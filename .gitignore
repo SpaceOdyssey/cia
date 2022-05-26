@@ -2,3 +2,5 @@
 ###############
 .DS_Store
 .Rapp.history
+/doc/
+/Meta/

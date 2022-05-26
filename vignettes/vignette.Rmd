@@ -27,14 +27,21 @@ data <- bnlearn::learning.test[1:10, ]
 
 ```{r, error = TRUE}
 # Create scorer object.
-scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data))
+scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bde'))
+```
+
+```{r, error = TRUE}
+# Get a random DAG.
+set.seed(1)
+init_dag <- UniformlySampleDAG(colnames(data))
 ```
 
 ```{r, error = TRUE}
 # Sample from the posterior of labelled partitions using PartitionMCMC with a
 # partition Split/Join proposal.
-init_dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+
+set.seed(1)
 chain <- SampleChain(1000, partitioned_nodes, transition = PartitionMCMC,
                      proposal = ProposePartitionSplitJoin, scorer = scorer_1)
 ```
