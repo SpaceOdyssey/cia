@@ -1,0 +1,45 @@
+---
+title: "A simple example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(dagmc)
+library(bnlearn)
+library(magrittr)
+```
+
+```{r, error = TRUE}
+# Get data from the bnlearn library.
+data <- bnlearn::learning.test[1:10, ]
+```
+
+```{r, error = TRUE}
+# Create scorer object.
+scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data))
+```
+
+```{r, error = TRUE}
+# Sample from the posterior of labelled partitions using PartitionMCMC with a
+# partition Split/Join proposal.
+init_dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+chain <- SampleChain(1000, partitioned_nodes, transition = PartitionMCMC,
+                     proposal = ProposePartitionSplitJoin, scorer = scorer_1)
+```
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+# Plot trace of log scores.
+plot(chain$log_score, xlab = 'step', ylab = 'log(score)')
+```
