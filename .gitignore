@@ -4,3 +4,6 @@
 .Rapp.history
 /doc/
 /Meta/
+.Rproj.user
+*.Rproj
+.Rhistory

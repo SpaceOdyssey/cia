@@ -21,7 +21,7 @@ test_that("BNLearn scorer works", {
     BNLearnScorer(
       'A', c('B', 'C'), 
       data = data, type = 'bde', iss = 100
-      ) < BNLearnScorer(
+      ) > BNLearnScorer(
         'A', c('B', 'C'), 
         data = data, type = 'bde', iss = 1)
     )
@@ -52,6 +52,7 @@ test_that('ScoreNode works', {
   testthat::expect_true(ScoreNode('A', c('B', 'C'), scorer_2) < 0.0)
 })
 
+set.seed(1)
 dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 test_that('ScoreLabelledPartition works', {
@@ -95,6 +96,7 @@ testthat::test_that('SampleChain works', {
   )
 })
 
+set.seed(1)
 chain <- SampleChain(100, partitioned_nodes, PartitionMCMC,
                      proposal = ProposePartitionSplitJoin, scorer = scorer_1)
 testthat::test_that('Check SampleChain summary', {
@@ -102,4 +104,16 @@ testthat::test_that('Check SampleChain summary', {
                          ScoreLabelledPartition(chain$state[[100]], scorer_1) 
                          )
 })
+
+testthat::test_that('Check ScoreDAG', {
+  testthat::expect_true(ScoreDAG(dag, scorer_1) < 0.0)
+})
+
+bn_dag <- bnlearn::empty.graph(colnames(data))
+amat(bn_dag) <- dag
+testthat::test_that('Check ScoreDAG with BNLearn against bnlearn::score', {
+  testthat::expect_equal(ScoreDAG(dag, scorer_1), bnlearn::score(bn_dag, data = data))
+})
+
+
 

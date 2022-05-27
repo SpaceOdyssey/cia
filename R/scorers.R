@@ -26,17 +26,18 @@ BNLearnScorer <- function(node, parents, ...) {
   args$data <- args$data[, c(node, parents), drop = FALSE]
   
   if (is.null(parents))
-    parents = c()
+    parents <- c()
   
   dag <- bnlearn::empty.graph(c(node, parents))
   arc_set <- matrix(
-    c(rep(node, length(parents)), parents),
+    c(parents, rep(node, length(parents))),
     ncol = 2, dimnames = list(NULL, c('from', 'to'))
   )
   bnlearn::arcs(dag) <- arc_set
   args$x <- dag
+  args$by.node = TRUE
   
-  log_score <- do.call(bnlearn::score, args)
+  log_score <- do.call(bnlearn::score, args)[[node]]
   
   return(log_score)
 }

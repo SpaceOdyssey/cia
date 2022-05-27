@@ -18,10 +18,7 @@ SampleChain <- function(n_results, init_state, transition, proposal, scorer,
                         n_thin = 1) {
   
   init_log_score <- ScoreLabelledPartition(init_state, scorer)
-  trace <- list(
-    state = c(init_state), 
-    log_score = c(init_log_score)
-    )
+  trace <- list(state = list(init_state), log_score = init_log_score)
   
   current_state <- list(state = init_state, log_score = init_log_score)
   for (i in 2:n_results) {
@@ -29,7 +26,7 @@ SampleChain <- function(n_results, init_state, transition, proposal, scorer,
       current_state <- transition(current_state, proposal, scorer)
     }
     trace$state[[i]] <- current_state$state
-    trace$log_score[[i]] <- current_state$log_score
+    trace$log_score <- c(trace$log_score, current_state$log_score)
   }
   
   return(trace)

@@ -17,23 +17,31 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(dagmc)
 library(bnlearn)
-library(magrittr)
+library(dplyr)
+library(ggplot2)
 ```
 
 ```{r, error = TRUE}
 # Get data from the bnlearn library.
-data <- bnlearn::learning.test[1:10, ]
+data <- bnlearn::gaussian.test
 ```
 
 ```{r, error = TRUE}
 # Create scorer object.
-scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bde'))
+scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bge'))
 ```
 
 ```{r, error = TRUE}
 # Get a random DAG.
-set.seed(1)
-init_dag <- UniformlySampleDAG(colnames(data))
+# set.seed(2)
+# init_dag <- UniformlySampleDAG(colnames(data))
+
+learned_dag <- bnlearn::hc(data, score = 'bge')
+init_dag <- learned_dag %>% 
+  bnlearn::as.igraph() %>% 
+  igraph::as_adjacency_matrix() %>% 
+  as.matrix
+plot(learned_dag)
 ```
 
 ```{r, error = TRUE}
@@ -49,4 +57,48 @@ chain <- SampleChain(1000, partitioned_nodes, transition = PartitionMCMC,
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 # Plot trace of log scores.
 plot(chain$log_score, xlab = 'step', ylab = 'log(score)')
+```
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+# Convert partitions to DAGs.
+set.seed(1)
+dags <- lapply(chain$state, SampleDAGFromLabelledPartition, scorer = scorer_1)
+score_dags <- unlist(lapply(dags, ScoreDAG, scorer = scorer_1))
+plot(score_dags, xlab = 'step', ylab = 'log(score)')
+```
+
+```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
+# Plot DAG
+imap <- which(score_dags == max(score_dags))[1]
+map_mat <- dags[[imap]]
+
+map_dag <- bnlearn::empty.graph(colnames(data))
+amat(map_dag) <- map_mat
+
+plot(map_dag)
+```
+
+```{r, error = TRUE}
+# Inference for marginalised edge probabilities. 
+# Plot trace.
+dags %>%
+  unlist() %>%
+  data.frame(
+    step = rep(1:1000, each = ncol(data)^2),
+    parent = rep(colnames(data), times = ncol(data)*1000),
+    child = rep(colnames(data), each = ncol(data), times = 1000),
+    edge = .
+  ) %>%
+  dplyr::group_by(parent, child) %>%
+  dplyr::mutate(edge = cummean(edge)) %>%
+  ggplot2::ggplot(ggplot2::aes(step, edge, color = interaction(parent, child))) +
+  ggplot2::geom_path()
+```  
+
+```{r, error = TRUE}
+# Plot marginalised edge probabilities.
+p_edge <- dags %>%
+  simplify2array() %>%
+  apply(c(1, 2), mean)
+print(p_edge)
 ```
