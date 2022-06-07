@@ -15,13 +15,12 @@
 #' @export
 PartitionMCMC <- function(current_state, proposal, scorer) {
   
-  new_state <- proposal(current_state$state)
-  log_score_diff <- ScoreDiff(current_state$state, new_state, scorer)
+  proposed <- proposal(current_state$state)
 
-  current_nbd <- CalculateNeighbourhood(current_state$state)
-  new_nbd <- CalculateNeighbourhood(new_state)
+  new_state <- proposed$state
+  log_score_diff <- ScoreDiff(current_state$state, new_state, scorer)
   
-  log_r <- log(new_nbd) - log(current_nbd) + log_score_diff
+  log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
   if (AcceptProposal(log_r)) {
     current_state$state <- new_state
     current_state$log_score <- current_state$log_score + log_score_diff

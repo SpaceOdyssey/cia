@@ -1,3 +1,19 @@
+#' Partition split or join constructor.
+#' 
+#' @export
+PartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
+  
+  current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
+  
+  partitioned_nodes <- ProposePartitionSplitJoin(partitioned_nodes, verbose)
+  new_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
+  
+  return(list(
+    state = partitioned_nodes, 
+    current_nbd = current_nbd, 
+    new_nbd = new_nbd))
+}
+
 #' Propose a split or join of two partitions. 
 #' 
 #' @description
@@ -16,7 +32,7 @@
 ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
-  num_nbd <- CalculateNeighbourhood(partitioned_nodes)
+  num_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   j <- sample.int(num_nbd, size = 1)
   if (j < m) {
     # Join two partitions.
@@ -33,7 +49,8 @@ ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
     # Find partition element to source nodes. To do this we find minimum i* for 
     # given condition.
     for (i_star in 1:m) {
-      i_star_num_nbd <- CalculateNeighbourhood(partitioned_nodes[partitioned_nodes$partition <= i_star, ])
+      i_star_partitions <- partitioned_nodes[partitioned_nodes$partition <= i_star, ]
+      i_star_num_nbd <- CalculateSplitJoinNeighbourhood(i_star_partitions)
       if (j <= i_star_num_nbd)
         break
     }
@@ -74,4 +91,28 @@ ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
   
   return(partitioned_nodes)
+}
+
+#' Calculate neighbourhood for the split or join proposal.
+#' 
+#' @export
+CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
+  
+  m <- GetNumberOfPartitions(partitioned_nodes)
+  ordered_partition <- GetOrderedPartition(partitioned_nodes)
+  
+  node_combinations <- 0
+  for (i in 1:m) {
+    # Get number of combinations of selections for a given partition.
+    k_i <- ordered_partition$frequency[i]
+    if (k_i == 1) {
+      node_combinations <- node_combinations + 1
+    } else {
+      for (c in 1:(k_i - 1)) {
+        node_combinations <- node_combinations + choose(k_i, c)
+      }
+    }
+  }
+  
+  return(m - 1 + node_combinations)
 }

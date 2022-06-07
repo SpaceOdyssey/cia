@@ -1,0 +1,202 @@
+---
+title: "Three Node Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{three_node_example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## What is this for?
+
+This shows inference on a data set drawn from a fully connected three node DAG.
+As the number of possible three node DAGs is 25, this allows for a direct 
+comparison between the expected and actual frequency of samples for each DAG.
+
+```{r setup}
+library(dagmc)
+library(magrittr)
+```
+
+```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
+nodes <- LETTERS[1:3]
+set.seed(2)
+true_dag <- UniformlySampleDAG(nodes)
+
+true_graph <- bnlearn::empty.graph(nodes)
+bnlearn::amat(true_graph) <- true_dag
+plot(true_graph)
+```
+
+Create conditional probability tables.
+
+```{r, error = TRUE}
+set.seed(1)
+p_min <- 0.1
+levels <- c('yes', 'no')
+all_levels <- list(A = levels, B = levels, C = levels)
+bn_arr <- list()
+for (i in 1:length(nodes)) {
+  node <- nodes[i]
+  parents <- names(which(true_dag[, node] == 1))
+  values <- runif(2^length(parents), min = p_min)
+  bn_arr[[i]] <- gRbase::parray(c(node, parents), levels = all_levels, values = values)
+}
+cpt <- gRain::compileCPT(bn_arr)
+gr_dag <- gRain::grain(cpt)
+```
+
+Draw samples from the true DAG. There appears to be a bug somewhere here such that
+set.seed does not work when running simulate using gRain. So you will get
+irreproducible results for this script.
+
+```{r, error = TRUE}
+data <- stats::simulate(gr_dag, nsim = 500, seed = 1)
+head(data)
+```
+
+Get all possible graphs. This is quite inefficient. It goes through all possible 
+permutations of child, parent, and edge possibilities. Then it only takes the 
+unique ones.
+
+```{r, error = TRUE}
+tri_val <- expand.grid(c(0, 1), c(0, 1), c(0, 1))
+node_perm <- gtools::permutations(length(nodes), length(nodes), nodes)
+all_dags <- list()
+n <- 1
+for (i in 1:nrow(node_perm)) {
+  for (j in 1:nrow(node_perm)) {
+    for (k in 1:nrow(tri_val)) {
+      mat <- matrix(
+        0L, 
+        nrow = length(nodes), 
+        ncol = length(nodes), 
+        dimnames = list(node_perm[i, ], node_perm[j, ])
+        )
+      mat[upper.tri(mat)] <- as.numeric(tri_val[k, ])
+      mat <- mat[nodes, nodes]
+      
+      if (sum(diag(mat)) == 0) {
+        bn_gr <- bnlearn::empty.graph(nodes)
+        bnlearn::amat(bn_gr) <- mat
+        if (bnlearn::acyclic(bn_gr) & bnlearn::directed(bn_gr)) {
+          all_dags[[n]] <- mat
+          n <- n + 1
+        }
+      }
+    }
+  }
+}
+all_dags <- unique(all_dags)
+```
+
+Score all possible DAGs against the simulated data.
+
+```{r, error = TRUE}
+scorer <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bde'))
+score_all_dags <- unlist(lapply(all_dags, ScoreDAG, scorer = scorer))
+hash_all_dags <- all_dags %>%
+  lapply(rlang::hash) %>% 
+  unlist
+```
+
+Convert the scores into expected probabilities.
+
+```{r, error = TRUE}
+log_z <- LogSumExp(score_all_dags)
+log_p <- score_all_dags - log_z
+p <- exp(log_p)
+
+p_summary <- data.frame(
+  hash_dag = hash_all_dags, 
+  p = p
+)
+```
+
+## Sample from the posterior using MCMC
+
+```{r, error = TRUE}
+n_runs <- 4
+n_results <- 5000
+chains <- list()
+for (i in 1:n_runs) {
+  set.seed(i)
+  init_dag <- UniformlySampleDAG(names(data))
+  partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+  chain <- SampleChain(n_results, partitioned_nodes, transition = PartitionMCMC,
+                       proposal = DefaultProposal, scorer = scorer)
+  chains[[i]] <- chain
+}
+```
+
+Looking at the trace of the partition log score.
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+col <- c('green', 'red', 'blue')
+plot(chains[[1]]$log_score, xlab = 'saves', ylab = 'log(partition score)', type = 'l')
+for (i in 2:n_runs) {
+  lines(chains[[i]]$log_score, xlab = 'saves', ylab = 'log(partition score)', type = 'l', col = col[i - 1])
+}
+```
+
+Converting the partitions into DAGs.
+
+```{r, error = TRUE}
+n_burnin <- 100
+set.seed(1)
+eq_states <- chains[[1]]$state[n_burnin:n_results]
+dags <- lapply(eq_states, SampleDAGFromLabelledPartition, scorer = scorer)
+score_dags <- unlist(lapply(dags, ScoreDAG, scorer = scorer))
+```
+
+Plot trace of DAG scores.
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+true_score <- ScoreDAG(true_dag, scorer)
+n_target_saves <- 1 + n_results - n_burnin
+plot(1:n_target_saves, score_dags, xlab = 'saves', ylab = 'log(DAG score)', type = 'l')
+```
+
+Estimate probabilities for each DAG. To make things a little simpler computationally
+I've worked with hashes.
+
+```{r, error = TRUE}
+unique_sampled_dags <- unique(dags)
+p_sampled <- score_dags
+count_dags <- dags %>%
+  lapply(rlang::hash) %>%
+  unlist %>%
+  table
+sample_p_dags <- count_dags / sum(count_dags)
+sample_summary <- data.frame(hash_dag = names(count_dags), sample_p = as.numeric(sample_p_dags))
+```
+
+Compare the sampler to the known values.
+
+```{r, error = TRUE}
+compare <- merge(p_summary, sample_summary, by = 'hash_dag', all.y = T)
+compare <- compare[order(compare$p, decreasing = TRUE), ]
+print(compare)
+```
+Plot the two highest scoring DAGs. These are equivalent and it's important that we're sampling these with the same probability.
+
+```{r, error = TRUE, fig.dim = c(7.0, 6.0)}
+par(mfrow = c(1, 2))
+for (i in 1:2) {
+  hash_focus_dag <- compare[i, 'hash_dag']
+  focus_dag <- all_dags[[which(hash_all_dags == hash_focus_dag)]]
+  
+  bn_focus <- bnlearn::empty.graph(nodes)
+  bnlearn::amat(bn_focus) <- focus_dag
+  plot(bn_focus)
+}
+par(mfrow = c(1,1))
+```
+

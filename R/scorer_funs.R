@@ -1,6 +1,6 @@
 #' Calculate score tables for (node, parents) combinations. 
 #'
-#' @examples 
+#' @examples
 #' ScoreTableNode('A', c('B', 'C'), scorer_1)
 #' ScoreTableNode('A', c('B', 'C'), scorer_2)
 #' ScoreTableNode('A', c(), scorer_1)
@@ -143,30 +143,6 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   return(log_score_diff)
 }
 
-#' Calculate neighbourhood.
-#' 
-#' @export
-CalculateNeighbourhood <- function(partitioned_nodes) {
-  
-  m <- GetNumberOfPartitions(partitioned_nodes)
-  ordered_partition <- GetOrderedPartition(partitioned_nodes)
-  
-  node_combinations <- 0
-  for (i in 1:m) {
-    # Get number of combinations of selections for a given partition.
-    k_i <- ordered_partition$frequency[i]
-    if (k_i == 1) {
-      node_combinations <- node_combinations + 1
-    } else {
-      for (c in 1:(k_i - 1)) {
-        node_combinations <- node_combinations + choose(k_i, c)
-      }
-    }
-  }
-  
-  return(m - 1 + node_combinations)
-}
-
 #' Score DAG.
 #' 
 #' @param dag An adjacency matrix with (parent, child) entries. With 1 denoting
@@ -176,61 +152,20 @@ CalculateNeighbourhood <- function(partitioned_nodes) {
 #'@export
 ScoreDAG <- function(dag, scorer) {
   
-  bnd <- bnlearn::empty.graph(colnames(dag))
-  amat(bnd) <- dag
-  log_score_2 <- bnlearn::score(bnd, data = scorer$parameters$data, type = scorer$parameters$type, by.node = TRUE)
-  
   log_score <- 0.0
   for (child in colnames(dag)) {
-    # print('child')
-    # print(child)
     scorer$parameters$node <- child
     
     pa_bool <- dag[, child] == 1
     if (sum(pa_bool) > 0) {
       scorer$parameters$parents <- names(which(pa_bool))
-      parents <- names(which(pa_bool))
     } else {
       scorer$parameters$parents <- vector()
-      parents <- NULL
     }
-    # print('parents')
-    # print(parents)
     
     log_score_node <- do.call(scorer$scorer, scorer$parameters)
     log_score <- log_score + log_score_node
-    
-    # print('log_score_node')
-    # print(log_score_node)
-    
-    nodes <- c(child, parents)
-    bnd <- bnlearn::empty.graph(nodes)
-
-    dag_tmp <- dag[nodes, nodes, drop = FALSE]
-    amat(bnd) <- dag_tmp
-# 
-#     log_score_node_3 <- bnlearn::score(
-#       bnd,
-#       data = scorer$parameters$data[, nodes, drop = FALSE],
-#       type = scorer$parameters$type,
-#       by.node = TRUE
-#       )
-#     log_score_node_3 <- log_score_node_3[[child]]
-#     
-#     print('log_score_node_3')
-#     print(log_score_node_3)
-#     
-#     print('log_score_node_2')
-#     print(log_score_2[[child]])
-  
-    # log_score <- log_score + log_score_node
-    if (log_score_2[[child]] != log_score_node) stop()
   }
-  # print('log_score')
-  # print(log_score)
-  # 
-  # print('log_score_2')
-  # print(sum(log_score_2))
   
   return(log_score)
 }

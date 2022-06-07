@@ -14,61 +14,129 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+## What is this for?
+
+This shows an example use of dagmc on the bnlearn gaussian.test data set. 
+
+## Setup
+
+```{r setup, message = FALSE}
 library(dagmc)
 library(bnlearn)
 library(dplyr)
 library(ggplot2)
 ```
 
-```{r, error = TRUE}
-# Get data from the bnlearn library.
+Get test problem from the bnlearn library.
+
+```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
 data <- bnlearn::gaussian.test
+true_graph <- bnlearn::empty.graph(names(data))
+arc_set <- matrix(c('A', 'F', 
+                    'A', 'C', 
+                    'B', 'C', 
+                    'B', 'D',
+                    # 'D', 'B',
+                    'G', 'F',
+                    'D', 'F',
+                    'E', 'F'),
+                  ncol = 2, byrow = TRUE,
+                  dimnames = list(NULL, c('from', 'to')))
+bnlearn::arcs(true_graph) <- arc_set
+true_adj <- true_graph %>% 
+  bnlearn::as.igraph() %>%
+  igraph::as_adjacency_matrix() %>%
+  as.matrix
 ```
 
+Show the true DAG from which the data were sampled.
+
+```{R, fig.dim = c(6.0, 6.0)}
+plot(true_graph)
+```
+
+## Optimise for the known solution
+
+Start with a DAG drawn uniformly from the prior space.
+
+## Posterior sampling.
+
+The aim of dagmc is to sample from the posterior distribution of DAGs. This is
+what is done here.
+
+First, a function that calculates the score of a given (node, parents) is combination
+is setup. In this case, I am using the Bayesian Gaussian equivalent score.
+
 ```{r, error = TRUE}
-# Create scorer object.
 scorer_1 <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bge'))
 ```
 
-```{r, error = TRUE}
-# Get a random DAG.
-# set.seed(2)
-# init_dag <- UniformlySampleDAG(colnames(data))
-
-learned_dag <- bnlearn::hc(data, score = 'bge')
-init_dag <- learned_dag %>% 
-  bnlearn::as.igraph() %>% 
-  igraph::as_adjacency_matrix() %>% 
-  as.matrix
-plot(learned_dag)
-```
+I then sample a random DAG from the prior space as an initial state for the MCMC
+and get 'n_results' saves from the sampler. This procedure is done four times
+in order to check that similar results are being reached on each run.
 
 ```{r, error = TRUE}
-# Sample from the posterior of labelled partitions using PartitionMCMC with a
-# partition Split/Join proposal.
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
-
-set.seed(1)
-chain <- SampleChain(1000, partitioned_nodes, transition = PartitionMCMC,
-                     proposal = ProposePartitionSplitJoin, scorer = scorer_1)
+n_runs <- 4
+n_results <- 1000
+chains <- list()
+for (i in 1:n_runs) {
+  set.seed(i)
+  init_dag <- UniformlySampleDAG(names(data))
+  partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+  chain <- SampleChain(n_results, partitioned_nodes, transition = PartitionMCMC,
+                       proposal = DefaultProposal, scorer = scorer_1)
+  chains[[i]] <- chain
+}
 ```
 
-```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-# Plot trace of log scores.
-plot(chain$log_score, xlab = 'step', ylab = 'log(score)')
-```
+## Summarise posterior samples.
+
+Plot trace of the labelled partition log scores. The aim is to check that the 
+MCMC is not getting stuck in local maxima for a large number of saves and that 
+multiple chains reach the same maxima.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-# Convert partitions to DAGs.
+col <- c('green', 'red', 'blue')
+plot(chains[[1]]$log_score, xlab = 'save', ylab = 'log(partition score)', type = 'l')
+for (i in 2:n_runs) {
+  lines(chains[[i]]$log_score, xlab = 'save', ylab = 'log(partition score)', type = 'l', col = col[i-1])
+}
+```
+
+Zooming in on the maximum scoring region...
+
+```{R, error = TRUE, fig.dim = c(6.0, 4.0)}
+ylim <- c(-53265, -53255)
+plot(chains[[1]]$log_score[1:n_results], xlab = 'save', ylab = 'log(partition score)', type = 'l', ylim = ylim)
+for (i in 2:n_runs) {
+  lines(chains[[i]]$log_score[1:n_results], xlab = 'save', ylab = 'log(partition score)', type = 'l', col = col[i-1], ylim = ylim)
+}
+```
+
+Convert labelled partitions to DAGs. This is a computationally intensive task, 
+so I (i) just do it for the first run, and (ii) only take the samples greater 
+than a burnin.
+
+```{r, error = TRUE}
+n_burnin <- 200
 set.seed(1)
-dags <- lapply(chain$state, SampleDAGFromLabelledPartition, scorer = scorer_1)
+dags <- lapply(chains[[1]]$state[n_burnin:n_results], SampleDAGFromLabelledPartition, scorer = scorer_1)
 score_dags <- unlist(lapply(dags, ScoreDAG, scorer = scorer_1))
-plot(score_dags, xlab = 'step', ylab = 'log(score)')
 ```
+
+Plot trace of DAG scores.
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+true_score <- ScoreDAG(true_adj, scorer_1)
+n_target_saves <- 1 + n_results - n_burnin
+plot(1:n_target_saves, score_dags, xlab = 'saves', ylab = 'log(DAG score)', type = 'l')
+```
+
+## Inference for the Maximum a Posteriori (MAP)
+
+Plot the first found highest scoring DAG.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-# Plot DAG
 imap <- which(score_dags == max(score_dags))[1]
 map_mat <- dags[[imap]]
 
@@ -78,25 +146,29 @@ amat(map_dag) <- map_mat
 plot(map_dag)
 ```
 
-```{r, error = TRUE}
-# Inference for marginalised edge probabilities. 
-# Plot trace.
+## Inference for marginalised edge probabilities 
+
+Plot trace for each marginalised edge probability to check for convergence.
+
+```{r, error = TRUE, fig.dim = c(8.0, 6.0)}
 dags %>%
   unlist() %>%
   data.frame(
-    step = rep(1:1000, each = ncol(data)^2),
-    parent = rep(colnames(data), times = ncol(data)*1000),
-    child = rep(colnames(data), each = ncol(data), times = 1000),
+    save = rep(1:n_target_saves, each = ncol(data)^2),
+    parent = rep(colnames(data), times = ncol(data)*n_target_saves),
+    child = rep(colnames(data), each = ncol(data), times = n_target_saves),
     edge = .
   ) %>%
   dplyr::group_by(parent, child) %>%
   dplyr::mutate(edge = cummean(edge)) %>%
-  ggplot2::ggplot(ggplot2::aes(step, edge, color = interaction(parent, child))) +
-  ggplot2::geom_path()
-```  
+  ggplot2::ggplot(ggplot2::aes(save, edge, color = interaction(parent, child))) +
+  ggplot2::geom_path() +
+  ggplot2::ylab('probability')
+```
+
+Print marginalised edge probabilities.
 
 ```{r, error = TRUE}
-# Plot marginalised edge probabilities.
 p_edge <- dags %>%
   simplify2array() %>%
   apply(c(1, 2), mean)
