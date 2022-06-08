@@ -46,7 +46,11 @@ bn_arr <- list()
 for (i in 1:length(nodes)) {
   node <- nodes[i]
   parents <- names(which(true_dag[, node] == 1))
-  values <- runif(2^length(parents), min = p_min)
+  
+  y_values <- runif(max(1, length(parents)), min = p_min)
+  n_values <- 1.0 - y_values
+  values <- rbind(y_values, n_values) %>% as.vector
+  
   bn_arr[[i]] <- gRbase::parray(c(node, parents), levels = all_levels, values = values)
 }
 cpt <- gRain::compileCPT(bn_arr)
