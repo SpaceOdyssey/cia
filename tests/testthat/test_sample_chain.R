@@ -13,14 +13,14 @@ testthat::test_that('SampleChain returns consistent state dimensions', {
   testthat::expect_equal(
     length(
       SampleChain(10, partitioned_nodes, PartitionMCMC,
-                  proposal = PartitionSplitJoin, scorer = scorer_1)),
-      2
+                  proposal = DefaultProposal(), scorer = scorer_1)),
+      4
   )
 })
 
 set.seed(1)
 chain <- SampleChain(100, partitioned_nodes, PartitionMCMC,
-                     proposal = DefaultProposal, scorer = scorer_1)
+                     proposal = DefaultProposal(), scorer = scorer_1)
 testthat::test_that('Check SampleChain returns correct scores', {
   testthat::expect_equal(chain$log_score[[100]],
                          ScoreLabelledPartition(chain$state[[100]], scorer_1) 

@@ -9,7 +9,7 @@ NodeMove <- function(partitioned_nodes, verbose = FALSE) {
   new_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
   
   return(list(
-    state = partitioned_nodes, 
+    state = partitioned_nodes,
     current_nbd = current_nbd, 
     new_nbd = new_nbd))
 }

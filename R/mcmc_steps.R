@@ -24,6 +24,12 @@ PartitionMCMC <- function(current_state, proposal, scorer) {
   if (AcceptProposal(log_r)) {
     current_state$state <- new_state
     current_state$log_score <- current_state$log_score + log_score_diff
+    
+    current_state$proposal_used <- proposed$proposal_used
+    current_state$accept <- 1
+  } else {
+    current_state$proposal_used <- proposed$proposal_used
+    current_state$accept <- 0
   }
   
   return(current_state)

@@ -9,7 +9,8 @@ scorer_1 <- list(
 
 current_state <- list(
   state = partitioned_nodes,
-  log_score = ScoreLabelledPartition(partitioned_nodes, scorer_1)
+  log_score = ScoreLabelledPartition(partitioned_nodes, scorer_1),
+  accept = NULL
 )
 
 testthat::test_that('PartitionMCMC returns same structured state', {
