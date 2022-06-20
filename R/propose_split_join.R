@@ -17,7 +17,10 @@ PartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
 #' Propose a split or join of two partitions. 
 #' 
 #' @description
-#' This is the 'Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015).
+#' This is the 'Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015). There
+#' is a caveat in that the split proposal for a partition with one element is
+#' amiguous, as a split for such a partitin element results in a stay still 
+#' proposal that has been removed.
 #' 
 #' @examples 
 #' ProposePartitionSplitJoin(partitioned_nodes, verbose = TRUE)
@@ -36,56 +39,55 @@ ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
   j <- sample.int(num_nbd, size = 1)
   if (j < m) {
     # Join two partitions.
-    if (verbose) print('Joining two partition elements.')
-    
     partition_j <- partitioned_nodes$partition[j]
     
     higher_partitions <- partitioned_nodes$partition > partition_j
     partitioned_nodes$partition[higher_partitions] <- partitioned_nodes$partition[higher_partitions] - 1
   } else {
     # Split a partition.
-    if (verbose) print('Splitting partition element.')
     
-    # Find partition element to source nodes. To do this we find minimum i* for 
-    # given condition.
+    # Find partition element to split. The split partition element needs to be
+    # chosen proportional to the number of ways there is to perform the split.
+    # Also record numnber of ways prior to the chosen partition.
+    prior_i_star_num_nbd <- m - 1
     for (i_star in 1:m) {
       i_star_partitions <- partitioned_nodes[partitioned_nodes$partition <= i_star, ]
-      i_star_num_nbd <- CalculateSplitJoinNeighbourhood(i_star_partitions)
+      i_star_num_nbd <- m - 1 + CalculateSplitCombinations(i_star_partitions)
       if (j <= i_star_num_nbd)
         break
+      
+      prior_i_star_num_nbd <- i_star_num_nbd
     }
     
-    # Get partition element information.
+    # Get split partition element information.
     ordered_partitions <- GetOrderedPartition(partitioned_nodes)
     k_i_star <- ordered_partitions[i_star, 'frequency']
     
-    # Only move if there are at least two nodes in the partition element.
-    if (k_i_star > 1) {
-      
-      # Find minimum c* for given condition.
-      for (c_star in 1:k_i_star) {
-        for (c in 1:c_star) {
-          choose_nodes <- choose(k_i_star, c)
-        }
-        
-        if (j <= i_star_num_nbd + choose_nodes)
-          break
+    # Choose the number of nodes to select from the partition in proportion to
+    # the number of ways available.
+    choose_nodes <- 0
+    for (c_star in 1:(k_i_star - 1)) {
+      for (c in 1:c_star) {
+        choose_nodes <- choose_nodes + choose(k_i_star, c)
       }
       
-      # Sample c_star nodes from partition element i_star.
-      i_star_nodes <- partitioned_nodes[partitioned_nodes$partition == i_star, 'node']
-      split_nodes <- sample(i_star_nodes, c_star)
-      
-      # Move them to the left. NOTE: I have my partition elements ordered in the 
-      # opposite direction to kp15. I should probably change that for consistency.
-      if (i_star < m) {
-        higher_elements <- partitioned_nodes$partition > i_star
-        partitioned_nodes[higher_elements, 'partition'] <- partitioned_nodes[higher_elements, 'partition'] + 1
-      }
-      
-      move_nodes <- partitioned_nodes$node %in% split_nodes
-      partitioned_nodes[move_nodes, 'partition'] <- i_star + 1
+      if (j <= prior_i_star_num_nbd + choose_nodes)
+        break
     }
+    
+    # Sample c_star nodes from partition element i_star.
+    i_star_nodes <- partitioned_nodes[partitioned_nodes$partition == i_star, 'node']
+    split_nodes <- sample(i_star_nodes, c_star)
+    
+    # Assign all partition elements higher than the chosen partition element to
+    # one great.
+    higher_elements <- partitioned_nodes$partition > i_star
+    partitioned_nodes[higher_elements, 'partition'] <- partitioned_nodes[higher_elements, 'partition'] + 1
+    
+    # Move chosen nodes to a new partition element one greater than it's 
+    # current partition element.
+    move_nodes <- partitioned_nodes$node %in% split_nodes
+    partitioned_nodes[move_nodes, 'partition'] <- i_star + 1
   }
   
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
@@ -95,24 +97,37 @@ ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
 
 #' Calculate neighbourhood for the split or join proposal.
 #' 
+#' The number of split combinations prescribed by KP15 is ambiguous when a 
+#' partition element has only 1 node. A split for a partition element with 1 
+#' node results in a proposal to stay still, as such I remove that proposal.
+#' 
 #' @export
 CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
+  split_combinations <- CalculateSplitCombinations(partitioned_nodes)
+  
+  return(m - 1 + split_combinations)
+}
+
+#' Calculate number of split combinations.
+#' 
+#' @export
+CalculateSplitCombinations <- function(partitioned_nodes) {
+  
+  m <- GetNumberOfPartitions(partitioned_nodes)
   ordered_partition <- GetOrderedPartition(partitioned_nodes)
   
-  node_combinations <- 0
+  split_combinations <- 0
   for (i in 1:m) {
-    # Get number of combinations of selections for a given partition.
+    # Get number of combinations of splits for a given partition.
     k_i <- ordered_partition$frequency[i]
-    if (k_i == 1) {
-      node_combinations <- node_combinations + 1
-    } else {
+    if (k_i > 1) {
       for (c in 1:(k_i - 1)) {
-        node_combinations <- node_combinations + choose(k_i, c)
+        split_combinations <- split_combinations + choose(k_i, c)
       }
     }
   }
   
-  return(m - 1 + node_combinations)
+  return(split_combinations)
 }
