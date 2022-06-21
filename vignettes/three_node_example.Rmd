@@ -128,7 +128,7 @@ p_summary <- data.frame(
 
 ```{r, error = TRUE}
 n_runs <- 4
-n_results <- 1000
+n_results <- 5000
 proposal <- DefaultProposal(p_split_join = 0.33, p_swap_node = 0.33, p_node_move = 0.33)
 chains <- list()
 set.seed(i)
@@ -296,7 +296,10 @@ for (i_focus_dag in 1:1) {
 }
 bw1 <- bw %>% 
   dplyr::bind_cols(n_eff = n_eff) %>%
-  dplyr::mutate(p_sd = sqrt(p*(1.0 - p)/n_eff))
+  dplyr::mutate(
+    p_sd = sqrt(p*(1.0 - p)/n_eff),
+    p_within_sd = (p >= p_true - p_sd) & (p <= p_true + p_sd)
+    )
 
 knitr::kable(bw1)
 ```
@@ -306,11 +309,13 @@ knitr::kable(bw1)
 Acceptance per proposal.
 
 ```{r, error = TRUE}
-prop_accept <- dplyr::bind_cols(
-  proposal = chains[[1]]$proposal_used, 
-  accept = chains[[1]]$accept
-  ) %>% 
-  dplyr::group_by(proposal) %>% 
+chain_info <- dplyr::bind_cols(
+  proposal_used = unlist(chains[[1]]$proposal_info, use.names = FALSE), 
+  accept = unlist(chains[[1]]$mcmc_info, use.names = FALSE)
+  )
+
+prop_accept <- chain_info %>% 
+  dplyr::group_by(proposal_used) %>% 
   dplyr::summarise(accept = mean(accept))
 
 knitr::kable(prop_accept)
@@ -325,9 +330,9 @@ dags_col <- simplify2array(dags[[1]])
 dags_diff <- dags_col[, , 2:(n_results - n_burnin)] - dags_col[, , 1:(n_results - n_burnin - 1)]
 dags_still <- apply(abs(dags_diff), 3, sum) == 0
 
-accepted_sj <- ((chains[[1]]$proposal_used[(1 + n_burnin):(n_results - 1)] == 'split_join')
-                & (chains[[1]]$accept[(1 + n_burnin):(n_results - 1)] == 1)
-                & (dags_still))
+accepted_sj <- ((chain_info$proposal_used[(1 + n_burnin):(n_results - 1)] == 'split_join')
+                & (chain_info$accept[(1 + n_burnin):(n_results - 1)] == 1)
+                & dags_still)
 print(mean(accepted_sj))
 ```
 
@@ -335,14 +340,10 @@ Calculate the proportion of node move proposals that are accepted where it
 proposes staying still...
 
 ```{r, error = TRUE}
-dags_col <- simplify2array(dags[[1]])
-dags_diff <- dags_col[, , 2:(n_results - n_burnin)] - dags_col[, , 1:(n_results - n_burnin - 1)]
-dags_still <- apply(abs(dags_diff), 3, sum) == 0
-
-accepted_sj <- ((chains[[1]]$proposal_used[(1 + n_burnin):(n_results - 1)] == 'node_move')
-                & (chains[[1]]$accept[(1 + n_burnin):(n_results - 1)] == 1)
-                & (dags_still))
-print(mean(accepted_sj))
+accepted_nm <- ((chain_info$proposal_used[(1 + n_burnin):(n_results - 1)] == 'node_move')
+                & (chain_info$accept[(1 + n_burnin):(n_results - 1)] == 1)
+                & dags_still)
+print(mean(accepted_nm))
 ```
 
 

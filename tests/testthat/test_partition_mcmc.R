@@ -9,13 +9,40 @@ scorer_1 <- list(
 
 current_state <- list(
   state = partitioned_nodes,
-  log_score = ScoreLabelledPartition(partitioned_nodes, scorer_1),
-  accept = NULL
+  log_score = ScoreLabelledPartition(partitioned_nodes, scorer_1)
 )
 
-testthat::test_that('PartitionMCMC returns same structured state', {
+testthat::test_that('PartitionMCMC returns same structured state for DefaultProposal', {
+  testthat::expect_identical(
+    names(PartitionMCMC(current_state, proposal = DefaultProposal(), scorer = scorer_1)),
+    c(names(current_state), 'proposal_info', 'mcmc_info')
+  )
+})
+
+testthat::test_that('PartitionMCMC returns same structured state for PartitionSplitJoin', {
   testthat::expect_identical(
     names(PartitionMCMC(current_state, proposal = PartitionSplitJoin, scorer = scorer_1)),
-    names(current_state)
+    c(names(current_state), 'mcmc_info')
+  )
+})
+
+testthat::test_that('PartitionMCMC returns same structured state for NodeMove', {
+  testthat::expect_identical(
+    names(PartitionMCMC(current_state, proposal = NodeMove, scorer = scorer_1)),
+    c(names(current_state), 'mcmc_info')
+  )
+})
+
+testthat::test_that('PartitionMCMC returns same structured state for SwapNode', {
+  testthat::expect_identical(
+    names(PartitionMCMC(current_state, proposal = SwapNode, scorer = scorer_1)),
+    c(names(current_state), 'mcmc_info')
+  )
+})
+
+testthat::test_that('PartitionMCMC returns same structured state for StayStill', {
+  testthat::expect_identical(
+    names(PartitionMCMC(current_state, proposal = StayStill, scorer = scorer_1)),
+    c(names(current_state), 'mcmc_info')
   )
 })

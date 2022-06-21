@@ -9,12 +9,39 @@ scorer_1 <- list(
   parameters = list(data = data)
 )
 
-testthat::test_that('SampleChain returns consistent state dimensions', {
+testthat::test_that('SampleChain returns consistent state dimensions for DefaultProposal', {
   testthat::expect_equal(
     length(
       SampleChain(10, partitioned_nodes, PartitionMCMC,
                   proposal = DefaultProposal(), scorer = scorer_1)),
       4
+  )
+})
+
+testthat::test_that('SampleChain returns consistent state dimensions for PartitionSplitJoin proposal', {
+  testthat::expect_equal(
+    length(
+      SampleChain(10, partitioned_nodes, PartitionMCMC,
+                  proposal = PartitionSplitJoin, scorer = scorer_1)),
+    4
+  )
+})
+
+testthat::test_that('SampleChain returns consistent state dimensions for NodeMove proposal', {
+  testthat::expect_equal(
+    length(
+      SampleChain(10, partitioned_nodes, PartitionMCMC,
+                  proposal = NodeMove, scorer = scorer_1)),
+    4
+  )
+})
+
+testthat::test_that('SampleChain returns consistent state dimensions for SwapNode proposal', {
+  testthat::expect_equal(
+    length(
+      SampleChain(10, partitioned_nodes, PartitionMCMC,
+                  proposal = SwapNode, scorer = scorer_1)),
+    4
   )
 })
 

@@ -16,6 +16,8 @@ scorer_2 <- list(
 testthat::test_that('ScoreTableNode works', {
   testthat::expect_true(sum(ScoreTableNode(partitioned_nodes, 'A', scorer_1)$log_scores) < 0.0)
   testthat::expect_true(sum(ScoreTableNode(partitioned_nodes, 'A', scorer_2)$log_scores) < 0.0)
+  testthat::expect_true(sum(ScoreTableNode(partitioned_nodes, 'B', scorer_1)$log_scores) < 0.0)
+  testthat::expect_true(sum(ScoreTableNode(partitioned_nodes, 'B', scorer_2)$log_scores) < 0.0)
 })
 
 lscores <- length(ScoreTableNode(partitioned_nodes, 'A', scorer_1)$log_scores)

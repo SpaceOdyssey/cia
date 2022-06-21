@@ -1,11 +1,11 @@
 #' Partition split or join constructor.
 #' 
 #' @export
-PartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
+PartitionSplitJoin <- function(partitioned_nodes) {
   
   current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposePartitionSplitJoin(partitioned_nodes, verbose)
+  partitioned_nodes <- ProposePartitionSplitJoin(partitioned_nodes)
   new_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   
   return(list(
@@ -23,16 +23,14 @@ PartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
 #' proposal that has been removed.
 #' 
 #' @examples 
-#' ProposePartitionSplitJoin(partitioned_nodes, verbose = TRUE)
+#' ProposePartitionSplitJoin(partitioned_nodes)
 #' 
 #' @param partitioned_nodes A labelled partition.
-#' @param verbose A flag to indicate whether to inform the user that the move 
-#' is a split or join.
 #' 
 #' @return A proposed labelled partition.
 #' 
 #' @export
-ProposePartitionSplitJoin <- function(partitioned_nodes, verbose = FALSE) {
+ProposePartitionSplitJoin <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
   num_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)

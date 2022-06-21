@@ -21,26 +21,28 @@ PartitionMCMC <- function(current_state, proposal, scorer) {
   log_score_diff <- ScoreDiff(current_state$state, new_state, scorer)
   
   log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
-  if (AcceptProposal(log_r)) {
+  
+  accept <- AcceptProposal(log_r)
+  mcmc_info <- list(accept = accept)
+  
+  if (accept) {
     current_state$state <- new_state
     current_state$log_score <- current_state$log_score + log_score_diff
     
-    current_state$proposal_used <- proposed$proposal_used
-    current_state$accept <- 1
+    current_state$proposal_info <- proposed$proposal_info
+    current_state$mcmc_info <- mcmc_info
   } else {
-    current_state$proposal_used <- proposed$proposal_used
-    current_state$accept <- 0
+    current_state$proposal_info <- proposed$proposal_info
+    current_state$mcmc_info <- mcmc_info
   }
   
   return(current_state)
 }
 
-# Utilities.
-
 #' Metropolis-Hastings acceptance.
 #' 
 #' @param log_r Log of Metropolis-Hastings ratio.
-#' @return accept Boolean.
+#' @return accept flag.
 #' 
 #' @noRd
 AcceptProposal <- function(log_r) {

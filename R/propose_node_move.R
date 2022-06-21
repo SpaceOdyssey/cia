@@ -1,11 +1,11 @@
 #' Node movement constructor.
 #' 
 #' @export
-NodeMove <- function(partitioned_nodes, verbose = FALSE) {
+NodeMove <- function(partitioned_nodes) {
   
   current_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeNodeMove(partitioned_nodes, verbose)
+  partitioned_nodes <- ProposeNodeMove(partitioned_nodes)
   new_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
   
   return(list(
@@ -17,24 +17,24 @@ NodeMove <- function(partitioned_nodes, verbose = FALSE) {
 #' Propose individual node movement. 
 #' 
 #' This proposes that a single node selected uniformly can either:
-#'   1) Move to any current partition element 
-#'   2) Move to any gap between or at the ends of the elements.
+#'   1) Move to any current partition.
+#'   2) Move to any gap between or at the ends of the partitions.
 #'   
-#'  Any of these moves are possible and are selected uniformly. Note that
-#'  this differs slightly from KP15 who remove the possibility of a 2-node
-#'  partition element . This may slow the convergence on a per step basis but is 
-#'  easier and more concise to implement.
+#'  Any of these moves are possible and are selected uniformly with two 
+#'  exceptions:
+#'    1) The selected node cannot move into adjacent gaps if it originated from 
+#'    a single node partition.
+#'    2) The selected node cannot move to the immediately higher gap if it 
+#'    originated from a two node partition.
 #' 
 #' @examples
-#' ProposeNodeMovement(partitioned_nodes, verbose = TRUE)
+#' ProposeNodeMovement(partitioned_nodes)
 #' 
-#' @param partitioned_nodes A labelled partition.
-#' @param verbose A flag to indicate that a single node is being moved.
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
-ProposeNodeMove <- function(partitioned_nodes, verbose = FALSE) {
+ProposeNodeMove <- function(partitioned_nodes) {
   
-  # Get number of current partitions.
   m <- GetNumberOfPartitions(partitioned_nodes)
   
   # Relabel current partitions into the new partition + gap space. Note that
@@ -47,13 +47,27 @@ ProposeNodeMove <- function(partitioned_nodes, verbose = FALSE) {
   inode <- partitioned_nodes$node == node
   current_element <- partitioned_nodes[inode, 'partition']
   
-  # Move node into another partition in the new space with uniform probability
-  # for each partition element.
-  move <- sample.int(2*m, size = 1)
-  new_element <- (current_element + move) %% (2*m + 1)
-  partitioned_nodes[inode, 'partition'] <- new_element
+  # Move the node into it's available 
+  n_element <- sum(partitioned_nodes$partition == current_element)
+  if (n_element == 1) {
+    # Move node into any non-adjacent partition in the new space with uniform 
+    # probability.
+    move <- sample.int(2*m - 2, size = 1) + 1
+  } else if (n_element == 2) {
+    # Move node into any non-directly greater partition element in the new space
+    # with uniform probability.
+    move <- sample.int(2*m - 1, size = 1) + 1
+  } else {
+    # Move node into another partition in the new space with uniform probability
+    # for each partition element.
+    move <- sample.int(2*m, size = 1)
+  }
   
-  # Relabel the elements back to the standard form.
+  # Wrap move to deal with boundaries.
+  new_element <- (current_element + move) %% (2*m + 1)
+  
+  # Assign and relabel the elements back to the standard form.
+  partitioned_nodes[inode, 'partition'] <- new_element
   partitioned_nodes$partition <- match(
     partitioned_nodes$partition, 
     sort(unique(partitioned_nodes$partition))
@@ -71,8 +85,12 @@ ProposeNodeMove <- function(partitioned_nodes, verbose = FALSE) {
 CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
-  n <- nrow(partitioned_nodes)
+  ordered_partition <- GetOrderedPartition(partitioned_nodes)
   
-  return(2*m*n)
+  n_1_num_nbd <- (2*m - 2)*sum(ordered_partition$frequency == 1)
+  n_2_num_nbd <- (2*m - 1)*sum(ordered_partition$frequency == 2)
+  n_oth_num_nbd <- 2*m*sum(ordered_partition$frequency > 2)
+  
+  return(n_1_num_nbd + n_2_num_nbd + n_oth_num_nbd)
 }
 

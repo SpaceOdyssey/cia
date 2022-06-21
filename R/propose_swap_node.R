@@ -1,12 +1,12 @@
 #' Swap node proposal.
 #' 
-#' @param verbose A flag to indicate that you are staying still.
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
-SwapNode <- function(partitioned_nodes, verbose = FALSE) {
+SwapNode <- function(partitioned_nodes) {
   current_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeSwapNode(partitioned_nodes, verbose)
+  partitioned_nodes <- ProposeSwapNode(partitioned_nodes)
   new_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
   
   return(list(
@@ -18,17 +18,14 @@ SwapNode <- function(partitioned_nodes, verbose = FALSE) {
 #' Propose that two nodes swap partition elements.
 #' 
 #' @examples 
-#' ProposeStayStill(partitioned_nodes, verbose = TRUE)
+#' ProposeStayStill(partitioned_nodes)
 #' 
-#' @param partitioned_nodes A labelled partition.
-#' @param verbose A flag to indicate that you are staying still.
+#' @param partitioned_nodes labelled partition.
 #' 
 #' @return A proposed labelled partition.
 #' 
 #' @export
-ProposeSwapNode <- function(partitioned_nodes, verbose = FALSE) {
-  
-  if (verbose) print('Swapping nodes')
+ProposeSwapNode <- function(partitioned_nodes) {
   
   if (GetNumberOfPartitions(partitioned_nodes) > 1) {
 

@@ -1,10 +1,8 @@
 #' Calculate score tables for (node, parents) combinations. 
 #'
 #' @examples
-#' ScoreTableNode('A', c('B', 'C'), scorer_1)
-#' ScoreTableNode('A', c('B', 'C'), scorer_2)
-#' ScoreTableNode('A', c(), scorer_1)
-#' ScoreTableNode('A', NULL, scorer_1)
+#' ScoreTableNode(partitioned_nodes, 'A', scorer_1)
+#' ScoreTableNode(partitioned_nodes, 'A', scorer_2)
 #' 
 #' @param node The node name.
 #' @param potential_parents A vector of potential parents that need to be iterated over.
@@ -42,8 +40,8 @@ ScoreTableNode <- function(partitioned_nodes, node, scorer) {
 #' Score node by marginalising over parent combinations.
 #' 
 #' @examples 
-#' ScoreNode('A', c('B', 'C'), scorer_1)
-#' ScoreNode('A', c('B', 'C'), scorer_2)
+#' ScoreNode(partitioned_nodes, 'A', scorer_1)
+#' ScoreNode(partitioned_nodes, 'C', scorer_2)
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' @param node The node name.

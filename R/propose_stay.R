@@ -1,13 +1,11 @@
 #' StayStill proposal.
 #' 
-#' @param verbose A flag to indicate that you are staying still.
-#' 
 #' @export
-StayStill <- function(partitioned_nodes, verbose = FALSE) {
+StayStill <- function(partitioned_nodes) {
   
   current_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeStayStill(partitioned_nodes, verbose)
+  partitioned_nodes <- ProposeStayStill(partitioned_nodes)
   new_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
   
   return(list(
@@ -18,19 +16,15 @@ StayStill <- function(partitioned_nodes, verbose = FALSE) {
 
 #' Propose that the partition stays still.
 #' 
-#' @examples 
-#' ProposeStayStill(partitioned_nodes, verbose = TRUE)
+#' @examples
+#' ProposeStayStill(partitioned_nodes)
 #' 
 #' @param partitioned_nodes A labelled partition.
-#' @param verbose A flag to indicate that you are staying still.
 #' 
 #' @return A proposed labelled partition.
 #' 
 #' @export
-ProposeStayStill <- function(partitioned_nodes, verbose = FALSE) {
-  
-  if (verbose) print('Staying still.')
-  
+ProposeStayStill <- function(partitioned_nodes) {
   return(partitioned_nodes)
 }
 

@@ -19,22 +19,19 @@ SampleChain <- function(n_results, init_state, transition, proposal, scorer,
   
   init_log_score <- ScoreLabelledPartition(init_state, scorer)
   trace <- list(state = list(init_state), log_score = init_log_score, 
-                proposal_used = NULL, accept = NULL)
+                proposal_info = list(), mcmc_info = list())
   
   current_state <- list(state = init_state, log_score = init_log_score, 
-                        proposal_used = NULL, accept = NULL)
+                        proposal_info = NULL, mcmc_info = NULL)
   for (i in 2:n_results) {
-    proposal_used <- c()
-    accept <- c()
     for (j in 1:n_thin) {
       current_state <- transition(current_state, proposal, scorer)
-      proposal_used <- c(proposal_used, current_state$proposal_used)
-      accept <- c(accept, current_state$accept)
+      
+      trace$proposal_info <- append(trace$proposal_info, current_state$proposal_info)
+      trace$mcmc_info <- append(trace$mcmc_info, current_state$mcmc_info)
     }
     trace$state[[i]] <- current_state$state
     trace$log_score <- c(trace$log_score, current_state$log_score)
-    trace$proposal_used <- c(trace$proposal_used, proposal_used)
-    trace$accept <- c(trace$accept, accept)
   }
   
   return(trace)
