@@ -6,6 +6,12 @@
 \usage{
 GetOrderedPartition(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
+\value{
+Ordered partition.
+}
 \description{
-Calculate the ordered partition. Labelled as lamba in Kuipers & Moffa (2015).
+Calculate the ordered partition. Denoted as lamba in Kuipers & Moffa (2015).
 }

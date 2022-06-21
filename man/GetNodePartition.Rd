@@ -4,15 +4,15 @@
 \alias{GetNodePartition}
 \title{Get a node's partition element number.}
 \usage{
-GetNodePartition(node, partitioned_nodes)
+GetNodePartition(partitioned_nodes, node)
 }
 \arguments{
-\item{node}{A node name.}
+\item{partitioned_nodes}{Labelled partition.}
 
-\item{partitioned_nodes}{A labelled partition.}
+\item{node}{Node name.}
 }
 \value{
-node_partition A node's partition element number.
+Node's partition element number.
 }
 \description{
 Get a node's partition element number.

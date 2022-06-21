@@ -4,17 +4,17 @@
 \alias{ScoreTableNode}
 \title{Calculate score tables for (node, parents) combinations.}
 \usage{
-ScoreTableNode(node, potential_parents, scorer)
+ScoreTableNode(partitioned_nodes, node, scorer)
 }
 \arguments{
 \item{node}{The node name.}
 
-\item{potential_parents}{A vector of potential parents that need to be iterated over.}
-
 \item{scorer}{A scorer object.}
+
+\item{potential_parents}{A vector of potential parents that need to be iterated over.}
 }
 \value{
-scorer_table A list of log_scores for each combination in parent_combinations.
+List of log_scores for each combination in parent_combinations.
 }
 \description{
 Calculate score tables for (node, parents) combinations.

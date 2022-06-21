@@ -10,19 +10,19 @@
 #' @param potential_parents A vector of potential parents that need to be iterated over.
 #' @param scorer A scorer object.
 #'
-#' @return scorer_table A list of log_scores for each combination in parent_combinations.
+#' @return List of log_scores for each combination in parent_combinations.
 #' 
 #' @export
-ScoreTableNode <- function(node, potential_parents, scorer) {
+ScoreTableNode <- function(partitioned_nodes, node, scorer) {
   
   scorer$parameters$node <- node
+  parent_combinations <- GetParentCombinations(partitioned_nodes, node)
   
-  if (is.null(potential_parents)) {
+  if (is.null(parent_combinations)) {
     scorer$parameters$parents <- vector()
     log_node_parent_scores <- do.call(scorer$scorer, scorer$parameters)
     parent_combinations <- list(NULL)
   } else {
-    parent_combinations <- GetParentCombinations(potential_parents)
     log_node_parent_scores <- c()
     for (parents in parent_combinations) {
       scorer$parameters$parents <- parents
@@ -32,7 +32,7 @@ ScoreTableNode <- function(node, potential_parents, scorer) {
   }
   
   score_table <- list(
-    log_scores = log_node_parent_scores, 
+    log_scores = log_node_parent_scores,
     parent_combinations = parent_combinations
   )
   
@@ -45,16 +45,16 @@ ScoreTableNode <- function(node, potential_parents, scorer) {
 #' ScoreNode('A', c('B', 'C'), scorer_1)
 #' ScoreNode('A', c('B', 'C'), scorer_2)
 #' 
+#' @param partitioned_nodes Labelled partition.
 #' @param node The node name.
-#' @param potential_parents A vector of potential parents that need to be iterated over.
 #' @param scorer A scorer object.
 #' 
-#' @return log_node_score The log of the node score.
+#' @return Log of the node score.
 #' 
 #' @export
-ScoreNode <- function(node, potential_parents, scorer) {
+ScoreNode <- function(partitioned_nodes, node, scorer) {
   
-  score_table <- ScoreTableNode(node, potential_parents, scorer)
+  score_table <- ScoreTableNode(partitioned_nodes, node, scorer)
   log_node_score <- LogSumExp(score_table$log_scores)
   
   return(log_node_score)
@@ -66,19 +66,18 @@ ScoreNode <- function(node, potential_parents, scorer) {
 #' ScoreLabelledPartition(partitioned_nodes, scorer_1)
 #' ScoreLabelledPartition(partitioned_nodes, scorer_2)
 #' 
+#' @param partitioned_nodes Labelled partition.
 #' @param node The node name.
-#' @param potential_parents A vector of potential parents that need to be iterated over.
 #' @param scorer A scorer object.
 #' 
-#' @return log_node_score The log of the node score.
+#' @return Log of the node score.
 #' 
 #' @export
 ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
   
   log_partition_score <- 0.0
   for (node in partitioned_nodes$node) {
-    potential_parents <- GetLowerPartitionedNodes(node, partitioned_nodes)
-    log_node_score <- ScoreNode(node, potential_parents, scorer)
+    log_node_score <- ScoreNode(partitioned_nodes, node, scorer)
     log_partition_score <- log_partition_score + log_node_score
   }
   
@@ -91,19 +90,20 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' @examples 
 #' changed_nodes <- FindChangedNodes(partitioned_nodes, new_partitioned_nodes)
 #' 
-#' @param old_partitioned_nodes A labelled partition.
-#' @param new_partitioned_nodes A labelled partition.
+#' @param old_partitioned_nodes Labelled partition.
+#' @param new_partitioned_nodes Labelled partition.
 #' 
-#' @return changed_nodes A vector of changed nodes.
+#' @return Vector of changed nodes.
 #' 
 #' @export
 FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
   
   changed_nodes <- c()
   for (node in old_partitioned_nodes$node) {
-    potential_parents <- GetLowerPartitionedNodes(node, old_partitioned_nodes)
-    new_potential_parents <- GetLowerPartitionedNodes(node, new_partitioned_nodes)
+    potential_parents <- GetParentCombinations(old_partitioned_nodes, node)
+    new_potential_parents <- GetParentCombinations(new_partitioned_nodes, node)
     
+    # TODO: This shouldn't check the whole set. Instead, 1) check direct parents, 2) check indirect parents.
     if (!setequal(potential_parents, new_potential_parents)) {
       changed_nodes <- c(changed_nodes, node)
     }
@@ -123,7 +123,7 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
 #' @param new_partitioned_nodes A labelled partition.
 #' @param scorer A scorer object.
 #' 
-#' @return changed_nodes A vector of changed nodes.
+#' @return Log of score difference between two labelled partitions.
 #' 
 #' @export
 ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
@@ -131,13 +131,10 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
   log_score_diff <- 0.0
   for (node in changed_nodes) {
-    potential_parents <- GetLowerPartitionedNodes(node, old_partitioned_nodes)
-    log_score_node <- ScoreNode(node, potential_parents, scorer)
+    old_log_score_node <- ScoreNode(old_partitioned_nodes, node, scorer)
+    new_log_score_node <- ScoreNode(new_partitioned_nodes, node, scorer)
     
-    new_potential_parents <- GetLowerPartitionedNodes(node, new_partitioned_nodes)
-    new_log_score_node <- ScoreNode(node, new_potential_parents, scorer)
-    
-    log_score_diff <- log_score_diff + new_log_score_node - log_score_node
+    log_score_diff <- log_score_diff + new_log_score_node - old_log_score_node
   }
   
   return(log_score_diff)
@@ -145,11 +142,12 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
 
 #' Score DAG.
 #' 
-#' @param dag An adjacency matrix with (parent, child) entries. With 1 denoting
-#' and edge and 0 otherwise.
+#' @param dag Adjacency matrix of (parent, child) entries with 1 denoting an 
+#' edge and 0 otherwise.
+#' 
 #' @returns Log of DAG score.
 #'
-#'@export
+#' @export
 ScoreDAG <- function(dag, scorer) {
   
   log_score <- 0.0
@@ -175,7 +173,7 @@ ScoreDAG <- function(dag, scorer) {
 #' Log-Sum-Exponential calculation using the trick that limits underflow issues.
 #' 
 #' @param x A vector of numeric.
-#' @return lse The Log-Sum-Exponential of x.
+#' @return Log-Sum-Exponential (LSE) of x.
 #' 
 #' @export
 LogSumExp <- function(x) {
@@ -199,64 +197,88 @@ GetNumberOfPartitions <- function(partitioned_nodes) {
 
 #' Get a node's partition element number.
 #' 
-#' @param node A node name.
-#' @param partitioned_nodes A labelled partition.
+#' @param node Node name.
+#' @param partitioned_nodes Labelled partition.
 #' 
-#' @return node_partition A node's partition element number.
+#' @return Node's partition element number.
 #' 
 #' @export
-GetNodePartition <- function(node, partitioned_nodes) {
+GetNodePartition <- function(partitioned_nodes, node) {
   node_partition <- partitioned_nodes[partitioned_nodes$node == node, 'partition']
   
   return(node_partition)
 }
 
-#' Get potential parents of a node.
+#' Get parent combinations for a given node.
 #' 
+#' @param partitioned_nodes Labelled partition.
 #' @param node A node name.
-#' @param partitioned_nodes A labelled partition.
 #' 
-#' @return potential_parents A vector of potential parent names.
-#' 
-#' @export
-GetLowerPartitionedNodes <- function(node, partitioned_nodes) {
-  # Get higher-order nodes (i.e. find potential parents).
-  node_partition <- GetNodePartition(node, partitioned_nodes)
-  potential_parents <- partitioned_nodes[partitioned_nodes$partition < node_partition, 'node']
-  
-  if (identical(potential_parents, character(0)))
-    potential_parents <- NULL
-  
-  return(potential_parents)
-}
-
-#' Get all parent combinations of nodes.
-#' 
-#' @param parents A vector of potential parent names.
-#' 
-#' @return parent_combinations A list of parent combinations.
+#' @return List of parent combinations.
 #' 
 #' @export
-GetParentCombinations <- function(parents) {
-  if (is.null(parents))
-    return(parents)
+GetParentCombinations <- function(partitioned_nodes, node) {
   
-  parents <- parents[order(parents)]
+  node_el <- GetNodePartition(partitioned_nodes, node)
   
-  parent_combinations <- lapply(
-    1:length(parents),
-    function(y) combn(parents, y, simplify = FALSE)
-    ) %>%
-    unlist(recursive = FALSE)
+  if (node_el == 1) {
+    parent_combinations <- NULL
+  } else if (node_el == 2) {
+    direct_pas <- partitioned_nodes[partitioned_nodes$partition == node_el - 1, 'node']
+    direct_pa_coms <- GetNodeCombinations(direct_pas)
+    
+    parent_combinations <- direct_pa_coms
+  } else {
+  
+    direct_pas <- partitioned_nodes[partitioned_nodes$partition == node_el - 1, 'node']
+    direct_pa_coms <- GetNodeCombinations(direct_pas)
+    
+    indirect_pas <- partitioned_nodes[partitioned_nodes$partition < node_el - 1, 'node']
+    indirect_pa_coms <- GetNodeCombinations(indirect_pas)
+  
+    parent_combinations <- direct_pa_coms
+    i <- 1 + length(direct_pa_coms)
+    for (direct_pa_com in direct_pa_coms) {
+      for (indirect_pa_com in indirect_pa_coms) {
+        parent_combinations[[i]] <- c(direct_pa_com, indirect_pa_com)
+        i <- i + 1
+      }
+    }
+  }
   
   return(parent_combinations)
 }
 
-#' Derived a labelled partition.
+#' Get all combinations of nodes.
+#' 
+#' @param parents A vector of nodes.
+#' 
+#' @return List of parent combinations.
+#' 
+#' @export
+GetNodeCombinations <- function(nodes) {
+  if (is.null(nodes))
+    return(nodes)
+  
+  nodes <- nodes[order(nodes)]
+  
+  node_combinations <- lapply(
+      1:length(nodes),
+      function(y) combn(nodes, y, simplify = FALSE)
+    ) %>%
+    unlist(recursive = FALSE)
+  
+  return(node_combinations)
+}
+
+#' Map DAG to a labelled partition.
 #'
 #' This partitions nodes into levels of outpoints as explained in Section 4.1 of
 #' Kuipers & Moffa 2015. This takes an adjacency matrix and returns a data.frame
 #' of (partition, node) pairs
+#'
+#' @param adjacency Adjacency matrix.
+#' @returns Labelled partition for the given adjacency matrix.
 #'
 #' @export
 GetPartitionedNodesFromAdjacencyMatrix <- function(adjacency) {
@@ -287,6 +309,9 @@ GetPartitionedNodesFromAdjacencyMatrix <- function(adjacency) {
 
 #' Order partitioned nodes.
 #' 
+#' @param partitioned_nodes Labelled partition.
+#' @return Labelled partitioned in descending partition element order.
+#' 
 #' @export
 OrderPartitionedNodes <- function(partitioned_nodes) {
   ord <- order(partitioned_nodes$partition, partitioned_nodes$node)
@@ -297,7 +322,10 @@ OrderPartitionedNodes <- function(partitioned_nodes) {
 
 #' Get ordered labelled partition.
 #' 
-#' Calculate the ordered partition. Labelled as lamba in Kuipers & Moffa (2015).
+#' Calculate the ordered partition. Denoted as lamba in Kuipers & Moffa (2015).
+#'
+#' @param partitioned_nodes Labelled partition.
+#' @return Ordered partition. 
 #'
 #' @export
 GetOrderedPartition <- function(partitioned_nodes) {

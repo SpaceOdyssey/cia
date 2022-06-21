@@ -7,14 +7,14 @@
 ScoreLabelledPartition(partitioned_nodes, scorer)
 }
 \arguments{
+\item{partitioned_nodes}{Labelled partition.}
+
 \item{scorer}{A scorer object.}
 
 \item{node}{The node name.}
-
-\item{potential_parents}{A vector of potential parents that need to be iterated over.}
 }
 \value{
-log_node_score The log of the node score.
+Log of the node score.
 }
 \description{
 Score labelled partition by adding the log scores for each node.

@@ -10,7 +10,7 @@ LogSumExp(x)
 \item{x}{A vector of numeric.}
 }
 \value{
-lse The Log-Sum-Exponential of x.
+Log-Sum-Exponential (LSE) of x.
 }
 \description{
 Log-Sum-Exponential calculation using the trick that limits underflow issues.

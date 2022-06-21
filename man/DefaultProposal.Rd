@@ -4,7 +4,12 @@
 \alias{DefaultProposal}
 \title{Default proposal}
 \usage{
-DefaultProposal(partitioned_nodes, verbose = FALSE)
+DefaultProposal(
+  p_split_join = 0.4,
+  p_swap_node = 0.3,
+  p_node_move = 0.29,
+  verbose = FALSE
+)
 }
 \description{
 Default proposal

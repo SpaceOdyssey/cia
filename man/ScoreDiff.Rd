@@ -14,7 +14,7 @@ ScoreDiff(old_partitioned_nodes, new_partitioned_nodes, scorer)
 \item{scorer}{A scorer object.}
 }
 \value{
-changed_nodes A vector of changed nodes.
+Log of score difference between two labelled partitions.
 }
 \description{
 Calculate the difference in log scores between two labelled partitions.

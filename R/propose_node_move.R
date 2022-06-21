@@ -34,8 +34,6 @@ NodeMove <- function(partitioned_nodes, verbose = FALSE) {
 #' @export
 ProposeNodeMove <- function(partitioned_nodes, verbose = FALSE) {
   
-  if (verbose) print('Individual node being moved.')
-  
   # Get number of current partitions.
   m <- GetNumberOfPartitions(partitioned_nodes)
   

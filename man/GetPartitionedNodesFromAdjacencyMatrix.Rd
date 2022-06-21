@@ -2,9 +2,15 @@
 % Please edit documentation in R/scorer_funs.R
 \name{GetPartitionedNodesFromAdjacencyMatrix}
 \alias{GetPartitionedNodesFromAdjacencyMatrix}
-\title{Derived a labelled partition.}
+\title{Map DAG to a labelled partition.}
 \usage{
 GetPartitionedNodesFromAdjacencyMatrix(adjacency)
+}
+\arguments{
+\item{adjacency}{Adjacency matrix.}
+}
+\value{
+Labelled partition for the given adjacency matrix.
 }
 \description{
 This partitions nodes into levels of outpoints as explained in Section 4.1 of

@@ -8,12 +8,12 @@ partitions.}
 FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
 }
 \arguments{
-\item{old_partitioned_nodes}{A labelled partition.}
+\item{old_partitioned_nodes}{Labelled partition.}
 
-\item{new_partitioned_nodes}{A labelled partition.}
+\item{new_partitioned_nodes}{Labelled partition.}
 }
 \value{
-changed_nodes A vector of changed nodes.
+Vector of changed nodes.
 }
 \description{
 Find nodes with changed parent combinations between different labelled

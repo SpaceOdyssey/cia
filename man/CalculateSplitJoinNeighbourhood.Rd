@@ -7,5 +7,7 @@
 CalculateSplitJoinNeighbourhood(partitioned_nodes)
 }
 \description{
-Calculate neighbourhood for the split or join proposal.
+The number of split combinations prescribed by KP15 is ambiguous when a
+partition element has only 1 node. A split for a partition element with 1
+node results in a proposal to stay still, as such I remove that proposal.
 }

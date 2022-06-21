@@ -4,17 +4,17 @@
 \alias{ScoreNode}
 \title{Score node by marginalising over parent combinations.}
 \usage{
-ScoreNode(node, potential_parents, scorer)
+ScoreNode(partitioned_nodes, node, scorer)
 }
 \arguments{
-\item{node}{The node name.}
+\item{partitioned_nodes}{Labelled partition.}
 
-\item{potential_parents}{A vector of potential parents that need to be iterated over.}
+\item{node}{The node name.}
 
 \item{scorer}{A scorer object.}
 }
 \value{
-log_node_score The log of the node score.
+Log of the node score.
 }
 \description{
 Score node by marginalising over parent combinations.

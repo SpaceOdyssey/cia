@@ -6,6 +6,12 @@
 \usage{
 OrderPartitionedNodes(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
+\value{
+Labelled partitioned in descending partition element order.
+}
 \description{
 Order partitioned nodes.
 }

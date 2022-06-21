@@ -2,16 +2,18 @@
 % Please edit documentation in R/scorer_funs.R
 \name{GetParentCombinations}
 \alias{GetParentCombinations}
-\title{Get all parent combinations of nodes.}
+\title{Get parent combinations for a given node.}
 \usage{
-GetParentCombinations(parents)
+GetParentCombinations(partitioned_nodes, node)
 }
 \arguments{
-\item{parents}{A vector of potential parent names.}
+\item{partitioned_nodes}{Labelled partition.}
+
+\item{node}{A node name.}
 }
 \value{
-parent_combinations A list of parent combinations.
+List of parent combinations.
 }
 \description{
-Get all parent combinations of nodes.
+Get parent combinations for a given node.
 }
