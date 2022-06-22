@@ -20,7 +20,7 @@ Log of the node score.
 Score node by marginalising over parent combinations.
 }
 \examples{
-ScoreNode('A', c('B', 'C'), scorer_1)
-ScoreNode('A', c('B', 'C'), scorer_2)
+ScoreNode(partitioned_nodes, 'A', scorer_1)
+ScoreNode(partitioned_nodes, 'C', scorer_2)
 
 }

@@ -4,10 +4,7 @@
 \alias{StayStill}
 \title{StayStill proposal.}
 \usage{
-StayStill(partitioned_nodes, verbose = FALSE)
-}
-\arguments{
-\item{verbose}{A flag to indicate that you are staying still.}
+StayStill(partitioned_nodes)
 }
 \description{
 StayStill proposal.

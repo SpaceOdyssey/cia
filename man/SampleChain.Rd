@@ -4,7 +4,7 @@
 \alias{SampleChain}
 \title{Sample chain.}
 \usage{
-SampleChain(n_results, init_state, transition, proposal, scorer, n_thin = 1)
+SampleChain(n_results, init_state, transition, scorer, n_thin = 1)
 }
 \arguments{
 \item{n_results}{Number of saved states.}
@@ -18,14 +18,12 @@ SampleChain(n_results, init_state, transition, proposal, scorer, n_thin = 1)
 \item{n_thin}{Number of steps between saved states.}
 }
 \value{
-A list of states and log_score.
+List of results.
 }
 \description{
 Sample chain.
 }
 \examples{
-trace <- SampleChain(100, partitioned_nodes, transition = PartitionMCMC, 
-proposal = ProposePartitionSplitJoin, scorer = scorer_1, 
-n_thin = 1)
+results <- SampleChain(100, partitioned_nodes, transition = PartitionMCMC(scorer = scorer_1))
 
 }

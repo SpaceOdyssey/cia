@@ -2,15 +2,16 @@
 % Please edit documentation in R/default_proposal.R
 \name{DefaultProposal}
 \alias{DefaultProposal}
-\title{Default proposal}
+\title{Default proposal constructor.}
 \usage{
-DefaultProposal(
-  p_split_join = 0.4,
-  p_swap_node = 0.3,
-  p_node_move = 0.29,
-  verbose = FALSE
-)
+DefaultProposal(p = c(0.33, 0.33, 0.33, 0.01), verbose = TRUE)
+}
+\arguments{
+\item{p}{Probability for each proposal in the order (split_join, node_move,
+swap_node, stay_still).}
+
+\item{verbose}{Boolean flag to record proposal used.}
 }
 \description{
-Default proposal
+Default proposal constructor.
 }

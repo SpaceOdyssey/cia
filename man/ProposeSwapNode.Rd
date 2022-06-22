@@ -4,12 +4,10 @@
 \alias{ProposeSwapNode}
 \title{Propose that two nodes swap partition elements.}
 \usage{
-ProposeSwapNode(partitioned_nodes, verbose = FALSE)
+ProposeSwapNode(partitioned_nodes)
 }
 \arguments{
-\item{partitioned_nodes}{A labelled partition.}
-
-\item{verbose}{A flag to indicate that you are staying still.}
+\item{partitioned_nodes}{labelled partition.}
 }
 \value{
 A proposed labelled partition.
@@ -18,6 +16,6 @@ A proposed labelled partition.
 Propose that two nodes swap partition elements.
 }
 \examples{
-ProposeStayStill(partitioned_nodes, verbose = TRUE)
+ProposeStayStill(partitioned_nodes)
 
 }

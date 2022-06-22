@@ -2,10 +2,10 @@
 % Please edit documentation in R/propose_node_move.R
 \name{NodeMove}
 \alias{NodeMove}
-\title{Node movement constructor.}
+\title{Node move proposal.}
 \usage{
-NodeMove(partitioned_nodes, verbose = FALSE)
+NodeMove(partitioned_nodes)
 }
 \description{
-Node movement constructor.
+Node move proposal.
 }

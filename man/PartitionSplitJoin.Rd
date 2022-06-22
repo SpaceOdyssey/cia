@@ -4,7 +4,7 @@
 \alias{PartitionSplitJoin}
 \title{Partition split or join constructor.}
 \usage{
-PartitionSplitJoin(partitioned_nodes, verbose = FALSE)
+PartitionSplitJoin(partitioned_nodes)
 }
 \description{
 Partition split or join constructor.

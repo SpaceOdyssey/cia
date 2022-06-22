@@ -4,13 +4,10 @@
 \alias{ProposePartitionSplitJoin}
 \title{Propose a split or join of two partitions.}
 \usage{
-ProposePartitionSplitJoin(partitioned_nodes, verbose = FALSE)
+ProposePartitionSplitJoin(partitioned_nodes)
 }
 \arguments{
 \item{partitioned_nodes}{A labelled partition.}
-
-\item{verbose}{A flag to indicate whether to inform the user that the move
-is a split or join.}
 }
 \value{
 A proposed labelled partition.
@@ -22,6 +19,6 @@ amiguous, as a split for such a partitin element results in a stay still
 proposal that has been removed.
 }
 \examples{
-ProposePartitionSplitJoin(partitioned_nodes, verbose = TRUE)
+ProposePartitionSplitJoin(partitioned_nodes)
 
 }

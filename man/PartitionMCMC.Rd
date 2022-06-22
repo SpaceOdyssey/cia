@@ -3,26 +3,28 @@
 \name{PartitionMCMC}
 \alias{PartitionMCMC}
 \title{A transition object.
-A one-step implementation of partition MCMC.}
+A one-step implementation of partition MCMC. This acts as a constructor.}
 \usage{
-PartitionMCMC(current_state, proposal, scorer)
+PartitionMCMC(proposal = DefaultProposal(), verbose = TRUE)
 }
 \arguments{
+\item{proposal}{Proposal function. Default is the DefaultProposal.}
+
+\item{verbose}{Flag to pass mcmc information.}
+
 \item{current_state}{A labelled partition.}
 
-\item{proposal}{A proposal function.}
-
-\item{scorer}{A scorer object.}
+\item{scorer}{Scorer object.}
 }
 \value{
 A new state.
 }
 \description{
 A transition object.
-A one-step implementation of partition MCMC.
+A one-step implementation of partition MCMC. This acts as a constructor.
 }
 \examples{
-PartitionMCMC(partitioned_nodes, proposal = ProposePartitionSplitJoin, scorer = scorer_1)
-PartitionMCMC(partitioned_nodes, proposal = ProposePartitionSplitJoin, scorer = scorer_2)
+transition <- PartitionMCMC(proposal = ProposePartitionSplitJoin)
+transition(current_state, scorer_1)
 
 }

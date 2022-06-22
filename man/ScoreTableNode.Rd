@@ -20,9 +20,7 @@ List of log_scores for each combination in parent_combinations.
 Calculate score tables for (node, parents) combinations.
 }
 \examples{
-ScoreTableNode('A', c('B', 'C'), scorer_1)
-ScoreTableNode('A', c('B', 'C'), scorer_2)
-ScoreTableNode('A', c(), scorer_1)
-ScoreTableNode('A', NULL, scorer_1)
+ScoreTableNode(partitioned_nodes, 'A', scorer_1)
+ScoreTableNode(partitioned_nodes, 'A', scorer_2)
 
 }

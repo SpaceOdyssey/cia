@@ -4,26 +4,28 @@
 \alias{ProposeNodeMove}
 \title{Propose individual node movement.}
 \usage{
-ProposeNodeMove(partitioned_nodes, verbose = FALSE)
+ProposeNodeMove(partitioned_nodes)
 }
 \arguments{
-\item{partitioned_nodes}{A labelled partition.}
-
-\item{verbose}{A flag to indicate that a single node is being moved.}
+\item{partitioned_nodes}{Labelled partition.}
 }
 \description{
 This proposes that a single node selected uniformly can either:
 \enumerate{
-\item Move to any current partition element
-\item Move to any gap between or at the ends of the elements.
+\item Move to any current partition.
+\item Move to any gap between or at the ends of the partitions.
 }
 
-Any of these moves are possible and are selected uniformly. Note that
-this differs slightly from KP15 who remove the possibility of a 2-node
-partition element . This may slow the convergence on a per step basis but is
-easier and more concise to implement.
+Any of these moves are possible and are selected uniformly with two
+exceptions:
+\enumerate{
+\item The selected node cannot move into adjacent gaps if it originated from
+a single node partition.
+\item The selected node cannot move to the immediately higher gap if it
+originated from a two node partition.
+}
 }
 \examples{
-ProposeNodeMovement(partitioned_nodes, verbose = TRUE)
+ProposeNodeMovement(partitioned_nodes)
 
 }

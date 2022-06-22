@@ -4,12 +4,10 @@
 \alias{ProposeStayStill}
 \title{Propose that the partition stays still.}
 \usage{
-ProposeStayStill(partitioned_nodes, verbose = FALSE)
+ProposeStayStill(partitioned_nodes)
 }
 \arguments{
 \item{partitioned_nodes}{A labelled partition.}
-
-\item{verbose}{A flag to indicate that you are staying still.}
 }
 \value{
 A proposed labelled partition.
@@ -18,6 +16,6 @@ A proposed labelled partition.
 Propose that the partition stays still.
 }
 \examples{
-ProposeStayStill(partitioned_nodes, verbose = TRUE)
+ProposeStayStill(partitioned_nodes)
 
 }

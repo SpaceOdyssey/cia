@@ -4,10 +4,10 @@
 \alias{SwapNode}
 \title{Swap node proposal.}
 \usage{
-SwapNode(partitioned_nodes, verbose = FALSE)
+SwapNode(partitioned_nodes)
 }
 \arguments{
-\item{verbose}{A flag to indicate that you are staying still.}
+\item{partitioned_nodes}{Labelled partition.}
 }
 \description{
 Swap node proposal.
