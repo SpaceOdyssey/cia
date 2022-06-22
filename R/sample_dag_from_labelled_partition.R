@@ -1,6 +1,16 @@
 #' Sample a DAG from a labelled partition.
 #' 
-#' @examples 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' 
+#' scorer_1 <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#' )
+#' 
 #' SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer_1)
 #' 
 #' @param partitioned_nodes A labelled partition.
@@ -35,7 +45,7 @@ SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {
     }
     
     # Select parents using the cumulative distribution.
-    log_alpha <- log(runif(1))
+    log_alpha <- log(stats::runif(1))
     ordered_parents_i <- min(which(log_alpha < cdf_log_p))
     parent_combination_i <- ordered_log_scores[ordered_parents_i]
     parents <- score_table$parent_combinations[[parent_combination_i]]

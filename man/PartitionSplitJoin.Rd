@@ -6,6 +6,9 @@
 \usage{
 PartitionSplitJoin(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
 \description{
 Partition split or join constructor.
 }

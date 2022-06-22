@@ -16,6 +16,8 @@ A proposed labelled partition.
 Propose that two nodes swap partition elements.
 }
 \examples{
+dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 ProposeStayStill(partitioned_nodes)
 
 }

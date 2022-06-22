@@ -7,11 +7,11 @@
 ScoreTableNode(partitioned_nodes, node, scorer)
 }
 \arguments{
-\item{node}{The node name.}
+\item{partitioned_nodes}{Labelled partition.}
 
-\item{scorer}{A scorer object.}
+\item{node}{Name of node.}
 
-\item{potential_parents}{A vector of potential parents that need to be iterated over.}
+\item{scorer}{Scorer object.}
 }
 \value{
 List of log_scores for each combination in parent_combinations.
@@ -20,7 +20,16 @@ List of log_scores for each combination in parent_combinations.
 Calculate score tables for (node, parents) combinations.
 }
 \examples{
-ScoreTableNode(partitioned_nodes, 'A', scorer_1)
-ScoreTableNode(partitioned_nodes, 'A', scorer_2)
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(names(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+  
+ScoreTableNode(partitioned_nodes, 'A', scorer)
 
 }

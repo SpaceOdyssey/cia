@@ -19,6 +19,8 @@ amiguous, as a split for such a partitin element results in a stay still
 proposal that has been removed.
 }
 \examples{
+dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 ProposePartitionSplitJoin(partitioned_nodes)
 
 }

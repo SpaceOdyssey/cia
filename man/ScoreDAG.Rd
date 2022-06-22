@@ -9,6 +9,8 @@ ScoreDAG(dag, scorer)
 \arguments{
 \item{dag}{Adjacency matrix of (parent, child) entries with 1 denoting an
 edge and 0 otherwise.}
+
+\item{scorer}{Scorer object.}
 }
 \value{
 Log of DAG score.

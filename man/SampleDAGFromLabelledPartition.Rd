@@ -18,6 +18,16 @@ A data.frame of (node, partition element) pairs.
 Sample a DAG from a labelled partition.
 }
 \examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer_1 <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+)
+
 SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer_1)
 
 }

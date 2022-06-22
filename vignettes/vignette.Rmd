@@ -76,15 +76,14 @@ and get 'n_results' saves from the sampler. This procedure is done four times
 in order to check that similar results are being reached on each run.
 
 ```{r, error = TRUE}
+set.seed(1)
 n_runs <- 4
 n_results <- 1000
 chains <- list()
 for (i in 1:n_runs) {
-  set.seed(i)
   init_dag <- UniformlySampleDAG(names(data))
   partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
-  chain <- SampleChain(n_results, partitioned_nodes, transition = PartitionMCMC,
-                       proposal = DefaultProposal, scorer = scorer_1)
+  chain <- SampleChain(n_results, partitioned_nodes, PartitionMCMC(), scorer_1)
   chains[[i]] <- chain
 }
 ```
@@ -118,7 +117,7 @@ so I (i) just do it for the first run, and (ii) only take the samples greater
 than a burnin.
 
 ```{r, error = TRUE}
-n_burnin <- 200
+n_burnin <- 500
 set.seed(1)
 dags <- lapply(chains[[1]]$state[n_burnin:n_results], SampleDAGFromLabelledPartition, scorer = scorer_1)
 score_dags <- unlist(lapply(dags, ScoreDAG, scorer = scorer_1))

@@ -6,6 +6,9 @@
 \usage{
 NodeMove(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
 \description{
 Node move proposal.
 }

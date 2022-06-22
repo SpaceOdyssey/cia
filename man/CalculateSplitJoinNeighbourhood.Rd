@@ -6,6 +6,9 @@
 \usage{
 CalculateSplitJoinNeighbourhood(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
 \description{
 The number of split combinations prescribed by KP15 is ambiguous when a
 partition element has only 1 node. A split for a partition element with 1

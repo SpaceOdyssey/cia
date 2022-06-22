@@ -10,9 +10,10 @@
 #' 
 #' @param node A child node of parents.
 #' @param parents The parent nodes of node.
-#' @param ellipsis The ellipsis is used to pass other parameters to the scorer.
+#' @param ... The ellipsis is used to pass other parameters to the scorer.
 #' 
 #' @examples
+#' data <- bnlearn::learning.test
 #' BNLearnScorer('A', c('B', 'C'), data = data)
 #' BNLearnScorer('A', c(), data = data)
 #' BNLearnScorer('A', vector(), data = data)

@@ -20,7 +20,19 @@ Log of score difference between two labelled partitions.
 Calculate the difference in log scores between two labelled partitions.
 }
 \examples{
-ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer = scorer_1)
-ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer = scorer_2)
+data <- bnlearn::learning.test
+
+old_dag <- UniformlySampleDAG(names(data))
+old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+
+new_dag <- UniformlySampleDAG(names(data))
+new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+ScoreDiff(old_partitioned_nodes, new_partitioned_nodes, scorer = scorer)
 
 }

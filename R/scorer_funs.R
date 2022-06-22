@@ -1,12 +1,21 @@
 #' Calculate score tables for (node, parents) combinations. 
 #'
 #' @examples
-#' ScoreTableNode(partitioned_nodes, 'A', scorer_1)
-#' ScoreTableNode(partitioned_nodes, 'A', scorer_2)
+#' data <- bnlearn::learning.test
 #' 
-#' @param node The node name.
-#' @param potential_parents A vector of potential parents that need to be iterated over.
-#' @param scorer A scorer object.
+#' dag <- UniformlySampleDAG(names(data))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#'   
+#' ScoreTableNode(partitioned_nodes, 'A', scorer)
+#' 
+#' @param partitioned_nodes Labelled partition.
+#' @param node Name of node.
+#' @param scorer Scorer object.
 #'
 #' @return List of log_scores for each combination in parent_combinations.
 #' 
@@ -40,8 +49,17 @@ ScoreTableNode <- function(partitioned_nodes, node, scorer) {
 #' Score node by marginalising over parent combinations.
 #' 
 #' @examples 
-#' ScoreNode(partitioned_nodes, 'A', scorer_1)
-#' ScoreNode(partitioned_nodes, 'C', scorer_2)
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(names(data))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#'   
+#' ScoreNode(partitioned_nodes, 'A', scorer)
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' @param node The node name.
@@ -61,12 +79,20 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
 #' Score labelled partition by adding the log scores for each node.
 #' 
 #' @examples
-#' ScoreLabelledPartition(partitioned_nodes, scorer_1)
-#' ScoreLabelledPartition(partitioned_nodes, scorer_2)
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(names(data))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' ScoreLabelledPartition(partitioned_nodes, scorer)
 #' 
 #' @param partitioned_nodes Labelled partition.
-#' @param node The node name.
-#' @param scorer A scorer object.
+#' @param scorer Scorer object.
 #' 
 #' @return Log of the node score.
 #' 
@@ -85,8 +111,14 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' Find nodes with changed parent combinations between different labelled 
 #' partitions.
 #' 
-#' @examples 
-#' changed_nodes <- FindChangedNodes(partitioned_nodes, new_partitioned_nodes)
+#' @examples
+#' old_dag <- UniformlySampleDAG(LETTERS[1:5])
+#' old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+#' 
+#' new_dag <- UniformlySampleDAG(LETTERS[1:5])
+#' new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+#' 
+#' changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
 #' 
 #' @param old_partitioned_nodes Labelled partition.
 #' @param new_partitioned_nodes Labelled partition.
@@ -114,8 +146,20 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
 #' Calculate the difference in log scores between two labelled partitions. 
 #' 
 #' @examples 
-#' ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer = scorer_1)
-#' ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer = scorer_2)
+#' data <- bnlearn::learning.test
+#' 
+#' old_dag <- UniformlySampleDAG(names(data))
+#' old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+#' 
+#' new_dag <- UniformlySampleDAG(names(data))
+#' new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+#'
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' ScoreDiff(old_partitioned_nodes, new_partitioned_nodes, scorer = scorer)
 #' 
 #' @param old_partitioned_nodes A labelled partition.
 #' @param new_partitioned_nodes A labelled partition.
@@ -142,6 +186,7 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
 #' 
 #' @param dag Adjacency matrix of (parent, child) entries with 1 denoting an 
 #' edge and 0 otherwise.
+#' @param scorer Scorer object.
 #' 
 #' @returns Log of DAG score.
 #'
@@ -186,7 +231,7 @@ LogSumExp <- function(x) {
 #' Calculate the number of partitions for a given labelled partition. This is 
 #' 'm' in Kuipers & Moffa (2015).
 #' 
-#' @param partitoned_nodes
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
 GetNumberOfPartitions <- function(partitioned_nodes) {
@@ -249,9 +294,9 @@ GetParentCombinations <- function(partitioned_nodes, node) {
 
 #' Get all combinations of nodes.
 #' 
-#' @param parents A vector of nodes.
+#' @param nodes Vector of node names.
 #' 
-#' @return List of parent combinations.
+#' @return List of node combinations.
 #' 
 #' @export
 GetNodeCombinations <- function(nodes) {
@@ -262,7 +307,7 @@ GetNodeCombinations <- function(nodes) {
   
   node_combinations <- lapply(
       1:length(nodes),
-      function(y) combn(nodes, y, simplify = FALSE)
+      function(y) utils::combn(nodes, y, simplify = FALSE)
     ) %>%
     unlist(recursive = FALSE)
   
@@ -330,7 +375,7 @@ GetOrderedPartition <- function(partitioned_nodes) {
   
   ordered_partition <- table(partitioned_nodes$partition) %>%
     as.data.frame() %>%
-    setNames(nm = c('partition', 'frequency'))
+    stats::setNames(nm = c('partition', 'frequency'))
   
   return(ordered_partition)
 }

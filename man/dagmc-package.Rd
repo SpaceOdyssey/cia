@@ -4,12 +4,12 @@
 \name{dagmc-package}
 \alias{dagmc}
 \alias{dagmc-package}
-\title{dagmc: MCMC sampler for Directed Acyclic Graphs.}
+\title{dagmc: MCMC sampler for Directed Acyclic Graphs}
 \description{
 What the package does (one paragraph).
 }
 \author{
-\strong{Maintainer}: Mathew Varidel \email{mathew.varidel@sydney.edu.au} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Mathew Varidel \email{mathew.varidel@sydney.edu.au} (\href{https://orcid.org/0000-0002-1648-8317}{ORCID})
 
 }
 \keyword{internal}

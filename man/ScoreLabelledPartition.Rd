@@ -9,9 +9,7 @@ ScoreLabelledPartition(partitioned_nodes, scorer)
 \arguments{
 \item{partitioned_nodes}{Labelled partition.}
 
-\item{scorer}{A scorer object.}
-
-\item{node}{The node name.}
+\item{scorer}{Scorer object.}
 }
 \value{
 Log of the node score.
@@ -20,7 +18,16 @@ Log of the node score.
 Score labelled partition by adding the log scores for each node.
 }
 \examples{
-ScoreLabelledPartition(partitioned_nodes, scorer_1)
-ScoreLabelledPartition(partitioned_nodes, scorer_2)
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(names(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+ScoreLabelledPartition(partitioned_nodes, scorer)
 
 }

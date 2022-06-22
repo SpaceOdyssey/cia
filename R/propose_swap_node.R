@@ -18,6 +18,8 @@ SwapNode <- function(partitioned_nodes) {
 #' Propose that two nodes swap partition elements.
 #' 
 #' @examples 
+#' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' ProposeStayStill(partitioned_nodes)
 #' 
 #' @param partitioned_nodes labelled partition.

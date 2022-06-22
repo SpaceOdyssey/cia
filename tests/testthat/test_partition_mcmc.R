@@ -3,7 +3,7 @@ dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
 scorer_1 <- list(
-  scorer = dagmc::BNLearnScorer, 
+  scorer = BNLearnScorer,
   parameters = list(data = bnlearn::learning.test[1:10, ])
 )
 

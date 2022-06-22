@@ -36,6 +36,13 @@ testthat::test_that('SampleChain returns consistent state dimensions for SwapNod
   )
 })
 
+testthat::test_that('SampleChains returns a list of chains', {
+  testthat::expect_equal(
+    length(SampleChains(10, partitioned_nodes, PartitionMCMC(proposal = SwapNode), scorer = scorer_1)),
+    2
+  )
+})
+
 set.seed(1)
 chain <- SampleChain(100, partitioned_nodes, PartitionMCMC(), scorer = scorer_1)
 testthat::test_that('Check SampleChain returns correct scores', {

@@ -20,7 +20,16 @@ Log of the node score.
 Score node by marginalising over parent combinations.
 }
 \examples{
-ScoreNode(partitioned_nodes, 'A', scorer_1)
-ScoreNode(partitioned_nodes, 'C', scorer_2)
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(names(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+  
+ScoreNode(partitioned_nodes, 'A', scorer)
 
 }

@@ -11,12 +11,13 @@ BNLearnScorer(node, parents, ...)
 
 \item{parents}{The parent nodes of node.}
 
-\item{ellipsis}{The ellipsis is used to pass other parameters to the scorer.}
+\item{...}{The ellipsis is used to pass other parameters to the scorer.}
 }
 \description{
 BNLearnScorer
 }
 \examples{
+data <- bnlearn::learning.test
 BNLearnScorer('A', c('B', 'C'), data = data)
 BNLearnScorer('A', c(), data = data)
 BNLearnScorer('A', vector(), data = data)

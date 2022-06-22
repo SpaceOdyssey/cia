@@ -20,6 +20,12 @@ Find nodes with changed parent combinations between different labelled
 partitions.
 }
 \examples{
-changed_nodes <- FindChangedNodes(partitioned_nodes, new_partitioned_nodes)
+old_dag <- UniformlySampleDAG(LETTERS[1:5])
+old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+
+new_dag <- UniformlySampleDAG(LETTERS[1:5])
+new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+
+changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
 
 }

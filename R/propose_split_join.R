@@ -1,5 +1,7 @@
 #' Partition split or join constructor.
 #' 
+#' @param partitioned_nodes Labelled partition.
+#'
 #' @export
 PartitionSplitJoin <- function(partitioned_nodes) {
   
@@ -23,6 +25,8 @@ PartitionSplitJoin <- function(partitioned_nodes) {
 #' proposal that has been removed.
 #' 
 #' @examples 
+#' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' ProposePartitionSplitJoin(partitioned_nodes)
 #' 
 #' @param partitioned_nodes A labelled partition.
@@ -99,6 +103,8 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
 #' partition element has only 1 node. A split for a partition element with 1 
 #' node results in a proposal to stay still, as such I remove that proposal.
 #' 
+#' @param partitioned_nodes Labelled partition.
+#' 
 #' @export
 CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
   
@@ -109,6 +115,8 @@ CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
 }
 
 #' Calculate number of split combinations.
+#' 
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
 CalculateSplitCombinations <- function(partitioned_nodes) {

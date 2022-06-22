@@ -1,5 +1,7 @@
 #' Node move proposal.
 #' 
+#' @param partitioned_nodes Labelled partition.
+#' 
 #' @export
 NodeMove <- function(partitioned_nodes) {
   
@@ -28,7 +30,9 @@ NodeMove <- function(partitioned_nodes) {
 #'    originated from a two node partition.
 #' 
 #' @examples
-#' ProposeNodeMovement(partitioned_nodes)
+#' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' ProposeNodeMove(partitioned_nodes)
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 

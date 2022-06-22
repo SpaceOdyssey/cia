@@ -7,7 +7,7 @@
 GetNumberOfPartitions(partitioned_nodes)
 }
 \arguments{
-\item{partitoned_nodes}{}
+\item{partitioned_nodes}{Labelled partition.}
 }
 \description{
 Calculate the number of partitions for a given labelled partition. This is

@@ -16,6 +16,8 @@ A proposed labelled partition.
 Propose that the partition stays still.
 }
 \examples{
+dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 ProposeStayStill(partitioned_nodes)
 
 }

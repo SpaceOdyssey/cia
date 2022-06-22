@@ -126,19 +126,54 @@ p_summary <- data.frame(
 
 ## Sample from the posterior using MCMC
 
+# ```{r, error = TRUE}
+# n_runs <- 8
+# n_results <- 5000
+# chains <- list()
+# set.seed(i)
+# 
+# system.time(
+#   for (i in 1:n_runs) {
+#     init_dag <- UniformlySampleDAG(names(data))
+#     partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+#     chain <- SampleChain(n_results, partitioned_nodes, 
+#                          transition = PartitionMCMC(), scorer = scorer)
+#     chains[[i]] <- chain
+#   }
+# )
+# ```
+
+This get n_results samples for each core. 
+
 ```{r, error = TRUE}
-n_runs <- 4
-n_results <- 5000
-chains <- list()
-set.seed(i)
-for (i in 1:n_runs) {
+library(doParallel)
+
+set.seed(1)
+n_results <- 2000
+n_cores <- parallel::detectCores()
+
+init_partitions <- list()
+for (i in 1:n_cores) {
   init_dag <- UniformlySampleDAG(names(data))
-  partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
-  chain <- SampleChain(n_results, partitioned_nodes, 
-                       transition = PartitionMCMC(), scorer = scorer)
-  chains[[i]] <- chain
+  init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
+
+chains <- SampleChains(n_results, init_partitions, 
+                       transition = PartitionMCMC(),
+                       scorer = scorer,
+                       n_parallel_chains = n_cores)
 ```
+
+## Check the chains for convergence 
+
+Check that all chains have reached the maximum a posteriori (MAP).
+
+```{r, error = TRUE}
+
+
+
+```
+
 
 Looking at the trace of the partition log score.
 

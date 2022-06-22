@@ -6,6 +6,9 @@
 \usage{
 CalculateSplitCombinations(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
 \description{
 Calculate number of split combinations.
 }

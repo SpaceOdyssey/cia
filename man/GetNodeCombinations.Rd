@@ -7,10 +7,10 @@
 GetNodeCombinations(nodes)
 }
 \arguments{
-\item{parents}{A vector of nodes.}
+\item{nodes}{Vector of node names.}
 }
 \value{
-List of parent combinations.
+List of node combinations.
 }
 \description{
 Get all combinations of nodes.

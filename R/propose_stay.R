@@ -1,5 +1,7 @@
 #' StayStill proposal.
 #' 
+#' @param partitioned_nodes Labelled partition.
+#' 
 #' @export
 StayStill <- function(partitioned_nodes) {
   
@@ -17,6 +19,8 @@ StayStill <- function(partitioned_nodes) {
 #' Propose that the partition stays still.
 #' 
 #' @examples
+#' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' ProposeStayStill(partitioned_nodes)
 #' 
 #' @param partitioned_nodes A labelled partition.

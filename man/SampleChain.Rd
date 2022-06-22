@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_chain.R
 \name{SampleChain}
 \alias{SampleChain}
-\title{Sample chain.}
+\title{Sample a single chain.}
 \usage{
 SampleChain(n_results, init_state, transition, scorer, n_thin = 1)
 }
@@ -17,13 +17,20 @@ SampleChain(n_results, init_state, transition, scorer, n_thin = 1)
 
 \item{n_thin}{Number of steps between saved states.}
 }
-\value{
-List of results.
-}
 \description{
-Sample chain.
+Sample a single chain.
 }
 \examples{
-results <- SampleChain(100, partitioned_nodes, transition = PartitionMCMC(scorer = scorer_1))
+data = bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer_1 <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChain(10, partitioned_nodes, PartitionMCMC(), scorer_1)
 
 }

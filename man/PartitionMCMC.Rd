@@ -2,8 +2,8 @@
 % Please edit documentation in R/mcmc_steps.R
 \name{PartitionMCMC}
 \alias{PartitionMCMC}
-\title{A transition object.
-A one-step implementation of partition MCMC. This acts as a constructor.}
+\title{Transition objects.
+A one step implementation of partition MCMC. This acts as a constructor.}
 \usage{
 PartitionMCMC(proposal = DefaultProposal(), verbose = TRUE)
 }
@@ -11,20 +11,31 @@ PartitionMCMC(proposal = DefaultProposal(), verbose = TRUE)
 \item{proposal}{Proposal function. Default is the DefaultProposal.}
 
 \item{verbose}{Flag to pass mcmc information.}
-
-\item{current_state}{A labelled partition.}
-
-\item{scorer}{Scorer object.}
 }
 \value{
-A new state.
+Function that takes the current state and scorer that outputs a new
+state.
 }
 \description{
-A transition object.
-A one-step implementation of partition MCMC. This acts as a constructor.
+This is a constructor for a single Partition MCMC step. The function
+constructs an environment with the proposal and verbose flag. It then returns
+a function which takes the current_state and a scorer object.
 }
 \examples{
-transition <- PartitionMCMC(proposal = ProposePartitionSplitJoin)
-transition(current_state, scorer_1)
+dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer,
+  parameters = list(data = bnlearn::learning.test)
+  )
+
+current_state <- list(
+  state = partitioned_nodes,
+  log_score = ScoreLabelledPartition(partitioned_nodes, scorer)
+  )
+
+pmcmc <- PartitionMCMC(proposal = PartitionSplitJoin)
+pmcmc(current_state, scorer)
 
 }

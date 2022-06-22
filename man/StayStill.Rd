@@ -6,6 +6,9 @@
 \usage{
 StayStill(partitioned_nodes)
 }
+\arguments{
+\item{partitioned_nodes}{Labelled partition.}
+}
 \description{
 StayStill proposal.
 }
