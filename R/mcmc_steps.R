@@ -1,42 +1,44 @@
 #' A transition object.
 
-#' A one-step implementation of partition MCMC.
+#' A one-step implementation of partition MCMC. This acts as a constructor.
 #' 
 #' @examples 
-#' PartitionMCMC(partitioned_nodes, proposal = ProposePartitionSplitJoin, scorer = scorer_1)
-#' PartitionMCMC(partitioned_nodes, proposal = ProposePartitionSplitJoin, scorer = scorer_2)
+#' transition <- PartitionMCMC(proposal = ProposePartitionSplitJoin)
+#' transition(current_state, scorer_1)
 #' 
+#' @param proposal Proposal function. Default is the DefaultProposal.
+#' @param verbose Flag to pass mcmc information.
 #' @param current_state A labelled partition.
-#' @param proposal A proposal function.
-#' @param scorer A scorer object.
+#' @param scorer Scorer object.
 #'
 #' @returns A new state.
 #' 
 #' @export
-PartitionMCMC <- function(current_state, proposal, scorer) {
+PartitionMCMC <- function(proposal = DefaultProposal(), verbose = TRUE) {
   
-  proposed <- proposal(current_state$state)
-
-  new_state <- proposed$state
-  log_score_diff <- ScoreDiff(current_state$state, new_state, scorer)
+  function(current_state, scorer) {
+    proposed <- proposal(current_state$state)
   
-  log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
-  
-  accept <- AcceptProposal(log_r)
-  mcmc_info <- list(accept = accept)
-  
-  if (accept) {
-    current_state$state <- new_state
-    current_state$log_score <- current_state$log_score + log_score_diff
+    new_state <- proposed$state
+    log_score_diff <- ScoreDiff(current_state$state, new_state, scorer)
     
-    current_state$proposal_info <- proposed$proposal_info
-    current_state$mcmc_info <- mcmc_info
-  } else {
-    current_state$proposal_info <- proposed$proposal_info
-    current_state$mcmc_info <- mcmc_info
+    log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
+    
+    accept <- AcceptProposal(log_r)
+    
+    if (accept) {
+      current_state$state <- new_state
+      current_state$log_score <- current_state$log_score + log_score_diff
+      current_state$proposal_info <- proposed$proposal_info
+    } else {
+      current_state$proposal_info <- proposed$proposal_info
+    }
+    
+    if (verbose)
+      current_state$mcmc_info <- list(accept = accept)
+    
+    return(current_state)
   }
-  
-  return(current_state)
 }
 
 #' Metropolis-Hastings acceptance.

@@ -1,34 +1,42 @@
-#' Default proposal
+#' Default proposal constructor.
+#' 
+#' @param p Probability for each proposal in the order (split_join, node_move, 
+#' swap_node, stay_still).
+#' @param verbose Boolean flag to record proposal used.
 #' 
 #' @export
-DefaultProposal <- function(p_split_join = 0.4, p_swap_node = 0.30, 
-                            p_node_move = 0.29) {
+DefaultProposal <- function(p = c(0.33, 0.33, 0.33, 0.01), verbose = TRUE) {
 
-  stopifnot(sum(p_split_join, p_swap_node, p_node_move) <= 1)
-  
-  cdf_swap_node <- p_split_join + p_swap_node
-  cdf_node_move <- cdf_swap_node + p_node_move
+  stopifnot(sum(p) == 1)
   
   function(partitioned_nodes) {
   
     alpha <- stats::runif(1)
-    if (alpha < p_split_join) {
-      proposal_info <- list(proposal_used = 'split_join')
+    if (alpha < p[1]) {
+      if (verbose) 
+        proposal_info <- list(proposal_used = 'split_join')
+      
       current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
       partitioned_nodes <- ProposePartitionSplitJoin(partitioned_nodes)
       new_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
-    } else if (alpha < cdf_swap_node) {
-      proposal_info <- list(proposal_used = 'swap_node')
-      current_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
-      partitioned_nodes <- ProposeSwapNode(partitioned_nodes)
-      new_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)    
-    } else if (alpha < cdf_node_move) {
-      proposal_info <- list(proposal_used = 'node_move')
+    } else if (alpha <  sum(p[1:2])) {
+      if (verbose)
+        proposal_info <- list(proposal_used = 'node_move')
+      
       current_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
       partitioned_nodes <- ProposeNodeMove(partitioned_nodes)
       new_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
+    } else if (alpha < sum(p[1:3])) {
+      if (verbose)
+        proposal_info <- list(proposal_used = 'swap_node')
+      
+      current_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
+      partitioned_nodes <- ProposeSwapNode(partitioned_nodes)
+      new_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
     } else {
-      proposal_info <- list(proposal_used = 'stay_still')
+      if (verbose)
+        proposal_info <- list(proposal_used = 'stay_still')
+      
       current_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
       partitioned_nodes <- ProposeStayStill(partitioned_nodes)
       new_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)

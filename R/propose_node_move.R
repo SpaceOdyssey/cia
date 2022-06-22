@@ -1,4 +1,4 @@
-#' Node movement constructor.
+#' Node move proposal.
 #' 
 #' @export
 NodeMove <- function(partitioned_nodes) {

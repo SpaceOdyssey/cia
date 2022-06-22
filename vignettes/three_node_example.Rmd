@@ -129,14 +129,13 @@ p_summary <- data.frame(
 ```{r, error = TRUE}
 n_runs <- 4
 n_results <- 5000
-proposal <- DefaultProposal(p_split_join = 0.33, p_swap_node = 0.33, p_node_move = 0.33)
 chains <- list()
 set.seed(i)
 for (i in 1:n_runs) {
   init_dag <- UniformlySampleDAG(names(data))
   partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
-  chain <- SampleChain(n_results, partitioned_nodes, transition = PartitionMCMC,
-                       proposal = proposal, scorer = scorer)
+  chain <- SampleChain(n_results, partitioned_nodes, 
+                       transition = PartitionMCMC(), scorer = scorer)
   chains[[i]] <- chain
 }
 ```
@@ -254,12 +253,12 @@ bw <- psi %>%
 Calculate the effective sample size for each DAG probability. This still doesn't feel quite right.
 
 ```{r, error = TRUE}
-nmax <- 100
+t_max <- 100
 n_eff <- c()
 for (i_focus_dag in 1:1) {
   v <- c()
   rho <- c()
-  for (t in 0:(nmax - 1)) {
+  for (t in 0:(t_max - 1)) {
     sum_psi_sq <- 0.0
     for (r in 1:n_runs) {
       for (m in 1:2) {
@@ -281,7 +280,7 @@ for (i_focus_dag in 1:1) {
   }
   
   # Only perform a partial sum of rho
-  rho_pair_sum <- rho[seq(0, n_within, 2)] + rho[seq(1, n_within, 2)]
+  rho_pair_sum <- rho[seq(0, t_max, 2)] + rho[seq(1, t_max, 2)]
   if (all(rho_pair_sum > 0)) {
     # full sum
     rho_part_sum <- sum(rho)
@@ -321,61 +320,35 @@ prop_accept <- chain_info %>%
 knitr::kable(prop_accept)
 ```
 
-Calculate the proportion of split join proposals that are accepted where it 
-proposes staying still. This should equal zero now that I've removed this as a 
-possible proposal.
 
-```{r, error = TRUE}
-dags_col <- simplify2array(dags[[1]])
-dags_diff <- dags_col[, , 2:(n_results - n_burnin)] - dags_col[, , 1:(n_results - n_burnin - 1)]
-dags_still <- apply(abs(dags_diff), 3, sum) == 0
-
-accepted_sj <- ((chain_info$proposal_used[(1 + n_burnin):(n_results - 1)] == 'split_join')
-                & (chain_info$accept[(1 + n_burnin):(n_results - 1)] == 1)
-                & dags_still)
-print(mean(accepted_sj))
+```{r, error = TRUE, fig.dim = c(7.0, 12.0)}
+graphics::par(mfrow = c(4, 2))
+for (i in 1:min(nrow(bw1), 8)) {
+  hash_focus_dag <- bw1$hash_dag[i]
+  focus_dag <- all_dags[[which(hash_all_dags == hash_focus_dag)]]
+  
+  bn_focus <- bnlearn::empty.graph(nodes)
+  bnlearn::amat(bn_focus) <- focus_dag
+  plot(bn_focus)
+  
+  t <- paste('p_est: ', round(bw1$p[i], 3), ', p_true: ', round(bw1$p_true[i], 3), sep = '')
+  graphics::text(300, 0, t)
+}
+graphics::par(mfrow = c(1,1))
 ```
+<!-- Compare to BiDAG.. -->
 
-Calculate the proportion of node move proposals that are accepted where it 
-proposes staying still...
-
-```{r, error = TRUE}
-accepted_nm <- ((chain_info$proposal_used[(1 + n_burnin):(n_results - 1)] == 'node_move')
-                & (chain_info$accept[(1 + n_burnin):(n_results - 1)] == 1)
-                & dags_still)
-print(mean(accepted_nm))
-```
-
-
-Compare to BiDAG..
-
-````{r, error = TRUE}
-# library(Matrix)
-# bd_data <- tibble::tibble(data) %>% 
-#   dplyr::mutate_all(~ as.numeric(. == 'yes')) %>%
-#   # as.matrix %>%
-#   # as('dtCMatrix') %>%
-#   # as.matrix
-# 
-# # bd_data <- as.numeric(data == 'yes') %>% matrix(ncol = 3)
-# score_par <- BiDAG::scoreparameters(
-#   'bde', data = bd_data, bdepar = list(chi = 1, edgepf = 1)
-#   )
-# bidag_res <- BiDAG::partitionMCMC(score_par)
-
-
-```
-
-<!-- ```{r, error = TRUE, fig.dim = c(7.0, 6.0)} -->
-<!-- par(mfrow = c(1, 2)) -->
-<!-- for (i in 1:2) { -->
-<!--   hash_focus_dag <- compare[i, 'hash_dag'] -->
-<!--   focus_dag <- all_dags[[which(hash_all_dags == hash_focus_dag)]] -->
-
-<!--   bn_focus <- bnlearn::empty.graph(nodes) -->
-<!--   bnlearn::amat(bn_focus) <- focus_dag -->
-<!--   plot(bn_focus) -->
-<!-- } -->
-<!-- par(mfrow = c(1,1)) -->
+<!-- ````{r, error = TRUE} -->
+<!-- # library(Matrix) -->
+<!-- # bd_data <- tibble::tibble(data) %>%  -->
+<!-- #   dplyr::mutate_all(~ as.numeric(. == 'yes')) %>% -->
+<!-- #   # as.matrix %>% -->
+<!-- #   # as('dtCMatrix') %>% -->
+<!-- #   # as.matrix -->
+<!-- #  -->
+<!-- # # bd_data <- as.numeric(data == 'yes') %>% matrix(ncol = 3) -->
+<!-- # score_par <- BiDAG::scoreparameters( -->
+<!-- #   'bde', data = bd_data, bdepar = list(chi = 1, edgepf = 1) -->
+<!-- #   ) -->
+<!-- # bidag_res <- BiDAG::partitionMCMC(score_par) -->
 <!-- ``` -->
-
