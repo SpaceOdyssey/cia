@@ -14,7 +14,7 @@ SampleChains(
 )
 }
 \arguments{
-\item{n_results}{Number of saved states.}
+\item{n_results}{Number of saved states per chain.}
 
 \item{init_state}{An initial state that can be passed to transition. This can
 be a single state or a list of states for each parallel chain.}

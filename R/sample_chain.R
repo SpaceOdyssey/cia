@@ -13,7 +13,7 @@
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
 #' 
-#' @param n_results Number of saved states.
+#' @param n_results Number of saved states per chain.
 #' @param init_state An initial state that can be passed to transition. This can
 #' be a single state or a list of states for each parallel chain.
 #' @param transition A transition function.

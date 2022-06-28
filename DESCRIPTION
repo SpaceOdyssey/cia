@@ -14,14 +14,17 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.0
 Imports:
-	magrittr,
-	bnlearn,
-	igraph,
-	doParallel,
-	foreach
+    magrittr,
+    bnlearn,
+    igraph,
+    doParallel,
+    foreach,
+    memo
 Suggests: 
     rmarkdown,
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    parallel,
+    gtools
 Config/testthat/edition: 3
 VignetteBuilder: knitr

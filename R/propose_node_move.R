@@ -91,9 +91,14 @@ CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {
   m <- GetNumberOfPartitions(partitioned_nodes)
   ordered_partition <- GetOrderedPartition(partitioned_nodes)
   
-  n_1_num_nbd <- (2*m - 2)*sum(ordered_partition$frequency == 1)
-  n_2_num_nbd <- (2*m - 1)*sum(ordered_partition$frequency == 2)
-  n_oth_num_nbd <- 2*m*sum(ordered_partition$frequency > 2)
+  n_1 <- sum(ordered_partition$frequency == 1)
+  n_1_num_nbd <- (2*m - 2)*n_1
+  
+  n_2 <- 2*sum(ordered_partition$frequency == 2)
+  n_2_num_nbd <- (2*m - 1)*n_2
+  
+  n_oth <- sum(ordered_partition$frequency[ordered_partition$frequency > 2])
+  n_oth_num_nbd <- 2*m*n_oth
   
   return(n_1_num_nbd + n_2_num_nbd + n_oth_num_nbd)
 }

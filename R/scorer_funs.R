@@ -359,6 +359,7 @@ GetPartitionedNodesFromAdjacencyMatrix <- function(adjacency) {
 OrderPartitionedNodes <- function(partitioned_nodes) {
   ord <- order(partitioned_nodes$partition, partitioned_nodes$node)
   partitioned_nodes <- partitioned_nodes[ord, ]
+  row.names(partitioned_nodes) <- NULL
 
   return(partitioned_nodes)
 }

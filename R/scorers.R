@@ -43,26 +43,11 @@ BNLearnScorer <- function(node, parents, ...) {
   return(log_score)
 }
 
-#' Create scorer object. Not implemented yet.
-#' 
-#' @examples
-#' scorer_1 <- list(
-#'   scorer = BNLearnScorer,
-#'   parameters = list(data = data, type = 'bde', iss = 100)
-#'   )
-#'
-#' scorer_2 <- list(
-#'  scorer = BNLearnScorer,
-#'  parameters = list(data = data)
-#' )
-#' 
-#' @noRd
-create_scorer <- function(FUN, ...) {
+TemperedBNLearnScorer <- function(temperature) {
   
-  scorer <- list(
-    scorer = FUN,
-    parameters = list(...)
-  )
+  stopifnot(temperature > 1.0)
   
-  return(scorer)
+  function(node, parents) {
+    return(BNLearnScorer(node, parents)^(1.0/temperature))
+  }
 }
