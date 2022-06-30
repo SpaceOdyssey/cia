@@ -8,3 +8,6 @@
 *.Rproj
 .Rhistory
 inst/doc
+*.html
+*.R
+*.log

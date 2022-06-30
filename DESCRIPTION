@@ -19,12 +19,14 @@ Imports:
     igraph,
     doParallel,
     foreach,
-    memo
+    arrangements,
+    graphics
 Suggests: 
     rmarkdown,
     knitr,
     testthat (>= 3.0.0),
     parallel,
-    gtools
+    gtools,
+    memo
 Config/testthat/edition: 3
 VignetteBuilder: knitr

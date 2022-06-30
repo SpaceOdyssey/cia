@@ -32,19 +32,19 @@ ProposeSwapNode <- function(partitioned_nodes) {
   if (GetNumberOfPartitions(partitioned_nodes) > 1) {
 
     # Select node.
-    n <- nrow(partitioned_nodes)
+    n <- GetNumberOfNodes(partitioned_nodes)
     i_node <- sample.int(n, size = 1)
-    node_element <- partitioned_nodes[i_node, 'partition'] 
+    node_element <- partitioned_nodes$partition[i_node] 
     
     # Select node from another partition element.
-    candidates <- partitioned_nodes[partitioned_nodes$partition != node_element, 'node']
+    candidates <- partitioned_nodes$node[partitioned_nodes$partition != node_element]
     oth_node <- sample(candidates, 1)
     i_oth_node <- partitioned_nodes$node == oth_node
-    oth_node_element <- partitioned_nodes[i_oth_node, 'partition']
+    oth_node_element <- partitioned_nodes$partition[i_oth_node]
     
     # Swap nodes.
-    partitioned_nodes[i_node, 'partition'] <- oth_node_element
-    partitioned_nodes[i_oth_node, 'partition'] <- node_element
+    partitioned_nodes$partition[i_node] <- oth_node_element
+    partitioned_nodes$partition[i_oth_node] <- node_element
     
     partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
   }
@@ -61,7 +61,7 @@ CalculateSwapNodeNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
   if (m > 1) {
-    n <- nrow(partitioned_nodes)
+    n <- GetNumberOfNodes(partitioned_nodes)
     
     nbd <- 0
     for (i in 1:m) {

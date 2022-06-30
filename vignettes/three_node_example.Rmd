@@ -26,35 +26,63 @@ library(magrittr)
 ```
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-nodes <- LETTERS[1:3]
-set.seed(2)
-true_dag <- UniformlySampleDAG(nodes)
-
-true_graph <- bnlearn::empty.graph(nodes)
-bnlearn::amat(true_graph) <- true_dag
-plot(true_graph)
+# nodes <- LETTERS[1:3]
+# set.seed(2)
+# true_dag <- UniformlySampleDAG(nodes)
+# 
+# true_graph <- bnlearn::empty.graph(nodes)
+# bnlearn::amat(true_graph) <- true_dag
+# plot(true_graph)
 ```
 
 Create conditional probability tables.
 
 ```{r, error = TRUE}
-set.seed(1)
-p_min <- 0.1
+# Three Node confounder problem
 levels <- c('yes', 'no')
 all_levels <- list(A = levels, B = levels, C = levels)
+
+# Two-edge model
 bn_arr <- list()
-for (i in 1:length(nodes)) {
-  node <- nodes[i]
-  parents <- names(which(true_dag[, node] == 1))
-  
-  y_values <- runif(max(1, length(parents)), min = p_min)
-  n_values <- 1.0 - y_values
-  values <- rbind(y_values, n_values) %>% as.vector
-  
-  bn_arr[[i]] <- gRbase::parray(c(node, parents), levels = all_levels, values = values)
-}
+bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
+                              values = c(0.67, 0.33, 0.33, 0.67))
+bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
+                              values = c(0.5, 0.5))
+bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
+                              values = c(0.33, 0.67, 0.57, 0.1))
+
+# # Student model
+# all_levels <- list(
+#   D = c('no', 'yes'),
+#   I = c('no', 'yes'),
+#   G = c('no', 'yes'),
+#   L = c('no', 'yes'),
+#   S = c('no', 'yes')
+#   )
+# 
+# bn_arr <- list()
+# bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
+# bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
+# bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
+#                               values = c(0.3, 0.7,
+#                                          0.9, 0.10,
+#                                          0.05, 0.95,
+#                                          0.5, 0.5))
+# bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
+#                               levels = all_levels,
+#                               values = c(0.95, 0.05,
+#                                          0.2, 0.8))
+# bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
+#                               levels = all_levels,
+#                               values = c(0.1, 0.9,
+#                                          0.4, 0.6,
+#                                          0.99, 0.01))
+# 
+nodes <- names(all_levels)
 cpt <- gRain::compileCPT(bn_arr)
 gr_dag <- gRain::grain(cpt)
+true_dag <- as(gr_dag$dag, 'matrix')
+plot(gr_dag)
 ```
 
 Draw samples from the true DAG. There appears to be a bug somewhere here such that
@@ -62,50 +90,58 @@ set.seed does not work when running simulate using gRain. So you will get
 irreproducible results for this script.
 
 ```{r, error = TRUE}
-data <- stats::simulate(gr_dag, nsim = 500, seed = 1)
+data <- stats::simulate(gr_dag, nsim = 100, seed = 1)
 knitr::kable(head(data))
 ```
 
-Get all possible graphs. This is quite inefficient. It goes through all possible 
-permutations of child, parent, and edge possibilities. Then it only takes the 
-unique ones.
+Calculate correlation matrix of the data.
+```{r, error = TRUE}
+knitr::kable(cor(1*(data == 'yes')))
+```
+
+Get all possible graphs. 
 
 ```{r, error = TRUE}
-tri_val <- expand.grid(c(0, 1), c(0, 1), c(0, 1))
-node_perm <- gtools::permutations(length(nodes), length(nodes), nodes)
-all_dags <- list()
-n <- 1
-for (i in 1:nrow(node_perm)) {
-  for (j in 1:nrow(node_perm)) {
-    for (k in 1:nrow(tri_val)) {
+GetAllDAGs <- function(nodes) {
+
+  n <- length(nodes)
+  n_tri <- n*(n - 1)/2
+  tri_comb <- rep(list(c(0L, 1L)), n_tri)
+  tri_val <- expand.grid(tri_comb)
+  
+  node_perm <- gtools::permutations(length(nodes), length(nodes), nodes)
+  all_dags <- list()
+  n <- 1
+  for (i in 1:nrow(node_perm)) {
+    for (j in 1:nrow(tri_val)) {
       mat <- matrix(
-        0L, 
+        0L,
         nrow = length(nodes), 
-        ncol = length(nodes), 
-        dimnames = list(node_perm[i, ], node_perm[j, ])
+        ncol = length(nodes),
+        dimnames = list(node_perm[i, ], node_perm[i, ])
         )
-      mat[upper.tri(mat)] <- as.numeric(tri_val[k, ])
+      mat[upper.tri(mat)] <- as.integer(tri_val[j, ])
       mat <- mat[nodes, nodes]
       
-      if (sum(diag(mat)) == 0) {
-        bn_gr <- bnlearn::empty.graph(nodes)
-        bnlearn::amat(bn_gr) <- mat
-        if (bnlearn::acyclic(bn_gr) & bnlearn::directed(bn_gr)) {
-          all_dags[[n]] <- mat
-          n <- n + 1
-        }
-      }
+      all_dags[[n]] <- mat
+      n <- n + 1
     }
   }
+  all_dags <- unique(all_dags)
+  
+  return(all_dags)
 }
-all_dags <- unique(all_dags)
+
+all_dags <- GetAllDAGs(nodes)
 ```
 
 Score all possible DAGs against the simulated data.
 
 ```{r, error = TRUE}
-scorer <- list(scorer = BNLearnScorer, parameters = list(data = data, type = 'bde'))
-score_all_dags <- unlist(lapply(all_dags, ScoreDAG, scorer = scorer))
+scorer <- list(scorer = memo::memo(BNLearnScorer, memo::lru_cache(10000)), parameters = list(data = data, type = 'bde'))
+score_all_dags <- all_dags %>%
+  lapply(ScoreDAG, scorer = scorer) %>%
+  unlist
 hash_all_dags <- all_dags %>%
   lapply(rlang::hash) %>% 
   unlist
@@ -126,88 +162,113 @@ p_summary <- data.frame(
 
 ## Sample from the posterior using MCMC
 
-# ```{r, error = TRUE}
-# n_runs <- 8
-# n_results <- 5000
-# chains <- list()
-# set.seed(i)
-# 
-# system.time(
-#   for (i in 1:n_runs) {
-#     init_dag <- UniformlySampleDAG(names(data))
-#     partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
-#     chain <- SampleChain(n_results, partitioned_nodes, 
-#                          transition = PartitionMCMC(), scorer = scorer)
-#     chains[[i]] <- chain
-#   }
-# )
-# ```
-
-This get n_results samples for each core. 
+This gets n_results samples for each core. 
 
 ```{r, error = TRUE}
-library(doParallel)
-
 set.seed(1)
-n_results <- 2000
-n_cores <- parallel::detectCores()
+n_results <- 10000
+n_chains <- 4
 
 init_partitions <- list()
-for (i in 1:n_cores) {
+for (i in 1:n_chains) {
   init_dag <- UniformlySampleDAG(names(data))
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
-chains <- SampleChains(n_results, init_partitions, 
-                       transition = PartitionMCMC(),
-                       scorer = scorer,
-                       n_parallel_chains = n_cores)
+system.time(
+  chains <- SampleChains(n_results, init_partitions,
+                         transition = PartitionMCMC(),
+                         scorer = scorer,
+                         n_parallel_chains = n_chains)
+)
 ```
 
 ## Check the chains for convergence 
 
-Check that all chains have reached the maximum a posteriori (MAP).
+<!-- Check that all chains have reached the maximum a posteriori (MAP). -->
 
-```{r, error = TRUE}
-
-
-
-```
-
+<!-- # ```{r, error = TRUE} -->
+<!-- # # Get max score -->
+<!-- # # CheckMaxPartitionScoreAcrossChains <- function() -->
+<!-- # max_score <- -Inf -->
+<!-- # max_scores <- c() -->
+<!-- # for (i in 1:n_chains) { -->
+<!-- #   chain_max_score <- max(chains[[i]]$log_score) -->
+<!-- #   max_scores <- c(max_scores, chain_max_score) -->
+<!-- #    -->
+<!-- #   i_max_score <- which(chains[[i]]$log_score == chain_max_score) -->
+<!-- #   chain_max_score_states <- unique(chains[[i]]$state[i_max_score]) -->
+<!-- #    -->
+<!-- #   if (chain_max_score > max_score) -->
+<!-- #     max_score <- chain_max_score -->
+<!-- # } -->
+<!-- # check_score <- which(max_scores == max_score) -->
+<!-- #  -->
+<!-- # # Find all states that correspond to max score. There could be multiple states -->
+<!-- # # so this is exhaustive. -->
+<!-- # max_score_states <- list() -->
+<!-- # n <- 1 -->
+<!-- # for (i in check_score) { -->
+<!-- #   i_max_score <- which(chains[[i]]$log_score == chain_max_score) -->
+<!-- #   un_states <- unique(chains[[i]]$state[i_max_score]) -->
+<!-- #   for (j in 1:length(un_states)) { -->
+<!-- #     max_score_states[[n]] <- un_states[[j]] -->
+<!-- #     n <- n + 1 -->
+<!-- #   } -->
+<!-- # } -->
+<!-- # max_score_states <- unique(max_score_states) -->
+<!-- #  -->
+<!-- #  -->
+<!-- # if (length(max_score_states) == 1) { -->
+<!-- #   check_states <- check_score -->
+<!-- # } else { -->
+<!-- #   # Need to check each chain. -->
+<!-- #   check_states <- c() -->
+<!-- #   for (i in 1:n_chains) { -->
+<!-- #     check_states_chain <- TRUE -->
+<!-- #     for (j in 1:length(max_score_states)) { -->
+<!-- #       if (!max_score_states[[j]] %in% chains[[i]]$state) { -->
+<!-- #         check_states_chain <- FALSE -->
+<!-- #       } -->
+<!-- #     } -->
+<!-- #     check_states <- c(check_states, check_states_chain) -->
+<!-- #   } -->
+<!-- # } -->
+<!-- # ``` -->
 
 Looking at the trace of the partition log score.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-col <- c('green', 'red', 'blue')
-plot(chains[[1]]$log_score, xlab = 'saves', ylab = 'log(partition score)', type = 'l')
-for (i in 2:n_runs) {
-  lines(chains[[i]]$log_score, xlab = 'saves', ylab = 'log(partition score)', type = 'l', col = col[i - 1])
-}
+# PlotScoreTrace <- function(chains, burnin = 1, nrow = NULL, ncol = 1, ...) {
+#   
+#   colors <- c('black', 'green', 'red', 'blue', 'brown', 'darkviolet', 
+#               'darkgoldenrod', 'deeppink')
+#   
+#   n_within <- length(chains[[1]]$log_score)
+#   plot(chains[[1]]$log_score[burnin:n_within], col = colors[1], ...)
+#   
+#   for (i in 2:length(chains)) {
+#     n_within <- length(chains[[i]]$log_score)
+#     lines(chains[[i]]$log_score[burnin:n_within], 
+#           col = colors[i %% length(colors)], ...)
+#   }
+# }
+
+PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 ```
 
 Converting the partitions into DAGs.
 
 ```{r, error = TRUE}
-n_burnin <- 100
-set.seed(1)
-dags <- list()
-score_dags <- list()
-for (i in 1:n_runs) {
-  eq_states <- chains[[i]]$state[(1 + n_burnin):n_results]
-  dags[[i]] <- lapply(eq_states, SampleDAGFromLabelledPartition, scorer = scorer)
-  score_dags[[i]] <- unlist(lapply(dags[[i]], ScoreDAG, scorer = scorer))
-}
+n_burnin <- 500
+eq_chains <- PostProcessChains(chains, n_burnin = n_burnin)
+eq_chains <- SampleChainDAGs(eq_chains, scorer)
 ```
 
-Plot trace of DAG scores.
+Plot trace of DAG scores for equilibrium states.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-true_score <- ScoreDAG(true_dag, scorer)
-n_target_saves <- n_results - n_burnin
-plot(1:n_target_saves, score_dags[[1]], xlab = 'saves', ylab = 'log(DAG score)', type = 'l')
-for (i in 2:n_runs) {
-  lines(score_dags[[i]], xlab = 'saves', ylab = 'log(partition score)', type = 'l', col = col[i - 1])
-}
+PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
 ## Convergence of the score trace
@@ -221,17 +282,21 @@ convergence when the partition and DAG scores are not normally distributed?
 
 ## Estimating probabilities for each DAG
 
-First we want to check whether the convergence both between and within chains
+First we want to check that the convergence both between and within chains
 for the probability of the DAGs of interest. I do this using the Rhat calculation
 provided by Gelman in chapter 11 of Bayesian Data Analysis.
 
 ```{r, error = TRUE}
+dags <- list()
+for (i in 1:n_chains)
+  dags[[i]] <- eq_chains[[i]]$dag
+
 unique_sampled_dags <- unique(unlist(dags, recursive = FALSE))
 n_within <- (n_results - n_burnin)/2
 
 p_chains <- list()
 ssq <- list()
-for (i in 1:n_runs) {
+for (i in 1:n_chains) {
   for (m in 1:2) {
     count_dags <- dags[[i]][(1 + (m - 1)*n_within):(m*n_within)] %>%
       lapply(rlang::hash) %>%
@@ -251,7 +316,7 @@ p_chains <- dplyr::bind_rows(p_chains)
 # Only going to check convergence for DAGs that appear in all chains. I'm
 # assuming that other DAGs have a reasonably low probability, and therefore
 # we are less interested in them.
-focus_dags <- names(table(p_chains$hash_dag))[table(p_chains$hash_dag) == 2*n_runs]
+focus_dags <- names(table(p_chains$hash_dag))[table(p_chains$hash_dag) == 2*n_chains]
 p_chains <- p_chains %>%
   dplyr::filter(hash_dag %in% focus_dags)
 
@@ -273,7 +338,7 @@ bw <- psi %>%
   dplyr::mutate(psi_diff_sq = (psi_j - psi_bar)^2) %>%
   dplyr::group_by(hash_dag) %>%
   dplyr::summarise(
-    b = n_within/(2*n_runs - 1)*sum(psi_diff_sq),
+    b = n_within/(2*n_chains - 1)*sum(psi_diff_sq),
     w = mean(ssq_j)
     ) %>%
   dplyr::mutate(
@@ -295,7 +360,7 @@ for (i_focus_dag in 1:1) {
   rho <- c()
   for (t in 0:(t_max - 1)) {
     sum_psi_sq <- 0.0
-    for (r in 1:n_runs) {
+    for (r in 1:n_chains) {
       for (m in 1:2) {
         dags_j <- dags[[r]][(1 + (m - 1)*n_within):(m*n_within)] %>%
               lapply(rlang::hash) %>%
@@ -306,7 +371,7 @@ for (i_focus_dag in 1:1) {
         sum_psi_sq <- sum_psi_sq + sum_psi_sq_j
       }
     }
-    v_t_const <- 1.0/(2*n_runs*(n_within - t))
+    v_t_const <- 1.0/(2*n_chains*(n_within - t))
     v_t <- v_t_const*sum_psi_sq
     v <- c(v, v_t)
   
@@ -325,7 +390,7 @@ for (i_focus_dag in 1:1) {
     rho_part_sum <- sum(rho[1:(first_neg_pair - 1)])
   }
   
-  n_eff_dag <- 2*n_runs*n_within/(1 + 2*rho_part_sum)
+  n_eff_dag <- 2*n_chains*n_within/(1 + 2*rho_part_sum)
   n_eff <- c(n_eff, n_eff_dag)
 }
 bw1 <- bw %>% 
@@ -340,50 +405,47 @@ knitr::kable(bw1)
 
 ## Analysing acceptance rates
 
-Acceptance per proposal.
+Acceptance per proposal after burnin.
 
 ```{r, error = TRUE}
-chain_info <- dplyr::bind_cols(
-  proposal_used = unlist(chains[[1]]$proposal_info, use.names = FALSE), 
-  accept = unlist(chains[[1]]$mcmc_info, use.names = FALSE)
-  )
+chain_info <- list()
+for (i in 1:n_chains) {
+  chain_info[[i]] <- dplyr::bind_cols(
+    proposal_used = unlist(chains[[i]]$proposal_info[n_burnin:(n_results - 1)], use.names = FALSE),
+    accept = unlist(chains[[i]]$mcmc_info[n_burnin:(n_results - 1)], use.names = FALSE)
+    )
+}
+chain_info <- dplyr::bind_rows(chain_info)
 
 prop_accept <- chain_info %>% 
   dplyr::group_by(proposal_used) %>% 
-  dplyr::summarise(accept = mean(accept))
+  dplyr::summarise(accept = mean(accept), n_accept = sum(accept), n = dplyr::n())
 
 knitr::kable(prop_accept)
 ```
 
 
-```{r, error = TRUE, fig.dim = c(7.0, 12.0)}
-graphics::par(mfrow = c(4, 2))
-for (i in 1:min(nrow(bw1), 8)) {
-  hash_focus_dag <- bw1$hash_dag[i]
-  focus_dag <- all_dags[[which(hash_all_dags == hash_focus_dag)]]
-  
-  bn_focus <- bnlearn::empty.graph(nodes)
-  bnlearn::amat(bn_focus) <- focus_dag
-  plot(bn_focus)
-  
-  t <- paste('p_est: ', round(bw1$p[i], 3), ', p_true: ', round(bw1$p_true[i], 3), sep = '')
-  graphics::text(300, 0, t)
-}
-graphics::par(mfrow = c(1,1))
-```
-<!-- Compare to BiDAG.. -->
-
-<!-- ````{r, error = TRUE} -->
-<!-- # library(Matrix) -->
-<!-- # bd_data <- tibble::tibble(data) %>%  -->
-<!-- #   dplyr::mutate_all(~ as.numeric(. == 'yes')) %>% -->
-<!-- #   # as.matrix %>% -->
-<!-- #   # as('dtCMatrix') %>% -->
-<!-- #   # as.matrix -->
+<!-- # ```{r, error = TRUE, fig.dim = c(7.0, 12.0)} -->
+<!-- # n_chain_all <- dags %>% -->
+<!-- #   unlist(recursive = FALSE) %>% -->
+<!-- #   lapply(rlang::hash) %>% -->
+<!-- #   unlist %>% -->
+<!-- #   table -->
+<!-- # p_chain_all <- n_chain_all/sum(n_chain_all) -->
 <!-- #  -->
-<!-- # # bd_data <- as.numeric(data == 'yes') %>% matrix(ncol = 3) -->
-<!-- # score_par <- BiDAG::scoreparameters( -->
-<!-- #   'bde', data = bd_data, bdepar = list(chi = 1, edgepf = 1) -->
-<!-- #   ) -->
-<!-- # bidag_res <- BiDAG::partitionMCMC(score_par) -->
-<!-- ``` -->
+<!-- # i_order <- order(p_true, decreasing = TRUE) -->
+<!-- # graphics::par(mfrow = c(4, 2)) -->
+<!-- # for (i in i_order[1:25]) { -->
+<!-- #   hash_focus_dag <- hash_all_dags[i] -->
+<!-- #   focus_dag <- all_dags[[i]] -->
+<!-- #    -->
+<!-- #   bn_focus <- bnlearn::empty.graph(nodes) -->
+<!-- #   bnlearn::amat(bn_focus) <- focus_dag -->
+<!-- #   plot(bn_focus) -->
+<!-- #    -->
+<!-- #   t <- paste('p_est: ', round(p_chain_all[hash_focus_dag], 4),  -->
+<!-- #              ', p_true: ', round(p_true[i], 4), sep = '') -->
+<!-- #   graphics::text(300, 0, t) -->
+<!-- # } -->
+<!-- # graphics::par(mfrow = c(1,1)) -->
+<!-- # ``` -->

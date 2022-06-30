@@ -63,7 +63,7 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
     
     # Get split partition element information.
     ordered_partitions <- GetOrderedPartition(partitioned_nodes)
-    k_i_star <- ordered_partitions[i_star, 'frequency']
+    k_i_star <- ordered_partitions$frequency[i_star]
     
     # Choose the number of nodes to select from the partition in proportion to
     # the number of ways available.
@@ -78,18 +78,18 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
     }
     
     # Sample c_star nodes from partition element i_star.
-    i_star_nodes <- partitioned_nodes[partitioned_nodes$partition == i_star, 'node']
+    i_star_nodes <- partitioned_nodes$node[partitioned_nodes$partition == i_star]
     split_nodes <- sample(i_star_nodes, c_star)
     
     # Assign all partition elements higher than the chosen partition element to
     # one great.
     higher_elements <- partitioned_nodes$partition > i_star
-    partitioned_nodes[higher_elements, 'partition'] <- partitioned_nodes[higher_elements, 'partition'] + 1
+    partitioned_nodes$partition[higher_elements] <- partitioned_nodes$partition[higher_elements] + 1
     
     # Move chosen nodes to a new partition element one greater than it's 
     # current partition element.
     move_nodes <- partitioned_nodes$node %in% split_nodes
-    partitioned_nodes[move_nodes, 'partition'] <- i_star + 1
+    partitioned_nodes$partition[move_nodes] <- i_star + 1
   }
   
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)

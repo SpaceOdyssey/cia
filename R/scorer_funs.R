@@ -30,11 +30,10 @@ ScoreTableNode <- function(partitioned_nodes, node, scorer) {
     log_node_parent_scores <- do.call(scorer$scorer, scorer$parameters)
     parent_combinations <- list(NULL)
   } else {
-    log_node_parent_scores <- c()
-    for (parents in parent_combinations) {
-      scorer$parameters$parents <- parents
-      log_parent_comb_score <- do.call(scorer$scorer, scorer$parameters)
-      log_node_parent_scores <- c(log_node_parent_scores, log_parent_comb_score)
+    log_node_parent_scores <- numeric(length(parent_combinations))
+    for (i in 1:length(parent_combinations)) {
+      scorer$parameters$parents <- parent_combinations[[i]]
+      log_node_parent_scores[i] <- do.call(scorer$scorer, scorer$parameters)
     }
   }
   
@@ -247,7 +246,7 @@ GetNumberOfPartitions <- function(partitioned_nodes) {
 #' 
 #' @export
 GetNodePartition <- function(partitioned_nodes, node) {
-  node_partition <- partitioned_nodes[partitioned_nodes$node == node, 'partition']
+  node_partition <- partitioned_nodes$partition[partitioned_nodes$node == node]
   
   return(node_partition)
 }
@@ -267,19 +266,21 @@ GetParentCombinations <- function(partitioned_nodes, node) {
   if (node_el == 1) {
     parent_combinations <- NULL
   } else if (node_el == 2) {
-    direct_pas <- partitioned_nodes[partitioned_nodes$partition == node_el - 1, 'node']
+    direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
     direct_pa_coms <- GetNodeCombinations(direct_pas)
     
     parent_combinations <- direct_pa_coms
   } else {
-  
-    direct_pas <- partitioned_nodes[partitioned_nodes$partition == node_el - 1, 'node']
+    direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
     direct_pa_coms <- GetNodeCombinations(direct_pas)
     
-    indirect_pas <- partitioned_nodes[partitioned_nodes$partition < node_el - 1, 'node']
+    indirect_pas <- partitioned_nodes$node[partitioned_nodes$partition < node_el - 1]
     indirect_pa_coms <- GetNodeCombinations(indirect_pas)
   
-    parent_combinations <- direct_pa_coms
+    n_parent_coms <- length(direct_pa_coms)*(1 + length(indirect_pa_coms))
+    parent_combinations <- vector('list', n_parent_coms)
+    parent_combinations[1:length(direct_pa_coms)] <- direct_pa_coms
+    
     i <- 1 + length(direct_pa_coms)
     for (direct_pa_com in direct_pa_coms) {
       for (indirect_pa_com in indirect_pa_coms) {
@@ -303,12 +304,16 @@ GetNodeCombinations <- function(nodes) {
   if (is.null(nodes))
     return(nodes)
   
-  nodes <- nodes[order(nodes)]
+  # node_combinations <- lapply(
+  #     1:length(nodes),
+  #     function(x) utils::combn(nodes, x, simplify = FALSE)
+  #   ) %>%
+  #   unlist(recursive = FALSE)
   
   node_combinations <- lapply(
-      1:length(nodes),
-      function(y) utils::combn(nodes, y, simplify = FALSE)
-    ) %>%
+      1:length(nodes), 
+      function(x) arrangements::combinations(nodes, x, layout = 'list')
+      ) %>%
     unlist(recursive = FALSE)
   
   return(node_combinations)
@@ -374,10 +379,15 @@ OrderPartitionedNodes <- function(partitioned_nodes) {
 #' @export
 GetOrderedPartition <- function(partitioned_nodes) {
   
-  ordered_partition <- table(partitioned_nodes$partition) %>%
-    as.data.frame() %>%
-    stats::setNames(nm = c('partition', 'frequency'))
+  tab <- tabulate(partitioned_nodes$partition)
+  ordered_partition <- data.frame(partition = 1:length(tab), frequency = tab)
   
   return(ordered_partition)
 }
 
+#' Get number of nodes from labelled partition.
+#' 
+#' @noRd
+GetNumberOfNodes <- function(partitioned_nodes) {
+  return(dim.data.frame(partitioned_nodes)[1])
+}
