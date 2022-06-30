@@ -408,20 +408,15 @@ knitr::kable(bw1)
 Acceptance per proposal after burnin.
 
 ```{r, error = TRUE}
-chain_info <- list()
-for (i in 1:n_chains) {
-  chain_info[[i]] <- dplyr::bind_cols(
-    proposal_used = unlist(chains[[i]]$proposal_info[n_burnin:(n_results - 1)], use.names = FALSE),
-    accept = unlist(chains[[i]]$mcmc_info[n_burnin:(n_results - 1)], use.names = FALSE)
-    )
-}
-chain_info <- dplyr::bind_rows(chain_info)
-
-prop_accept <- chain_info %>% 
-  dplyr::group_by(proposal_used) %>% 
-  dplyr::summarise(accept = mean(accept), n_accept = sum(accept), n = dplyr::n())
-
+prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = c('proposal_used'))
 knitr::kable(prop_accept)
+```
+
+Overall acceptance proposal.
+
+```{r, error = TRUE}
+total_accept <- CalculateAcceptanceRates(eq_chains)
+knitr::kable(total_accept)
 ```
 
 

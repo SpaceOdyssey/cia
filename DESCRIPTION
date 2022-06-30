@@ -20,7 +20,8 @@ Imports:
     doParallel,
     foreach,
     arrangements,
-    graphics
+    graphics,
+    dplyr
 Suggests: 
     rmarkdown,
     knitr,

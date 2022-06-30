@@ -83,7 +83,7 @@ ProposeNodeMove <- function(partitioned_nodes) {
 
 #' Calculate neighbourhood for node move.
 #' 
-#' @param partitioned_nodes A labelled partition.
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
 CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {

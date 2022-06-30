@@ -67,23 +67,35 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 #' @export
 SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
   
-  init_log_score <- ScoreLabelledPartition(init_state, scorer)
-  trace <- list(state = list(init_state), log_score = init_log_score, 
-                proposal_info = list(), mcmc_info = list())
+  # Setup objects to store results.
+  states <- vector('list', n_results)
+  log_scores <- numeric(n_results)
+  proposal_info <- vector('list', n_results*n_thin)
+  mcmc_info <- vector('list', n_results*n_thin)
   
-  current_state <- list(state = init_state, log_score = init_log_score, 
-                        proposal_info = NULL, mcmc_info = NULL)
-  for (i in 2:n_results) {
+  # Setup initial state.
+  init_log_score <- ScoreLabelledPartition(init_state, scorer)
+  current_state <- list(state = init_state, 
+                        log_score = init_log_score,
+                        proposal_info = NULL, 
+                        mcmc_info = NULL)
+  
+  # Run MCMC to return n_results.
+  for (i in 1:n_results) {
     for (j in 1:n_thin) {
       current_state <- transition(current_state, scorer)
       
-      trace$proposal_info <- append(trace$proposal_info, current_state$proposal_info)
-      trace$mcmc_info <- append(trace$mcmc_info, current_state$mcmc_info)
+      i_info <- 1 + (i - 1)*n_thin + (j - 1)
+      proposal_info[[i_info]] <- current_state$proposal_info
+      mcmc_info[[i_info]] <- current_state$mcmc_info
     }
-    trace$state[[i]] <- current_state$state
-    trace$log_score <- c(trace$log_score, current_state$log_score)
+    states[[i]] <- current_state$state
+    log_scores[[i]] <- current_state$log_score
   }
   
-  return(trace)
+  return(list(state = states, 
+              log_score = log_scores, 
+              proposal_info = proposal_info, 
+              mcmc_info = mcmc_info))
 }
 
