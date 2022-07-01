@@ -3,7 +3,6 @@
 export(BNLearnScorer)
 export(CalculateAcceptanceRates)
 export(CalculateNodeMoveNeighbourhood)
-export(CalculateSplitCombinations)
 export(CalculateSplitJoinNeighbourhood)
 export(CalculateStayStillNeighbourhood)
 export(CalculateSwapNodeNeighbourhood)

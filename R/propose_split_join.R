@@ -40,17 +40,15 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
   num_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   j <- sample.int(num_nbd, size = 1)
   if (j < m) {
-    # Join two partitions.
-    partition_j <- partitioned_nodes$partition[j]
-    
-    higher_partitions <- partitioned_nodes$partition > partition_j
-    partitioned_nodes$partition[higher_partitions] <- partitioned_nodes$partition[higher_partitions] - 1
+    # Join partitions (j, j+1).   
+    move_partitions <- partitioned_nodes$partition > j
+    partitioned_nodes$partition[move_partitions] <- partitioned_nodes$partition[move_partitions] - 1
   } else {
     # Split a partition.
     
     # Find partition element to split. The split partition element needs to be
     # chosen proportional to the number of ways there is to perform the split.
-    # Also record numnber of ways prior to the chosen partition.
+    # Also record number of ways prior to the chosen partition element.
     prior_i_star_num_nbd <- m - 1
     for (i_star in 1:m) {
       i_star_partitions <- partitioned_nodes[partitioned_nodes$partition <= i_star, ]
@@ -82,7 +80,7 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
     split_nodes <- sample(i_star_nodes, c_star)
     
     # Assign all partition elements higher than the chosen partition element to
-    # one great.
+    # one greater.
     higher_elements <- partitioned_nodes$partition > i_star
     partitioned_nodes$partition[higher_elements] <- partitioned_nodes$partition[higher_elements] + 1
     
@@ -118,7 +116,7 @@ CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateSplitCombinations <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)

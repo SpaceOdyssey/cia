@@ -132,7 +132,6 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
     potential_parents <- GetParentCombinations(old_partitioned_nodes, node)
     new_potential_parents <- GetParentCombinations(new_partitioned_nodes, node)
     
-    # TODO: This shouldn't check the whole set. Instead, 1) check direct parents, 2) check indirect parents.
     if (!setequal(potential_parents, new_potential_parents)) {
       changed_nodes <- c(changed_nodes, node)
     }
@@ -304,16 +303,10 @@ GetNodeCombinations <- function(nodes) {
   if (is.null(nodes))
     return(nodes)
   
-  # node_combinations <- lapply(
-  #     1:length(nodes),
-  #     function(x) utils::combn(nodes, x, simplify = FALSE)
-  #   ) %>%
-  #   unlist(recursive = FALSE)
-  
   node_combinations <- lapply(
       1:length(nodes), 
       function(x) arrangements::combinations(nodes, x, layout = 'list')
-      ) %>%
+    ) %>%
     unlist(recursive = FALSE)
   
   return(node_combinations)

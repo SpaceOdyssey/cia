@@ -5,7 +5,7 @@
 \title{Transition objects.
 A one step implementation of partition MCMC. This acts as a constructor.}
 \usage{
-PartitionMCMC(proposal = DefaultProposal(), verbose = TRUE)
+PartitionMCMC(proposal = NULL, verbose = TRUE)
 }
 \arguments{
 \item{proposal}{Proposal function. Default is the DefaultProposal.}

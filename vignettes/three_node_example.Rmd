@@ -38,46 +38,46 @@ library(magrittr)
 Create conditional probability tables.
 
 ```{r, error = TRUE}
-# Three Node confounder problem
-levels <- c('yes', 'no')
-all_levels <- list(A = levels, B = levels, C = levels)
-
-# Two-edge model
-bn_arr <- list()
-bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
-                              values = c(0.67, 0.33, 0.33, 0.67))
-bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
-                              values = c(0.5, 0.5))
-bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
-                              values = c(0.33, 0.67, 0.57, 0.1))
-
-# # Student model
-# all_levels <- list(
-#   D = c('no', 'yes'),
-#   I = c('no', 'yes'),
-#   G = c('no', 'yes'),
-#   L = c('no', 'yes'),
-#   S = c('no', 'yes')
-#   )
+# # Three Node confounder problem
+# levels <- c('yes', 'no')
+# all_levels <- list(A = levels, B = levels, C = levels)
 # 
+# # Two-edge model
 # bn_arr <- list()
-# bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
-# bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
-# bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
-#                               values = c(0.3, 0.7,
-#                                          0.9, 0.10,
-#                                          0.05, 0.95,
-#                                          0.5, 0.5))
-# bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
-#                               levels = all_levels,
-#                               values = c(0.95, 0.05,
-#                                          0.2, 0.8))
-# bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
-#                               levels = all_levels,
-#                               values = c(0.1, 0.9,
-#                                          0.4, 0.6,
-#                                          0.99, 0.01))
-# 
+# bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
+#                               values = c(0.67, 0.33, 0.33, 0.67))
+# bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
+#                               values = c(0.5, 0.5))
+# bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
+#                               values = c(0.33, 0.67, 0.57, 0.1))
+
+# Student model
+all_levels <- list(
+  D = c('no', 'yes'),
+  I = c('no', 'yes'),
+  G = c('no', 'yes'),
+  L = c('no', 'yes'),
+  S = c('no', 'yes')
+  )
+
+bn_arr <- list()
+bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
+bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
+bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
+                              values = c(0.3, 0.7,
+                                         0.9, 0.10,
+                                         0.05, 0.95,
+                                         0.5, 0.5))
+bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
+                              levels = all_levels,
+                              values = c(0.95, 0.05,
+                                         0.2, 0.8))
+bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
+                              levels = all_levels,
+                              values = c(0.1, 0.9,
+                                         0.4, 0.6,
+                                         0.99, 0.01))
+
 nodes <- names(all_levels)
 cpt <- gRain::compileCPT(bn_arr)
 gr_dag <- gRain::grain(cpt)
@@ -181,6 +181,12 @@ system.time(
                          scorer = scorer,
                          n_parallel_chains = n_chains)
 )
+
+# profvis::profvis(
+#   chain <- SampleChain(n_results, init_partitions[[1]],
+#                         transition = PartitionMCMC(),
+#                         scorer = scorer)
+# )
 ```
 
 ## Check the chains for convergence 

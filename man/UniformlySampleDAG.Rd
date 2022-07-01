@@ -10,7 +10,7 @@ UniformlySampleDAG(nodes)
 \item{nodes}{A vector of node names.}
 }
 \value{
-An adjacency matrix with elements designated as (parent, child).
+Adjacency matrix with elements designated as (parent, child).
 }
 \description{
 Uniformly sample DAG given a set of nodes.

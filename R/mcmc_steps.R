@@ -31,7 +31,10 @@
 #' state.
 #' 
 #' @export
-PartitionMCMC <- function(proposal = DefaultProposal(), verbose = TRUE) {
+PartitionMCMC <- function(proposal = NULL, verbose = TRUE) {
+  
+  if (is.null(proposal))
+    proposal <- DefaultProposal()
   
   function(current_state, scorer) {
     proposed <- proposal(current_state$state)
