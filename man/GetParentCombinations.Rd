@@ -4,12 +4,14 @@
 \alias{GetParentCombinations}
 \title{Get parent combinations for a given node.}
 \usage{
-GetParentCombinations(partitioned_nodes, node)
+GetParentCombinations(partitioned_nodes, node, scorer)
 }
 \arguments{
 \item{partitioned_nodes}{Labelled partition.}
 
-\item{node}{A node name.}
+\item{node}{Node name.}
+
+\item{scorer}{A scorer object.}
 }
 \value{
 List of parent combinations.

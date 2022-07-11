@@ -7,12 +7,13 @@
 SampleDAGFromLabelledPartition(partitioned_nodes, scorer)
 }
 \arguments{
-\item{partitioned_nodes}{A labelled partition.}
+\item{partitioned_nodes}{Labelled partition.}
 
-\item{scorer}{A scorer object.}
+\item{scorer}{Scorer object.}
 }
 \value{
-A data.frame of (node, partition element) pairs.
+A matrix with elements of (parent, child) cells with 1 representing
+and edge and 0 otherwise.
 }
 \description{
 Sample a DAG from a labelled partition.
@@ -23,11 +24,8 @@ data <- bnlearn::learning.test
 dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
-scorer_1 <- list(
-  scorer = BNLearnScorer, 
-  parameters = list(data = data)
-)
+scorer <- CreateScorer(data = data)
 
-SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer_1)
+SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer)
 
 }

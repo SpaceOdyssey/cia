@@ -5,12 +5,14 @@
 \title{Find nodes with changed parent combinations between different labelled
 partitions.}
 \usage{
-FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
+FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes, scorer)
 }
 \arguments{
 \item{old_partitioned_nodes}{Labelled partition.}
 
 \item{new_partitioned_nodes}{Labelled partition.}
+
+\item{scorer}{Scorer object.}
 }
 \value{
 Vector of changed nodes.
@@ -20,12 +22,14 @@ Find nodes with changed parent combinations between different labelled
 partitions.
 }
 \examples{
+scorer = CreateScorer()
+
 old_dag <- UniformlySampleDAG(LETTERS[1:5])
 old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
 
 new_dag <- UniformlySampleDAG(LETTERS[1:5])
 new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
 
-changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
+changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes, scorer)
 
 }

@@ -4,14 +4,8 @@ set.seed(1)
 dag <- UniformlySampleDAG(names(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
-scorer_1 <- list(
-  scorer = BNLearnScorer, 
-  parameters = list(data = data)
-)
-scorer_2 <- list(
-  scorer = dagmc::BNLearnScorer, 
-  parameters = list(data = data, type = 'bde', iss = 1)
-)
+scorer_1 <- CreateScorer(data = data)
+scorer_2 <- CreateScorer(data = data, type = 'bde', iss = 1)
 
 testthat::test_that('ScoreTableNode works', {
   testthat::expect_true(sum(ScoreTableNode(partitioned_nodes, 'A', scorer_1)$log_scores) < 0.0)
@@ -49,4 +43,28 @@ testthat::test_that('ScoreDiff is consistent', {
     ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer_1),
     ScoreLabelledPartition(new_partitioned_nodes, scorer_1) - ScoreLabelledPartition(partitioned_nodes, scorer_1)
   )
+})
+
+whitelist <- matrix(FALSE, 
+                    ncol = ncol(data), 
+                    nrow = ncol(data), 
+                    dimnames = list(colnames(data), colnames(data)))
+whitelist['A', 'B'] <- TRUE
+false_whitelist <- data.frame(partition = c(1, 1), node = c('A', 'B'))
+true_whitelist <- data.frame(partition = c(1, 2), node = c('A', 'B'))
+testthat::test_that('CheckWhitelist works', {
+  testthat::expect_false(CheckWhitelistObeyed(false_whitelist, whitelist))
+  testthat::expect_true(CheckWhitelistObeyed(true_whitelist, whitelist))
+})
+
+blacklist <- matrix(FALSE, 
+                    ncol = ncol(data), 
+                    nrow = ncol(data), 
+                    dimnames = list(colnames(data), colnames(data)))
+blacklist['A', 'B'] <- TRUE
+true_blacklist <- data.frame(partition = c(1, 1), node = c('A', 'B'))
+false_blacklist <- data.frame(partition = c(1, 2), node = c('A', 'B'))
+testthat::test_that('CheckBlacklist works', {
+  testthat::expect_false(CheckBlacklistObeyed(false_blacklist, blacklist))
+  testthat::expect_true(CheckBlacklistObeyed(true_blacklist, blacklist))
 })

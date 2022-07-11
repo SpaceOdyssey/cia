@@ -54,7 +54,7 @@ ProposeSwapNode <- function(partitioned_nodes) {
 
 #' Calculate neighbourhood for swapping nodes.
 #' 
-#' @param partitioned_nodes A labelled partition.
+#' @param partitioned_nodes Labelled partition.
 #' 
 #' @export
 CalculateSwapNodeNeighbourhood <- function(partitioned_nodes) {

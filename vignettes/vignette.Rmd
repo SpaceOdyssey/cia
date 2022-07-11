@@ -30,9 +30,8 @@ library(ggplot2)
 Get test problem from the bnlearn library.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-# data <- bnlearn::gaussian.test[1:100, ]
 data <- bnlearn::alarm[1:100, ]
-
+type <- 'bde'
 modelstring <- paste0("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF][LVF]",
   "[STKV|HYP:LVF][ERLO][HRBP|ERLO:HR][HREK|ERCA:HR][ERCA][HRSA|ERCA:HR][ANES]",
   "[APL][TPR|APL][ECO2|ACO2:VLNG][KINK][MINV|INT:VLNG][FIO2][PVS|FIO2:VALV]",
@@ -41,27 +40,76 @@ modelstring <- paste0("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF][LVF]",
   "[ACO2|VALV][CCHL|ACO2:ANES:SAO2:TPR][HR|CCHL][CO|HR:STKV][BP|CO:TPR]")
 true_graph <- bnlearn::model2network(modelstring)
 
+# # Asia
+# data <- bnlearn::asia[1:1000, ]
+# type <- 'bde'
+# arc_set <- matrix(c('A', 'T',
+#                     'T', 'E',
+#                     'S', 'B',
+#                     'B', 'D',
+#                     'L', 'E',
+#                     'E', 'D',
+#                     'E', 'X'
+#                     ),
+#                   ncol = 2, byrow = TRUE,
+#                   dimnames = list(NULL, c('from', 'to')))
+
+# # Cornary
+# data <- bnlearn::coronary
+# type <- 'bde'
+# arc_set <- matrix(c('Smoking', 'M. Work',
+#                     'Smoking', 'Pressure',
+#                     'Smoking', 'P. Work',
+#                     'M. Work', 'Family',
+#                     'M. Work', 'Proteins',
+#                     'Pressure', 'Proteins'
+#                     ),
+#                   ncol = 2, byrow = TRUE,
+#                   dimnames = list(NULL, c('from', 'to')))
+
+
+# # BNlearn learning.test. A discretised problem.
+# data <- bnlearn::learning.test[1:1000, ]
+# type <- 'bde'
+# arc_set <- matrix(c('F', 'E',
+#                     'A', 'D',
+#                     'B', 'A',
+#                     'B', 'E',
+#                     'C', 'D'),
+#                   ncol = 2, byrow = TRUE,
+#                   dimnames = list(NULL, c('from', 'to')))
+
+
+# # BNlearn Gaussian test. A gaussian problem.
+# data <- bnlearn::gaussian.test[1:100, ]
+# type <- 'bge'
 # true_graph <- bnlearn::empty.graph(names(data))
-# arc_set <- matrix(c('A', 'F', 
-#                     'A', 'C', 
-#                     'B', 'C', 
+# arc_set <- matrix(c('A', 'F',
+#                     'A', 'C',
+#                     'B', 'C',
 #                     'B', 'D',
 #                     'G', 'F',
 #                     'D', 'F',
 #                     'E', 'F'),
 #                   ncol = 2, byrow = TRUE,
 #                   dimnames = list(NULL, c('from', 'to')))
+```
+
+Plot true graph.
+
+#```{r, error = TRUE}
+# true_graph <- bnlearn::empty.graph(names(data))
 # bnlearn::arcs(true_graph) <- arc_set
 # true_adj <- true_graph %>%
 #   bnlearn::as.igraph() %>%
 #   igraph::as_adjacency_matrix() %>%
 #   as.matrix
-```
+# ```
 
 Show the true DAG from which the data were sampled.
 
-```{R, fig.dim = c(6.0, 6.0)}
-graphviz.plot(true_graph)
+```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
+graphviz.plot(bnlearn::cpdag(true_graph))
 ```
 
 ## Optimise for the known solution
@@ -73,12 +121,24 @@ Start with a DAG drawn uniformly from the prior space.
 The aim of dagmc is to sample from the posterior distribution of DAGs. This is
 what is done here.
 
-First, a function that calculates the score of a given (node, parents) is combination
-is setup. In this case, I am using the Bayesian Gaussian equivalent score.
+First, a function that calculates the score of a given (node, parents) is
+setup.
 
 ```{r, error = TRUE}
-scorer <- list(scorer = memo::memo(BNLearnScorer, memo::lru_cache(10000)), 
-               parameters = list(data = data, type = 'bde'))
+scorer <- CreateScorer(scorer = BNLearnScorer,
+                       data = data, type = type,
+                       max_parents = 3,
+                       blacklist = NULL,
+                       whitelist = NULL,
+                       cache = FALSE)
+
+blacklist <- GetLowestScoringEdges(scorer, c = 20)
+scorer <- CreateScorer(scorer = BNLearnScorer,
+                       data = data, type = type,
+                       max_parents = 3,
+                       blacklist = blacklist,
+                       whitelist = NULL,
+                       cache = TRUE)
 ```
 
 I then sample a random DAG from the prior space as an initial state for the MCMC
@@ -87,17 +147,26 @@ to check that similar results are being reached on each run.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 2000
-n_runs <- parallel::detectCores()
+n_results <- 1000
+n_runs <- 4
 
 init_partitions <- list()
 for (i in 1:n_runs) {
   init_dag <- UniformlySampleDAG(names(data))
+  
+  # Remove edges that disobey white/black listing. I think this breaks the 
+  # uniformity from the prior but this will do for now.
+  if (!is.null(scorer$blacklist))
+    init_dag[which(scorer$blacklist)] <- 0
+  
+  if (!is.null(scorer$whitelist))
+    init_dag[which(scorer$whitelist)] <- 1
+  
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
 system.time(
-  chains <- SampleChains(n_results, init_partitions, 
+  chains <- SampleChains(n_results, init_partitions,
                          transition = PartitionMCMC(),
                          scorer = scorer,
                          n_parallel_chains = n_runs)
@@ -114,40 +183,24 @@ multiple chains reach the same maxima.
 PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 ```
 
-Removing the first 50% of samples as a burnin. This looks like it's stuck at a 
-maxima.
-
-
-```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-n_burnin <- min(500, as.integer(0.5*n_results))
-PlotScoreTrace(chains, burnin = n_burnin, ylab = 'log(partition score)', type = 'l')
-```
-
-Convert labelled partitions to DAGs. This is a computationally intensive task, 
-so I (i) just do it for the first run, and (ii) only take the samples greater 
-than a burnin.
+Post process by removing burnin and sampling DAGs from labelled partitions.
 
 ```{r, error = TRUE}
-set.seed(1)
-dags <- list()
-score_dags <- list()
-for (i in 1:n_runs) {
-  eq_states <- chains[[i]]$state[(1 + n_burnin):n_results]
-  dags[[i]] <- lapply(eq_states, SampleDAGFromLabelledPartition, scorer = scorer)
-  score_dags[[i]] <- unlist(lapply(dags[[i]], ScoreDAG, scorer = scorer))
-}
+n_burnin <- 0
+eq_chains <- PostProcessChains(chains, n_burnin)
+eq_chains <- SampleChainDAGs(eq_chains, scorer)
 ```
 
-Plot trace of DAG scores.
+Plot partition score trace after removing burnin.
 
-```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-true_score <- ScoreDAG(true_adj, scorer)
-n_target_saves <- n_results - n_burnin
-colors <- c('black', 'green', 'red', 'blue', 'brown', 'darkviolet', 'darkgoldenrod', 'deeppink')
-plot(1:n_target_saves, score_dags[[1]], xlab = 'saves', ylab = 'log(DAG score)', type = 'l')
-for (i in 2:n_runs) {
-  lines(score_dags[[i]], xlab = 'saves', ylab = 'log(partition score)', type = 'l', col = colors[i - 1])
-}
+```{r, error = TRUE}
+PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
+```
+
+Plot DAG scores.
+
+```{r, error = TRUE}
+PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
 ## Inference for the Maximum a Posteriori (MAP)
@@ -155,14 +208,18 @@ for (i in 2:n_runs) {
 Plot the first found highest scoring DAG.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-flat_score_dags <- unlist(score_dags)
-flat_dags <- unlist(dags, recursive = FALSE)
-                    
-imap <- which(flat_score_dags == max(flat_score_dags))[1]
-map_mat <- flat_dags[[imap]]
+flat_dags <- list()
+flat_dag_score <- c()
+for (i in 1:length(eq_chains)) {
+  flat_dags <- c(flat_dags, eq_chains[[i]]$dag)
+  flat_dag_score <- c(flat_dag_score, eq_chains[[i]]$log_dag_score)
+}
+
+map_dags <- flat_dags[which(flat_dag_score == max(flat_dag_score))]
+map_mat <- unique(map_dags)[[1]]  # Just gets the first instance for now.
 
 map_dag <- bnlearn::empty.graph(colnames(data))
-amat(map_dag) <- map_mat
+bnlearn::amat(map_dag) <- map_mat
 
 plot(bnlearn::cpdag(map_dag))
 ```
@@ -172,19 +229,7 @@ plot(bnlearn::cpdag(map_dag))
 Acceptance per proposal.
 
 ```{r, error = TRUE}
-chain_info <- list()
-for (i in 1:n_runs) {
-  chain_info[[i]] <- dplyr::bind_cols(
-    proposal_used = unlist(chains[[i]]$proposal_info[n_burnin:(n_results - 1)], use.names = FALSE),
-    accept = unlist(chains[[i]]$mcmc_info[n_burnin:(n_results - 1)], use.names = FALSE)
-    )
-}
-chain_info <- dplyr::bind_rows(chain_info)
-
-prop_accept <- chain_info %>% 
-  dplyr::group_by(proposal_used) %>% 
-  dplyr::summarise(accept = mean(accept))
-
+prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
 ```
 

@@ -6,9 +6,48 @@
 #   parameters: A list of parameter (name, value) pairs to pass to the scorer
 #     callable.
 
+#' Scorer constructor.
+#' 
+#' @param scorer A scorer function that takes (node, parents) as parameters. 
+#' Default is BNLearnScorer.
+#' @param ... Parameters to pass to scorer. 
+#' @param max_parents The maximum number of allowed parents. Default is 
+#' infinite.
+#' @param blacklist A boolean matrix of (parent, child) pairs where TRUE 
+#' represents edges that cannot be in the DAG. Default is NULL which 
+#' represents no blacklisting.
+#' @param whitelist A boolean matrix of (parent, child) pairs where TRUE 
+#' represents edges that must be in the DAG. Default is NULL which represents 
+#' no whitelisting.
+#' @param cache A boolean to indicate whether to build the cache. The 
+#' cache only works for problems where the scorer only varies as a function of 
+#' (node, parents). Default is FALSE.
+#' 
+#' @examples
+#' scorer <- CreateScorer(data = bnlearn::asia)
+#' 
+#' @export
+CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf, 
+                         blacklist = NULL, whitelist = NULL, cache = FALSE) {
+  
+  scorer <- list(scorer = scorer,
+                 parameters = list(...),
+                 max_parents = max_parents,
+                 blacklist = blacklist,
+                 whitelist = whitelist)
+  
+  if (cache)
+    scorer$scorer <- CachedScorer(scorer, max_size = NULL)
+  
+  return(scorer)
+}
+
 #' BNLearnScorer
 #' 
-#' @param node A child node of parents.
+#' @description 
+#' A thin wrapper on the bnlearn::score function.
+#' 
+#' @param node Name of node to score.
 #' @param parents The parent nodes of node.
 #' @param ... The ellipsis is used to pass other parameters to the scorer.
 #' 
@@ -64,28 +103,19 @@ BNLearnScoreSingleNode <- function(x, data, node, type = NULL, ..., debug = FALS
   
   # Check the score label.
   CheckScore <- utils::getFromNamespace('check.score', 'bnlearn')
-  type = CheckScore(type, data)
+  type <- CheckScore(type, data)
     
   # Expand and sanitize score-specific arguments.
   CheckScoreArgs <- utils::getFromNamespace('check.score.args', 'bnlearn')
-  extra.args = CheckScoreArgs(score = type, network = x,
-                              data = data, extra.args = list(...), 
-                              learning = FALSE)
+  extra.args <- CheckScoreArgs(score = type, network = x,
+                               data = data, extra.args = list(...), 
+                               learning = FALSE)
   
-  # compute the node contributions to the network score.
+  # Compute the node score.
   PerNodeScore <- utils::getFromNamespace('per.node.score', 'bnlearn')
-  local = PerNodeScore(network = x, data = data, score = type,
-                       targets = node, extra.args = extra.args, 
-                       debug = debug)
+  local <- PerNodeScore(network = x, data = data, score = type,
+                        targets = node, extra.args = extra.args, 
+                        debug = debug)
   
   return(local)
-}
-
-TemperedBNLearnScorer <- function(temperature) {
-  
-  stopifnot(temperature > 1.0)
-  
-  function(node, parents) {
-    return(BNLearnScorer(node, parents)^(1.0/temperature))
-  }
 }

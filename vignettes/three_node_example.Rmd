@@ -25,58 +25,48 @@ library(dagmc)
 library(magrittr)
 ```
 
-```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-# nodes <- LETTERS[1:3]
-# set.seed(2)
-# true_dag <- UniformlySampleDAG(nodes)
-# 
-# true_graph <- bnlearn::empty.graph(nodes)
-# bnlearn::amat(true_graph) <- true_dag
-# plot(true_graph)
-```
-
 Create conditional probability tables.
 
 ```{r, error = TRUE}
-# # Three Node confounder problem
-# levels <- c('yes', 'no')
-# all_levels <- list(A = levels, B = levels, C = levels)
-# 
-# # Two-edge model
-# bn_arr <- list()
-# bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
-#                               values = c(0.67, 0.33, 0.33, 0.67))
-# bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
-#                               values = c(0.5, 0.5))
-# bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
-#                               values = c(0.33, 0.67, 0.57, 0.1))
+# Three Node confounder problem
+levels <- c('yes', 'no')
+all_levels <- list(A = levels, B = levels, C = levels)
 
-# Student model
-all_levels <- list(
-  D = c('no', 'yes'),
-  I = c('no', 'yes'),
-  G = c('no', 'yes'),
-  L = c('no', 'yes'),
-  S = c('no', 'yes')
-  )
-
+# Two-edge model
 bn_arr <- list()
-bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
-bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
-bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
-                              values = c(0.3, 0.7,
-                                         0.9, 0.10,
-                                         0.05, 0.95,
-                                         0.5, 0.5))
-bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
-                              levels = all_levels,
-                              values = c(0.95, 0.05,
-                                         0.2, 0.8))
-bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
-                              levels = all_levels,
-                              values = c(0.1, 0.9,
-                                         0.4, 0.6,
-                                         0.99, 0.01))
+bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
+                              values = c(0.67, 0.33, 0.33, 0.67))
+bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
+                              values = c(0.5, 0.5))
+bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
+                              values = c(0.33, 0.67, 0.57, 0.1))
+
+# # Student model
+# all_levels <- list(
+#   D = c('no', 'yes'),
+#   I = c('no', 'yes'),
+#   G = c('no', 'yes'),
+#   L = c('no', 'yes'),
+#   S = c('no', 'yes')
+#   )
+# 
+# bn_arr <- list()
+# bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
+# bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
+# bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
+#                               values = c(0.3, 0.7,
+#                                          0.9, 0.10,
+#                                          0.05, 0.95,
+#                                          0.5, 0.5))
+# bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
+#                               levels = all_levels,
+#                               values = c(0.95, 0.05,
+#                                          0.2, 0.8))
+# bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
+#                               levels = all_levels,
+#                               values = c(0.1, 0.9,
+#                                          0.4, 0.6,
+#                                          0.99, 0.01))
 
 nodes <- names(all_levels)
 cpt <- gRain::compileCPT(bn_arr)
@@ -138,7 +128,8 @@ all_dags <- GetAllDAGs(nodes)
 Score all possible DAGs against the simulated data.
 
 ```{r, error = TRUE}
-scorer <- list(scorer = memo::memo(BNLearnScorer, memo::lru_cache(10000)), parameters = list(data = data, type = 'bde'))
+scorer <- CreateScorer(data = data, type = 'bde', cache = TRUE)
+
 score_all_dags <- all_dags %>%
   lapply(ScoreDAG, scorer = scorer) %>%
   unlist
@@ -166,7 +157,7 @@ This gets n_results samples for each core.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 10000
+n_results <- 100000
 n_chains <- 4
 
 init_partitions <- list()
@@ -175,17 +166,18 @@ for (i in 1:n_chains) {
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
-system.time(
+proposal <- DefaultProposal(p = c(0.34, 0.33, 0.33, 0.0))
+profvis::profvis(
   chains <- SampleChains(n_results, init_partitions,
-                         transition = PartitionMCMC(),
+                         transition = PartitionMCMC(proposal = proposal),
                          scorer = scorer,
                          n_parallel_chains = n_chains)
 )
 
 # profvis::profvis(
-#   chain <- SampleChain(n_results, init_partitions[[1]],
-#                         transition = PartitionMCMC(),
-#                         scorer = scorer)
+#   chain <- SampleChain(n_results, init_partitions[[i]],
+#                        transition = PartitionMCMC(proposal = proposal),
+#                        scorer = scorer)
 # )
 ```
 
@@ -245,21 +237,6 @@ system.time(
 Looking at the trace of the partition log score.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-# PlotScoreTrace <- function(chains, burnin = 1, nrow = NULL, ncol = 1, ...) {
-#   
-#   colors <- c('black', 'green', 'red', 'blue', 'brown', 'darkviolet', 
-#               'darkgoldenrod', 'deeppink')
-#   
-#   n_within <- length(chains[[1]]$log_score)
-#   plot(chains[[1]]$log_score[burnin:n_within], col = colors[1], ...)
-#   
-#   for (i in 2:length(chains)) {
-#     n_within <- length(chains[[i]]$log_score)
-#     lines(chains[[i]]$log_score[burnin:n_within], 
-#           col = colors[i %% length(colors)], ...)
-#   }
-# }
-
 PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 ```
 
@@ -267,7 +244,7 @@ Converting the partitions into DAGs.
 
 ```{r, error = TRUE}
 n_burnin <- 500
-eq_chains <- PostProcessChains(chains, n_burnin = n_burnin)
+eq_chains <- PostProcessChains(chains, n_burnin)
 eq_chains <- SampleChainDAGs(eq_chains, scorer)
 ```
 
@@ -414,7 +391,7 @@ knitr::kable(bw1)
 Acceptance per proposal after burnin.
 
 ```{r, error = TRUE}
-prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = c('proposal_used'))
+prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
 ```
 
@@ -423,6 +400,33 @@ Overall acceptance proposal.
 ```{r, error = TRUE}
 total_accept <- CalculateAcceptanceRates(eq_chains)
 knitr::kable(total_accept)
+```
+
+
+Show DAGs
+
+```{r, error = TRUE, fig.dim = c(6.0, 12.0)}
+n_chain_all <- dags %>%
+  unlist(recursive = FALSE) %>%
+  lapply(rlang::hash) %>%
+  unlist %>%
+  table
+p_chain_all <- n_chain_all/sum(n_chain_all)
+
+i_order <- order(p_true, decreasing = TRUE)
+graphics::par(mfrow = c(4, 2), mar=c(1,1,1,1))
+for (i in i_order) {
+  hash_focus_dag <- hash_all_dags[i]
+  focus_dag <- all_dags[[i]]
+  
+  bn_focus <- bnlearn::empty.graph(nodes)
+  bnlearn::amat(bn_focus) <- focus_dag
+  plot(bn_focus)
+  
+  t <- paste('p_est: ', round(p_chain_all[hash_focus_dag], 4), 
+             ', p_true: ', round(p_true[i], 4), sep = '')
+  graphics::text(300, 0, t)
+}
 ```
 
 

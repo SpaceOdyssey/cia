@@ -6,17 +6,15 @@
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' 
-#' scorer_1 <- list(
-#'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
-#' )
+#' scorer <- CreateScorer(data = data)
 #' 
-#' SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer_1)
+#' SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer)
 #' 
-#' @param partitioned_nodes A labelled partition.
-#' @param scorer A scorer object.
+#' @param partitioned_nodes Labelled partition.
+#' @param scorer Scorer object.
 #' 
-#' @returns A data.frame of (node, partition element) pairs.
+#' @returns A matrix with elements of (parent, child) cells with 1 representing
+#' and edge and 0 otherwise.
 #' 
 #' @export
 SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {

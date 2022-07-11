@@ -7,7 +7,7 @@
 CalculateSwapNodeNeighbourhood(partitioned_nodes)
 }
 \arguments{
-\item{partitioned_nodes}{A labelled partition.}
+\item{partitioned_nodes}{Labelled partition.}
 }
 \description{
 Calculate neighbourhood for swapping nodes.

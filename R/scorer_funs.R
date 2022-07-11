@@ -23,8 +23,8 @@
 ScoreTableNode <- function(partitioned_nodes, node, scorer) {
   
   scorer$parameters$node <- node
-  parent_combinations <- GetParentCombinations(partitioned_nodes, node)
-  
+  parent_combinations <- GetParentCombinations(partitioned_nodes, node, scorer)
+
   if (is.null(parent_combinations)) {
     scorer$parameters$parents <- vector()
     log_node_parent_scores <- do.call(scorer$scorer, scorer$parameters)
@@ -98,6 +98,11 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
 #' @export
 ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
   
+  whitelist_obeyed <- CheckWhitelistObeyed(partitioned_nodes, scorer$whitelist)
+  blacklist_obeyed <- CheckBlacklistObeyed(partitioned_nodes, scorer$blacklist)
+  if (!whitelist_obeyed | !blacklist_obeyed)
+    return(-Inf)
+  
   log_partition_score <- 0.0
   for (node in partitioned_nodes$node) {
     log_node_score <- ScoreNode(partitioned_nodes, node, scorer)
@@ -111,27 +116,30 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' partitions.
 #' 
 #' @examples
+#' scorer = CreateScorer()
+#' 
 #' old_dag <- UniformlySampleDAG(LETTERS[1:5])
 #' old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
 #' 
 #' new_dag <- UniformlySampleDAG(LETTERS[1:5])
 #' new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
 #' 
-#' changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
+#' changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes, scorer)
 #' 
 #' @param old_partitioned_nodes Labelled partition.
 #' @param new_partitioned_nodes Labelled partition.
+#' @param scorer Scorer object.
 #' 
 #' @return Vector of changed nodes.
 #' 
 #' @export
-FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
+FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   
   changed_nodes <- c()
   for (node in old_partitioned_nodes$node) {
-    potential_parents <- GetParentCombinations(old_partitioned_nodes, node)
-    new_potential_parents <- GetParentCombinations(new_partitioned_nodes, node)
-    
+    potential_parents <- GetParentCombinations(old_partitioned_nodes, node, scorer)
+    new_potential_parents <- GetParentCombinations(new_partitioned_nodes, node, scorer)
+
     if (!setequal(potential_parents, new_potential_parents)) {
       changed_nodes <- c(changed_nodes, node)
     }
@@ -168,7 +176,15 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes) {
 #' @export
 ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   
-  changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes)
+  white_obeyed <- CheckWhitelistObeyed(new_partitioned_nodes, scorer$whitelist)
+  black_obeyed <- CheckBlacklistObeyed(new_partitioned_nodes, scorer$blacklist)
+  if (!white_obeyed | !black_obeyed)
+    return(-Inf)
+  
+  changed_nodes <- FindChangedNodes(old_partitioned_nodes, 
+                                    new_partitioned_nodes, 
+                                    scorer)
+  
   log_score_diff <- 0.0
   for (node in changed_nodes) {
     old_log_score_node <- ScoreNode(old_partitioned_nodes, node, scorer)
@@ -178,6 +194,78 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   }
   
   return(log_score_diff)
+}
+
+#' Check whitelist is obeyed.
+#' 
+#' @param partitioned_nodes Labelled partition.
+#' @param whitelist A data.frame of (parent, child) pairs representing edges 
+#' that must be in the DAG.
+#' @param nodes A vector of node names to check. Default is to check all 
+#' child nodes in the whitelist.
+#' 
+#' @export
+CheckWhitelistObeyed <- function(partitioned_nodes, whitelist = NULL, nodes = NULL) {
+  
+  if (is.null(whitelist))
+    return(TRUE)
+  
+  if (is.null(nodes))
+    nodes <- GetRestrictedNodes(whitelist)
+  
+  for (node in nodes) {
+    node_el <- partitioned_nodes$partition[partitioned_nodes$node == node]
+    
+    if (node_el == 1)
+      return(FALSE)
+    
+    whitelist_parents <- GetRestrictedParents(node, whitelist)
+    lower_nodes <- partitioned_nodes$node[partitioned_nodes$partition < node_el]
+    
+    if (!all(whitelist_parents %in% lower_nodes))
+      return(FALSE)
+  }
+  
+  return(TRUE)
+}
+
+
+#' Check blacklist obeyed.
+#' 
+#' If an edge between two nodes is blacklisted in Partition MCMC the adjacent
+#' partition element cannot be the only direct node for it's blacklisted child.
+#' 
+#' @param partitioned_nodes Labelled partition.
+#' @param blacklist A data.frame of (parent, child) pairs representing edges 
+#' that cannot be in the DAG.
+#' @param nodes A vector of node names to check. Default is to check all 
+#' child nodes in the blacklist.
+#'
+#' @export
+CheckBlacklistObeyed <- function(partitioned_nodes, blacklist = NULL, 
+                                 nodes = NULL) {
+  
+  if (is.null(blacklist))
+    return(TRUE)
+  
+  if (is.null(nodes))
+    nodes <- GetRestrictedNodes(blacklist)
+  
+  for (node in nodes) {
+    node_el <- partitioned_nodes$partition[partitioned_nodes$node == node]
+    
+    if (node_el == 1)
+      next
+    
+    blacklist_parents <- GetRestrictedParents(node, blacklist)
+    lower_adj_nodes <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
+    
+    n_non_blacklisted <- length(setdiff(lower_adj_nodes, blacklist_parents))
+    if (n_non_blacklisted == 0)
+      return(FALSE)
+  }
+  
+  return(TRUE)
 }
 
 #' Score DAG.
@@ -253,63 +341,103 @@ GetNodePartition <- function(partitioned_nodes, node) {
 #' Get parent combinations for a given node.
 #' 
 #' @param partitioned_nodes Labelled partition.
-#' @param node A node name.
+#' @param node Node name.
+#' @param scorer A scorer object.
 #' 
 #' @return List of parent combinations.
 #' 
 #' @export
-GetParentCombinations <- function(partitioned_nodes, node) {
+GetParentCombinations <- function(partitioned_nodes, node, scorer) {
+  
+  # If this function is exported I probably need to check if whitelist/blacklist are obeyed.
   
   node_el <- GetNodePartition(partitioned_nodes, node)
   
-  if (node_el == 1) {
-    parent_combinations <- NULL
-  } else if (node_el == 2) {
-    direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
-    direct_pa_coms <- GetNodeCombinations(direct_pas)
-    
-    parent_combinations <- direct_pa_coms
-  } else {
-    direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
-    direct_pa_coms <- GetNodeCombinations(direct_pas)
-    
-    indirect_pas <- partitioned_nodes$node[partitioned_nodes$partition < node_el - 1]
-    indirect_pa_coms <- GetNodeCombinations(indirect_pas)
+  if (node_el == 1)
+    return(NULL)
   
-    n_parent_coms <- length(direct_pa_coms)*(1 + length(indirect_pa_coms))
-    parent_combinations <- vector('list', n_parent_coms)
-    parent_combinations[1:length(direct_pa_coms)] <- direct_pa_coms
-    
-    i <- 1 + length(direct_pa_coms)
-    for (direct_pa_com in direct_pa_coms) {
-      for (indirect_pa_com in indirect_pa_coms) {
-        parent_combinations[[i]] <- c(direct_pa_com, indirect_pa_com)
-        i <- i + 1
+  # Get white/black listed parent sets.
+  whitelist_parents <- GetRestrictedParents(node, scorer$whitelist)
+  n_whitelist <- length(whitelist_parents)
+  
+  blacklist_parents <- GetRestrictedParents(node, scorer$blacklist)
+  
+  # Get possible parents from adjacent element.
+  direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
+  direct_pas <- direct_pas %>% 
+    setdiff(whitelist_parents) %>%
+    setdiff(blacklist_parents)
+  
+  # Add direct parent combinations.
+  max_direct <- min(length(direct_pas), scorer$max_parents - n_whitelist)
+  ls_direct_pa_coms <- lapply(
+      1:max_direct, 
+      function(x) arrangements::combinations(direct_pas, x, layout = 'list')
+    ) 
+  
+  parent_combinations <- ls_direct_pa_coms %>%
+    unlist(recursive = FALSE) %>%
+    lapply(function(x) c(whitelist_parents, x))
+  
+  # Get possible parents from non-adjacent elements.
+  if (node_el > 2) {
+    indirect_pas <- partitioned_nodes$node[partitioned_nodes$partition < node_el - 1]
+    indirect_pas <- indirect_pas %>%
+      setdiff(whitelist_parents) %>%
+      setdiff(blacklist_parents)
+  
+    # Get possible parents from non-adjacent elements.
+    indirect_parent_combinations <- list()
+    n <- 1
+    max_direct_selected <- min(length(direct_pas), scorer$max_parents - n_whitelist)
+    for (i in 1:max_direct_selected) {
+      direct_pas_i <- ls_direct_pa_coms[[i]]
+      
+      max_indirect_selected <- min(length(indirect_pas), scorer$max_parents - n_whitelist - i)
+      for (j in 0:max_indirect_selected) {
+        indirect_pas_j <- arrangements::combinations(indirect_pas, j, layout = 'list')
+        
+        for (direct_pa_i in direct_pas_i) {
+          for (indirect_pa_j in indirect_pas_j) {
+            indirect_parent_combinations[[n]] <- c(whitelist_parents, direct_pa_i, indirect_pa_j)
+            n <- n + 1
+          }
+        }
       }
     }
+    
+    parent_combinations <- c(parent_combinations, indirect_parent_combinations)
   }
   
   return(parent_combinations)
 }
 
-#' Get all combinations of nodes.
+#' Get black or white listed parents.
 #' 
-#' @param nodes Vector of node names.
-#' 
-#' @return List of node combinations.
-#' 
+#' @param node The name of the node to get white or black listed parents.
+#' @param listed A black or white list.
+#'
 #' @export
-GetNodeCombinations <- function(nodes) {
-  if (is.null(nodes))
-    return(nodes)
+GetRestrictedParents <- function(node, listed = NULL) {
   
-  node_combinations <- lapply(
-      1:length(nodes), 
-      function(x) arrangements::combinations(nodes, x, layout = 'list')
-    ) %>%
-    unlist(recursive = FALSE)
+  if (is.null(listed)) {
+    parents <- c()
+  } else {
+    parents <- names(which(listed[, node]))
+  }
   
-  return(node_combinations)
+  return(parents)
+}
+
+#' Get nodes that have restricted parents.
+#'
+#' @param list A black or white list.
+#'
+#' @export
+GetRestrictedNodes <- function(list) {
+  nodes <- names(which(colSums(list, na.rm = TRUE) > 0))
+  
+  return(nodes)
 }
 
 #' Map DAG to a labelled partition.

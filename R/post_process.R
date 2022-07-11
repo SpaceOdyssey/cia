@@ -126,7 +126,9 @@ MultipleChains <- function(chains) {
 #' and mcmc has saved a variable 'accept'.
 #' 
 #' @param chains MCMC chains.
-#' @param group_by Vector of strings that are in c('chain', 'proposal_used').
+#' @param group_by Vector of strings that are in c('chain', 'proposal_used'). 
+#' Default is NULL which will return the acceptance rates marginalised over
+#' chains and the proposal used.
 #' 
 #' @returns Summary of acceptance rates per grouping.
 #'
@@ -151,9 +153,30 @@ CalculateAcceptanceRates <- function(chains, group_by = NULL) {
   
   accept_summary <- chain_info %>%
     dplyr::group_by_at(group_by) %>%
-    dplyr::summarise(mean_accept = mean(accept), 
-                     n_accept = sum(accept), 
+    dplyr::summarise(mean_accept = mean(.data$accept), 
+                     n_accept = sum(.data$accept), 
                      n_total = dplyr::n())
   
   return(accept_summary)
+}
+
+#' Flatten list of chains. Not exporting at the moment. Not sure if this is how 
+#' I want this implemented. 
+#' 
+#' @param chains MCMC chains.
+#' 
+#' @noRd
+FlattenChains <- function(chains) {
+  
+  stopifnot(MultipleChains(chains))
+  
+  chain <- list()
+  for (name in names(chains[[i]])) {
+    chain[[name]] <- list()
+    for (i in 1:length(chains)) {
+      chain[[name]] <- c(chain[[name]], chains[[i]][[name]])
+    }
+  }
+  
+  return(chain)
 }

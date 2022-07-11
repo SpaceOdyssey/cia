@@ -4,7 +4,7 @@ set.seed(1)
 dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
-scorer <- list(scorer = BNLearnScorer, parameters = list(data = data))
+scorer <- CreateScorer(data = data)
 
 testthat::test_that('SampleChain returns consistent state dimensions for DefaultProposal', {
   testthat::expect_equal(
@@ -46,4 +46,23 @@ testthat::test_that('Check SampleChain returns correct scores', {
   testthat::expect_equal(chain$log_score[[100]], 
                          ScoreLabelledPartition(chain$state[[100]], scorer) 
   )
+})
+
+blacklist <- GetLowestScoringEdges(scorer, c = 2)
+scorer <- CreateScorer(data = data, blacklist = blacklist)
+dag[which(scorer$blacklist)] <- 0
+partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+testthat::test_that('SampleChain works for blacklist', {
+  testthat::expect_equal(
+    length(SampleChain(100, partitioned_nodes, PartitionMCMC(), scorer = scorer)),
+    4
+  )
+})
+
+chain <- SampleChain(100, partitioned_nodes, PartitionMCMC(), scorer = scorer)
+dags <- SampleChainDAGs(chain, scorer)
+testthat::test_that('SampleChain does not return DAGs with blacklisted edges.', {
+  testthat::expect_equal(
+    sum(sapply(1:100, function(x) sum(simplify2array(dags$dag)[, , x] * scorer$blacklist, na.rm = TRUE))),
+    0)
 })

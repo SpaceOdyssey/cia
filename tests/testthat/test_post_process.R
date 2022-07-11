@@ -4,7 +4,7 @@ set.seed(1)
 dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
-scorer <- list(scorer = BNLearnScorer, parameters = list(data = data))
+scorer <- CreateScorer(data = data)
 
 chain <- SampleChain(10, partitioned_nodes, PartitionMCMC(), scorer)
 test_that("SampleChainDAGs Single", {

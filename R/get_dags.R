@@ -1,5 +1,5 @@
 #' Uniformly sample DAG given a set of nodes.
-#'
+#' 
 #' @param nodes A vector of node names.
 #' @return Adjacency matrix with elements designated as (parent, child).
 #' 

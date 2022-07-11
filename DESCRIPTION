@@ -21,7 +21,8 @@ Imports:
     foreach,
     arrangements,
     graphics,
-    dplyr
+    dplyr,
+    rlang
 Suggests: 
     rmarkdown,
     knitr,
