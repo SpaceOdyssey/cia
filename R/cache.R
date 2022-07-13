@@ -73,16 +73,17 @@ BuildCache <- function(scorer, max_size = NULL) {
   return(cache)
 }
 
+
 #' Get parents key.
 #' 
-#' TODO: The %in% function is slow. I may need to move this to C++.
+#' TODO: The in function is quite slow. May need to make this a for loop in C++.
 #' 
 #' @param parents A character vector of the parent nodes.
 #' @param nodes A character vector for all nodes.
 #' 
 #' @noRd
 GetParentsKey <- function(parents, nodes) {
-  parents_key <- paste(as.integer(nodes %in% parents), collapse = '')
+  parents_key <- rlang::hash(nodes %fin% parents)
   
   return(parents_key)
 }

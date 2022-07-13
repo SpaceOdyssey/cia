@@ -22,7 +22,8 @@ Imports:
     arrangements,
     graphics,
     dplyr,
-    rlang
+    rlang,
+    fastmatch
 Suggests: 
     rmarkdown,
     knitr,

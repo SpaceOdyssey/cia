@@ -133,12 +133,14 @@ scorer <- CreateScorer(scorer = BNLearnScorer,
                        cache = FALSE)
 
 blacklist <- GetLowestScoringEdges(scorer, c = 20)
-scorer <- CreateScorer(scorer = BNLearnScorer,
-                       data = data, type = type,
-                       max_parents = 3,
-                       blacklist = blacklist,
-                       whitelist = NULL,
-                       cache = TRUE)
+system.time(
+  scorer <- CreateScorer(scorer = BNLearnScorer,
+                         data = data, type = type,
+                         max_parents = 3,
+                         blacklist = blacklist,
+                         whitelist = NULL,
+                         cache = TRUE)
+)
 ```
 
 I then sample a random DAG from the prior space as an initial state for the MCMC
@@ -192,7 +194,7 @@ PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 Post process by removing burnin and sampling DAGs from labelled partitions.
 
 ```{r, error = TRUE}
-n_burnin <- 0
+n_burnin <- 900
 eq_chains <- PostProcessChains(chains, n_burnin)
 system.time(
   eq_chains <- SampleChainDAGs(eq_chains, scorer)
