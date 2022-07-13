@@ -1,6 +1,5 @@
 data <- bnlearn::learning.test
 
-set.seed(1)
 dag <- UniformlySampleDAG(names(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
@@ -34,15 +33,6 @@ testthat::test_that('Check ScoreDAG with BNLearn against bnlearn::score', {
 test_that('ScoreLabelledPartition are less than 0', {
   testthat::expect_true(ScoreLabelledPartition(partitioned_nodes, scorer_1) < 0.0)
   testthat::expect_true(ScoreLabelledPartition(partitioned_nodes, scorer_2) < 0.0)
-})
-
-new_dag <- UniformlySampleDAG(colnames(data))
-new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
-testthat::test_that('ScoreDiff is consistent', {
-  testthat::expect_equal(
-    ScoreDiff(partitioned_nodes, new_partitioned_nodes, scorer_1),
-    ScoreLabelledPartition(new_partitioned_nodes, scorer_1) - ScoreLabelledPartition(partitioned_nodes, scorer_1)
-  )
 })
 
 whitelist <- matrix(FALSE, 

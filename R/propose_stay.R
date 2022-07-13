@@ -7,13 +7,17 @@ StayStill <- function(partitioned_nodes) {
   
   current_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeStayStill(partitioned_nodes)
+  proposed <- ProposeStayStill(partitioned_nodes)
+  partitioned_nodes <- proposed$partitioned_nodes
+  rescore_nodes <- proposed$rescore_nodes
+  
   new_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
   
   return(list(
     state = partitioned_nodes, 
     current_nbd = current_nbd, 
-    new_nbd = new_nbd))
+    new_nbd = new_nbd,
+    rescore_nodes = rescore_nodes))
 }
 
 #' Propose that the partition stays still.
@@ -29,7 +33,8 @@ StayStill <- function(partitioned_nodes) {
 #' 
 #' @export
 ProposeStayStill <- function(partitioned_nodes) {
-  return(partitioned_nodes)
+  return(list(partitioned_nodes = partitioned_nodes, 
+              rescore_nodes = NULL))
 }
 
 #' Calculate neighbourhood for staying still.

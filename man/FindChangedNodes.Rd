@@ -18,8 +18,9 @@ FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes, scorer)
 Vector of changed nodes.
 }
 \description{
-Find nodes with changed parent combinations between different labelled
-partitions.
+TODO: This is quite slow. From the proposal we should be able to determine
+the nodes that need to be rescored rather than finding them using this
+function.
 }
 \examples{
 scorer = CreateScorer()

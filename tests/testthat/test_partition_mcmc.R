@@ -1,7 +1,5 @@
-set.seed(1)
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
-
 scorer <- CreateScorer(data = bnlearn::learning.test[1:10, ])
 
 current_state <- list(

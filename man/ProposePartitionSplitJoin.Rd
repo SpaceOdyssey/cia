@@ -15,8 +15,8 @@ A proposed labelled partition.
 \description{
 This is the 'Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015). There
 is a caveat in that the split proposal for a partition with one element is
-amiguous, as a split for such a partitin element results in a stay still
-proposal that has been removed.
+ambiguous, as a split for such a partition element results in a stay still
+proposal. Such a proposal has been removed.
 }
 \examples{
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))

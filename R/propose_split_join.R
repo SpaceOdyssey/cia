@@ -7,13 +7,17 @@ PartitionSplitJoin <- function(partitioned_nodes) {
   
   current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposePartitionSplitJoin(partitioned_nodes)
+  proposed <- ProposePartitionSplitJoin(partitioned_nodes)
+  partitioned_nodes <- proposed$partitioned_nodes
+  rescore_nodes <- proposed$rescore_nodes
+  
   new_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   
   return(list(
     state = partitioned_nodes, 
     current_nbd = current_nbd, 
-    new_nbd = new_nbd))
+    new_nbd = new_nbd,
+    rescore_nodes = rescore_nodes))
 }
 
 #' Propose a split or join of two partitions. 
@@ -21,8 +25,8 @@ PartitionSplitJoin <- function(partitioned_nodes) {
 #' @description
 #' This is the 'Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015). There
 #' is a caveat in that the split proposal for a partition with one element is
-#' amiguous, as a split for such a partitin element results in a stay still 
-#' proposal that has been removed.
+#' ambiguous, as a split for such a partition element results in a stay still 
+#' proposal. Such a proposal has been removed.
 #' 
 #' @examples 
 #' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
@@ -40,7 +44,8 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
   num_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
   j <- sample.int(num_nbd, size = 1)
   if (j < m) {
-    # Join partitions (j, j+1).   
+    # Join partitions (j, j+1).
+    rescore_nodes <- GetPartitionNodes(partitioned_nodes, c(j + 1, j + 2))
     move_partitions <- partitioned_nodes$partition > j
     partitioned_nodes$partition[move_partitions] <- partitioned_nodes$partition[move_partitions] - 1
   } else {
@@ -79,6 +84,11 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
     i_star_nodes <- partitioned_nodes$node[partitioned_nodes$partition == i_star]
     split_nodes <- sample(i_star_nodes, c_star)
     
+    # Rescore nodes that have been split out and in the partition element that 
+    # is 1 higher than the split.
+    adj_nodes <- GetPartitionNodes(partitioned_nodes, i_star + 1)
+    rescore_nodes <- c(split_nodes, adj_nodes)
+    
     # Assign all partition elements higher than the chosen partition element to
     # one greater.
     higher_elements <- partitioned_nodes$partition > i_star
@@ -92,7 +102,8 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
   
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
   
-  return(partitioned_nodes)
+  return(list(partitioned_nodes = partitioned_nodes,
+              rescore_nodes = rescore_nodes))
 }
 
 #' Calculate neighbourhood for the split or join proposal.
@@ -107,9 +118,10 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
 CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
+  join_combinations <- m - 1
   split_combinations <- CalculateSplitCombinations(partitioned_nodes)
   
-  return(m - 1 + split_combinations)
+  return(join_combinations + split_combinations)
 }
 
 #' Calculate number of split combinations.

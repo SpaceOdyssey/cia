@@ -6,13 +6,17 @@
 SwapNode <- function(partitioned_nodes) {
   current_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeSwapNode(partitioned_nodes)
+  proposed <- ProposeSwapNode(partitioned_nodes)
+  partitioned_nodes <- proposed$partitioned_nodes
+  rescore_nodes <- proposed$rescore_nodes
+  
   new_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
   
   return(list(
     state = partitioned_nodes, 
     current_nbd = current_nbd, 
-    new_nbd = new_nbd))
+    new_nbd = new_nbd,
+    rescore_nodes = rescore_nodes))
 }
 
 #' Propose that two nodes swap partition elements.
@@ -34,7 +38,8 @@ ProposeSwapNode <- function(partitioned_nodes) {
     # Select node.
     n <- GetNumberOfNodes(partitioned_nodes)
     i_node <- sample.int(n, size = 1)
-    node_element <- partitioned_nodes$partition[i_node] 
+    node <- partitioned_nodes$node[i_node]
+    node_element <- partitioned_nodes$partition[i_node]
     
     # Select node from another partition element.
     candidates <- partitioned_nodes$node[partitioned_nodes$partition != node_element]
@@ -42,14 +47,30 @@ ProposeSwapNode <- function(partitioned_nodes) {
     i_oth_node <- partitioned_nodes$node == oth_node
     oth_node_element <- partitioned_nodes$partition[i_oth_node]
     
+    # Find nodes to rescore.
+    if (node_element < oth_node_element) {
+      start_rescore <- node_element + 1
+      end_rescore <- oth_node_element + 1
+      rescore_nodes <- node
+    } else {
+      start_rescore <- oth_node_element + 1
+      end_rescore <- node_element + 1
+      rescore_nodes <- oth_node
+    }
+    rescore_nodes <- c(rescore_nodes, GetPartitionNodes(partitioned_nodes, start_rescore:end_rescore))
+    
     # Swap nodes.
     partitioned_nodes$partition[i_node] <- oth_node_element
     partitioned_nodes$partition[i_oth_node] <- node_element
-    
+
     partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
+    
+  } else {
+    rescore_nodes <- NULL
   }
   
-  return(partitioned_nodes)
+  return(list(partitioned_nodes = partitioned_nodes,
+              rescore_nodes = rescore_nodes))
 }
 
 #' Calculate neighbourhood for swapping nodes.

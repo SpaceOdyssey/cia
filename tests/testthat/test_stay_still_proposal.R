@@ -4,13 +4,14 @@ partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
 testthat::test_that('StayStill has attributes', {
   expect_identical(
-    setdiff(names(StayStill(partitioned_nodes)), c('state', 'current_nbd', 'new_nbd')),
-    character(0)
+    names(StayStill(partitioned_nodes)), 
+    c('state', 'current_nbd', 'new_nbd', 'rescore_nodes')
   )
 })
 
 testthat::test_that('StayStill proposes the same labelled partition', {
   testthat::expect_identical(
-    ProposeStayStill(partitioned_nodes), partitioned_nodes
+    names(ProposeStayStill(partitioned_nodes)), 
+    c('partitioned_nodes', 'rescore_nodes')
   )
 })

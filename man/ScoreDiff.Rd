@@ -4,7 +4,12 @@
 \alias{ScoreDiff}
 \title{Calculate the difference in log scores between two labelled partitions.}
 \usage{
-ScoreDiff(old_partitioned_nodes, new_partitioned_nodes, scorer)
+ScoreDiff(
+  old_partitioned_nodes,
+  new_partitioned_nodes,
+  scorer,
+  rescore_nodes = NULL
+)
 }
 \arguments{
 \item{old_partitioned_nodes}{A labelled partition.}
@@ -12,6 +17,8 @@ ScoreDiff(old_partitioned_nodes, new_partitioned_nodes, scorer)
 \item{new_partitioned_nodes}{A labelled partition.}
 
 \item{scorer}{A scorer object.}
+
+\item{rescore_nodes}{Default is NULL which will determine the}
 }
 \value{
 Log of score difference between two labelled partitions.

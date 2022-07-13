@@ -115,6 +115,10 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' Find nodes with changed parent combinations between different labelled 
 #' partitions.
 #' 
+#' TODO: This is quite slow. From the proposal we should be able to determine
+#' the nodes that need to be rescored rather than finding them using this 
+#' function.
+#' 
 #' @examples
 #' scorer = CreateScorer()
 #' 
@@ -170,23 +174,25 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, score
 #' @param old_partitioned_nodes A labelled partition.
 #' @param new_partitioned_nodes A labelled partition.
 #' @param scorer A scorer object.
+#' @param rescore_nodes Default is NULL which will determine the 
 #' 
 #' @return Log of score difference between two labelled partitions.
 #' 
 #' @export
-ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
+ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer, 
+                      rescore_nodes = NULL) {
   
   white_obeyed <- CheckWhitelistObeyed(new_partitioned_nodes, scorer$whitelist)
   black_obeyed <- CheckBlacklistObeyed(new_partitioned_nodes, scorer$blacklist)
   if (!white_obeyed | !black_obeyed)
     return(-Inf)
   
-  changed_nodes <- FindChangedNodes(old_partitioned_nodes, 
-                                    new_partitioned_nodes, 
-                                    scorer)
+  # rescore_nodes <- FindChangedNodes(old_partitioned_nodes,
+  #                                   new_partitioned_nodes,
+  #                                   scorer)
   
   log_score_diff <- 0.0
-  for (node in changed_nodes) {
+  for (node in rescore_nodes) {
     old_log_score_node <- ScoreNode(old_partitioned_nodes, node, scorer)
     new_log_score_node <- ScoreNode(new_partitioned_nodes, node, scorer)
     
@@ -336,6 +342,18 @@ GetNodePartition <- function(partitioned_nodes, node) {
   node_partition <- partitioned_nodes$partition[partitioned_nodes$node == node]
   
   return(node_partition)
+}
+
+#' Get nodes in a partition element.
+#' 
+#' @param partitioned_nodes Labelled partition.
+#' @param elements An integer or vector of integers for the partition element number.
+#' 
+#' @export
+GetPartitionNodes <- function(partitioned_nodes, elements) {
+  nodes <- partitioned_nodes$node[partitioned_nodes$partition %in% elements]
+  
+  return(nodes)
 }
 
 #' Get parent combinations for a given node.

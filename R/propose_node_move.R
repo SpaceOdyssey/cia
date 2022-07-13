@@ -7,13 +7,17 @@ NodeMove <- function(partitioned_nodes) {
   
   current_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
   
-  partitioned_nodes <- ProposeNodeMove(partitioned_nodes)
+  proposed <- ProposeNodeMove(partitioned_nodes)
+  partitioned_nodes <- proposed$partitioned_nodes
+  rescore_nodes <- proposed$rescore_nodes
+  
   new_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
   
   return(list(
     state = partitioned_nodes,
     current_nbd = current_nbd, 
-    new_nbd = new_nbd))
+    new_nbd = new_nbd,
+    rescore_nodes = rescore_nodes))
 }
 
 #' Propose individual node movement. 
@@ -70,6 +74,9 @@ ProposeNodeMove <- function(partitioned_nodes) {
   # Wrap move to deal with boundaries.
   new_element <- (current_element + move) %% (2*m + 1)
   
+  rescore_nodes <- NodeMoveRescore(partitioned_nodes, node,
+                                   current_element, new_element)
+  
   # Assign and relabel the elements back to the standard form.
   partitioned_nodes$partition[inode] <- new_element
   partitioned_nodes$partition <- match(
@@ -77,8 +84,9 @@ ProposeNodeMove <- function(partitioned_nodes) {
     sort(unique(partitioned_nodes$partition))
   )
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
-  
-  return(partitioned_nodes)
+
+  return(list(partitioned_nodes = partitioned_nodes, 
+              rescore_nodes = rescore_nodes))
 }
 
 #' Calculate neighbourhood for node move.
@@ -103,3 +111,23 @@ CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {
   return(n_1_num_nbd + n_2_num_nbd + n_oth_num_nbd)
 }
 
+#' Rescore nodes.
+#' 
+#' Find nodes to rescore. This works in the relabelled partition + gap space.
+#' 
+#' @noRd
+NodeMoveRescore <- function(partitioned_nodes, node, old_element, new_element) {
+  
+  # Rescore nodes as a function of moved. Rescore based on:
+  if (new_element > old_element) {
+    start_rescore <- old_element + 1
+    end_rescore <- new_element + ifelse(new_element %% 2 == 0, 1, 2)
+    rescore_nodes <- c(node, GetPartitionNodes(partitioned_nodes, start_rescore:end_rescore))
+  } else {
+    start_rescore <- new_element + 1
+    end_rescore <- old_element + 2
+    rescore_nodes <- GetPartitionNodes(partitioned_nodes, start_rescore:end_rescore)
+  }
+  
+  return(rescore_nodes)
+}

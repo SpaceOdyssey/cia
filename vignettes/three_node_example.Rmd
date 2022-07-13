@@ -39,7 +39,7 @@ bn_arr[[1]] <- gRbase::parray(c('A', 'B'), levels = all_levels,
 bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
                               values = c(0.5, 0.5))
 bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
-                              values = c(0.33, 0.67, 0.57, 0.1))
+                              values = c(0.33, 0.67, 0.9, 0.1))
 
 # # Student model
 # all_levels <- list(
@@ -157,7 +157,7 @@ This gets n_results samples for each core.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 100000
+n_results <- 50000
 n_chains <- 4
 
 init_partitions <- list()
@@ -166,8 +166,8 @@ for (i in 1:n_chains) {
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
-proposal <- DefaultProposal(p = c(0.34, 0.33, 0.33, 0.0))
-profvis::profvis(
+proposal <- DefaultProposal(p = c(0.34, 0.33, 0.33, 0.00))
+system.time(
   chains <- SampleChains(n_results, init_partitions,
                          transition = PartitionMCMC(proposal = proposal),
                          scorer = scorer,

@@ -4,7 +4,7 @@
 \alias{DefaultProposal}
 \title{Default proposal constructor.}
 \usage{
-DefaultProposal(p = c(0.33, 0.33, 0.33, 0.01), verbose = TRUE)
+DefaultProposal(p = c(0.34, 0.33, 0.33, 0), verbose = TRUE)
 }
 \arguments{
 \item{p}{Probability for each proposal in the order (split_join, node_move,

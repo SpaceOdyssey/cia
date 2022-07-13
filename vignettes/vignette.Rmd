@@ -171,6 +171,12 @@ system.time(
                          scorer = scorer,
                          n_parallel_chains = n_runs)
 )
+
+profvis::profvis(
+  chain <- SampleChain(n_results, init_partitions[[1]],
+                         transition = PartitionMCMC(),
+                         scorer = scorer)
+)
 ```
 
 ## Convergence the chains for convergence
@@ -188,7 +194,9 @@ Post process by removing burnin and sampling DAGs from labelled partitions.
 ```{r, error = TRUE}
 n_burnin <- 0
 eq_chains <- PostProcessChains(chains, n_burnin)
-eq_chains <- SampleChainDAGs(eq_chains, scorer)
+system.time(
+  eq_chains <- SampleChainDAGs(eq_chains, scorer)
+)
 ```
 
 Plot partition score trace after removing burnin.

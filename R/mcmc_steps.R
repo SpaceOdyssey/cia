@@ -39,7 +39,8 @@ PartitionMCMC <- function(proposal = NULL, verbose = TRUE) {
   function(current_state, scorer) {
     proposed <- proposal(current_state$state)
     
-    log_score_diff <- ScoreDiff(current_state$state, proposed$state, scorer)
+    log_score_diff <- ScoreDiff(current_state$state, proposed$state, 
+                                scorer, proposed$rescore_nodes)
     log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
     
     accept <- AcceptProposal(log_r)
