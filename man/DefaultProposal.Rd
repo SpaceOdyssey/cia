@@ -4,11 +4,11 @@
 \alias{DefaultProposal}
 \title{Default proposal constructor.}
 \usage{
-DefaultProposal(p = c(0.34, 0.33, 0.33, 0), verbose = TRUE)
+DefaultProposal(p = c(0.33, 0.33, 0.165, 0.165, 0.01), verbose = TRUE)
 }
 \arguments{
 \item{p}{Probability for each proposal in the order (split_join, node_move,
-swap_node, stay_still).}
+swap_node, swap_adjacent, stay_still).}
 
 \item{verbose}{Boolean flag to record proposal used.}
 }

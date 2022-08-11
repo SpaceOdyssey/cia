@@ -166,7 +166,7 @@ for (i in 1:n_chains) {
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
-proposal <- DefaultProposal(p = c(0.34, 0.33, 0.33, 0.00))
+proposal <- DefaultProposal()
 system.time(
   chains <- SampleChains(n_results, init_partitions,
                          transition = PartitionMCMC(proposal = proposal),
@@ -414,7 +414,7 @@ n_chain_all <- dags %>%
 p_chain_all <- n_chain_all/sum(n_chain_all)
 
 i_order <- order(p_true, decreasing = TRUE)
-graphics::par(mfrow = c(4, 2), mar=c(1,1,1,1))
+graphics::par(mfrow = c(4, 2), mar = c(1, 1, 1, 1))
 for (i in i_order) {
   hash_focus_dag <- hash_all_dags[i]
   focus_dag <- all_dags[[i]]
