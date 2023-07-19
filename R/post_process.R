@@ -37,7 +37,7 @@ PostProcessChain <- function(chain, n_burnin, n_thin) {
 #' Plot the score trace.
 #' 
 #' @param chains MCMC chains.
-#' @param attribute Name of attribute to plot. Default is 'log_score'.
+#' @param attribute Name of attribute to plot. Default is "log_score".
 #' @param n_burnin Number of steps to remove as burnin.
 #' @param same_plot Whether to plot on the same figure or on multiple figures.
 #' @param col A string representing a color for a single chain or a vector of 
@@ -122,11 +122,11 @@ MultipleChains <- function(chains) {
 
 #' Calculate acceptance rates per proposal. 
 #' 
-#' This makes the assumption that the proposal has saved a variable 'proposal_used'
+#' This makes the assumption that the proposal has saved a variable "proposal_used"
 #' and mcmc has saved a variable 'accept'.
 #' 
 #' @param chains MCMC chains.
-#' @param group_by Vector of strings that are in c('chain', 'proposal_used'). 
+#' @param group_by Vector of strings that are in c("chain", "proposal_used"). 
 #' Default is NULL which will return the acceptance rates marginalised over
 #' chains and the proposal used.
 #' 

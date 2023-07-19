@@ -23,7 +23,7 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes
       
-      new_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
+      new_nbd <- CalculateSplitJoinNeighbourhood(proposed$partitioned_nodes)
     } else if (alpha <  sum(p[1:2])) {
       if (verbose)
         proposal_info <- list(proposal_used = 'node_move')
@@ -32,7 +32,7 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
       proposed <- ProposeNodeMove(partitioned_nodes)
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes
-      new_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
+      new_nbd <- CalculateNodeMoveNeighbourhood(proposed$partitioned_nodes)
     } else if (alpha < sum(p[1:3])) {
       if (verbose)
         proposal_info <- list(proposal_used = 'swap_node')
@@ -41,7 +41,7 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
       proposed <- ProposeSwapNode(partitioned_nodes)
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes
-      new_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
+      new_nbd <- CalculateSwapNodeNeighbourhood(proposed$partitioned_nodes)
     } else if (alpha < sum(p[1:4])) {
       if (verbose)
         proposal_info <- list(proposal_used = 'swap_adjacent')
@@ -50,7 +50,7 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
       proposed <- ProposeSwapAdjacentNode(partitioned_nodes)
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes
-      new_nbd <- CalculateSwapAdjacentNodeNeighbourhood(partitioned_nodes)
+      new_nbd <- CalculateSwapAdjacentNodeNeighbourhood(proposed$partitioned_nodes)
       
     } else {
       if (verbose)
@@ -60,7 +60,7 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
       proposed <- ProposeStayStill(partitioned_nodes)
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes
-      new_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
+      new_nbd <- CalculateStayStillNeighbourhood(proposed$partitioned_nodes)
     }
     
     return(list(proposal_info = proposal_info,

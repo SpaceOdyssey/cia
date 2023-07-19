@@ -11,5 +11,5 @@ GetNumberOfPartitions(partitioned_nodes)
 }
 \description{
 Calculate the number of partitions for a given labelled partition. This is
-'m' in Kuipers & Moffa (2015).
+`m' in Kuipers & Moffa (2015).
 }

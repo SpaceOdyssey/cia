@@ -41,33 +41,6 @@ bn_arr[[2]] <- gRbase::parray('B', levels = all_levels,
 bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
                               values = c(0.33, 0.67, 0.9, 0.1))
 
-# # Student model
-# all_levels <- list(
-#   D = c('no', 'yes'),
-#   I = c('no', 'yes'),
-#   G = c('no', 'yes'),
-#   L = c('no', 'yes'),
-#   S = c('no', 'yes')
-#   )
-# 
-# bn_arr <- list()
-# bn_arr[[1]] <- gRbase::parray('D', levels = all_levels, values = c(0.6, 0.4))
-# bn_arr[[2]] <- gRbase::parray('I', levels = all_levels, values = c(0.7, 0.3))
-# bn_arr[[3]] <- gRbase::parray(c('G', 'I', 'D'), levels = all_levels,
-#                               values = c(0.3, 0.7,
-#                                          0.9, 0.10,
-#                                          0.05, 0.95,
-#                                          0.5, 0.5))
-# bn_arr[[4]] <- gRbase::parray(c('S', 'I'),
-#                               levels = all_levels,
-#                               values = c(0.95, 0.05,
-#                                          0.2, 0.8))
-# bn_arr[[5]] <- gRbase::parray(c('L', 'G'),
-#                               levels = all_levels,
-#                               values = c(0.1, 0.9,
-#                                          0.4, 0.6,
-#                                          0.99, 0.01))
-
 nodes <- names(all_levels)
 cpt <- gRain::compileCPT(bn_arr)
 gr_dag <- gRain::grain(cpt)
@@ -88,6 +61,8 @@ Calculate correlation matrix of the data.
 ```{r, error = TRUE}
 knitr::kable(cor(1*(data == 'yes')))
 ```
+
+## Calculate analytical probabilities for each graph
 
 Get all possible graphs. 
 
@@ -130,12 +105,12 @@ Score all possible DAGs against the simulated data.
 ```{r, error = TRUE}
 scorer <- CreateScorer(data = data, type = 'bde', cache = TRUE)
 
-score_all_dags <- all_dags %>%
-  lapply(ScoreDAG, scorer = scorer) %>%
-  unlist
-hash_all_dags <- all_dags %>%
-  lapply(rlang::hash) %>% 
-  unlist
+score_all_dags <- all_dags |>
+  lapply(ScoreDAG, scorer = scorer) |>
+  unlist()
+hash_all_dags <- all_dags |>
+  lapply(rlang::hash) |> 
+  unlist()
 ```
 
 Convert the scores into expected probabilities.
@@ -157,8 +132,8 @@ This gets n_results samples for each core.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 50000
-n_chains <- 4
+n_results <- as.integer(1e6)
+n_chains <- 2
 
 init_partitions <- list()
 for (i in 1:n_chains) {
@@ -166,73 +141,18 @@ for (i in 1:n_chains) {
   init_partitions[[i]] <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
 }
 
-proposal <- DefaultProposal()
+# Only use the move-node proposal. There are some minor issues with following 
+# detailed balance by using the others.
+proposal <- DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0)) 
 system.time(
   chains <- SampleChains(n_results, init_partitions,
                          transition = PartitionMCMC(proposal = proposal),
                          scorer = scorer,
                          n_parallel_chains = n_chains)
 )
-
-# profvis::profvis(
-#   chain <- SampleChain(n_results, init_partitions[[i]],
-#                        transition = PartitionMCMC(proposal = proposal),
-#                        scorer = scorer)
-# )
 ```
 
 ## Check the chains for convergence 
-
-<!-- Check that all chains have reached the maximum a posteriori (MAP). -->
-
-<!-- # ```{r, error = TRUE} -->
-<!-- # # Get max score -->
-<!-- # # CheckMaxPartitionScoreAcrossChains <- function() -->
-<!-- # max_score <- -Inf -->
-<!-- # max_scores <- c() -->
-<!-- # for (i in 1:n_chains) { -->
-<!-- #   chain_max_score <- max(chains[[i]]$log_score) -->
-<!-- #   max_scores <- c(max_scores, chain_max_score) -->
-<!-- #    -->
-<!-- #   i_max_score <- which(chains[[i]]$log_score == chain_max_score) -->
-<!-- #   chain_max_score_states <- unique(chains[[i]]$state[i_max_score]) -->
-<!-- #    -->
-<!-- #   if (chain_max_score > max_score) -->
-<!-- #     max_score <- chain_max_score -->
-<!-- # } -->
-<!-- # check_score <- which(max_scores == max_score) -->
-<!-- #  -->
-<!-- # # Find all states that correspond to max score. There could be multiple states -->
-<!-- # # so this is exhaustive. -->
-<!-- # max_score_states <- list() -->
-<!-- # n <- 1 -->
-<!-- # for (i in check_score) { -->
-<!-- #   i_max_score <- which(chains[[i]]$log_score == chain_max_score) -->
-<!-- #   un_states <- unique(chains[[i]]$state[i_max_score]) -->
-<!-- #   for (j in 1:length(un_states)) { -->
-<!-- #     max_score_states[[n]] <- un_states[[j]] -->
-<!-- #     n <- n + 1 -->
-<!-- #   } -->
-<!-- # } -->
-<!-- # max_score_states <- unique(max_score_states) -->
-<!-- #  -->
-<!-- #  -->
-<!-- # if (length(max_score_states) == 1) { -->
-<!-- #   check_states <- check_score -->
-<!-- # } else { -->
-<!-- #   # Need to check each chain. -->
-<!-- #   check_states <- c() -->
-<!-- #   for (i in 1:n_chains) { -->
-<!-- #     check_states_chain <- TRUE -->
-<!-- #     for (j in 1:length(max_score_states)) { -->
-<!-- #       if (!max_score_states[[j]] %in% chains[[i]]$state) { -->
-<!-- #         check_states_chain <- FALSE -->
-<!-- #       } -->
-<!-- #     } -->
-<!-- #     check_states <- c(check_states, check_states_chain) -->
-<!-- #   } -->
-<!-- # } -->
-<!-- # ``` -->
 
 Looking at the trace of the partition log score.
 
@@ -263,129 +183,6 @@ quantities of interest below.
 Rhat has gaussianity assumptions. What is the best statistical way to check for 
 convergence when the partition and DAG scores are not normally distributed?
 
-## Estimating probabilities for each DAG
-
-First we want to check that the convergence both between and within chains
-for the probability of the DAGs of interest. I do this using the Rhat calculation
-provided by Gelman in chapter 11 of Bayesian Data Analysis.
-
-```{r, error = TRUE}
-dags <- list()
-for (i in 1:n_chains)
-  dags[[i]] <- eq_chains[[i]]$dag
-
-unique_sampled_dags <- unique(unlist(dags, recursive = FALSE))
-n_within <- (n_results - n_burnin)/2
-
-p_chains <- list()
-ssq <- list()
-for (i in 1:n_chains) {
-  for (m in 1:2) {
-    count_dags <- dags[[i]][(1 + (m - 1)*n_within):(m*n_within)] %>%
-      lapply(rlang::hash) %>%
-      unlist %>%
-      table
-    sample_p_dags <- count_dags / sum(count_dags)
-    p_chains[[2*(i - 1) + m]] <- data.frame(
-      chain = i,
-      sequence = m,
-      hash_dag = names(sample_p_dags),
-      p = as.numeric(sample_p_dags)
-    )
-  }
-}
-p_chains <- dplyr::bind_rows(p_chains)
-
-# Only going to check convergence for DAGs that appear in all chains. I'm
-# assuming that other DAGs have a reasonably low probability, and therefore
-# we are less interested in them.
-focus_dags <- names(table(p_chains$hash_dag))[table(p_chains$hash_dag) == 2*n_chains]
-p_chains <- p_chains %>%
-  dplyr::filter(hash_dag %in% focus_dags)
-
-p_marg <- p_chains %>%
-  dplyr::group_by(hash_dag) %>%
-  dplyr::summarise(p = mean(p))
-
-psi_j <- p_chains %>%
-  dplyr::group_by(chain, hash_dag) %>%
-  dplyr::summarise(psi_j = mean(p), ssq_j = p*(1.0 - p))
-
-psi_bar <- psi_j %>%
-  dplyr::group_by(hash_dag) %>%
-  dplyr::summarise(psi_bar = mean(psi_j))
-
-psi <- dplyr::left_join(psi_j, psi_bar, by = 'hash_dag')
-
-bw <- psi %>%
-  dplyr::mutate(psi_diff_sq = (psi_j - psi_bar)^2) %>%
-  dplyr::group_by(hash_dag) %>%
-  dplyr::summarise(
-    b = n_within/(2*n_chains - 1)*sum(psi_diff_sq),
-    w = mean(ssq_j)
-    ) %>%
-  dplyr::mutate(
-    var = (w*(n_within - 1) + b)/n_within,
-    rhat = sqrt(var/w)
-    ) %>%
-  dplyr::left_join(p_marg, by = 'hash_dag') %>%
-  dplyr::left_join(p_summary, by = 'hash_dag') %>%
-  dplyr::arrange(desc(p_true))
-```
-
-Calculate the effective sample size for each DAG probability. This still doesn't feel quite right.
-
-```{r, error = TRUE}
-t_max <- 100
-n_eff <- c()
-for (i_focus_dag in 1:1) {
-  v <- c()
-  rho <- c()
-  for (t in 0:(t_max - 1)) {
-    sum_psi_sq <- 0.0
-    for (r in 1:n_chains) {
-      for (m in 1:2) {
-        dags_j <- dags[[r]][(1 + (m - 1)*n_within):(m*n_within)] %>%
-              lapply(rlang::hash) %>%
-              unlist
-        psi_ij <- dags_j == bw$hash_dag[i_focus_dag]
-        
-        sum_psi_sq_j <- sum((psi_ij[(t + 1):n_within] - psi_ij[1:(n_within - t)])^2)
-        sum_psi_sq <- sum_psi_sq + sum_psi_sq_j
-      }
-    }
-    v_t_const <- 1.0/(2*n_chains*(n_within - t))
-    v_t <- v_t_const*sum_psi_sq
-    v <- c(v, v_t)
-  
-    rho_t <- 1.0 - 0.5*v_t/bw$var[i_focus_dag]
-    rho <- c(rho, rho_t)
-  }
-  
-  # Only perform a partial sum of rho
-  rho_pair_sum <- rho[seq(0, t_max, 2)] + rho[seq(1, t_max, 2)]
-  if (all(rho_pair_sum > 0)) {
-    # full sum
-    rho_part_sum <- sum(rho)
-  } else {
-    # partial sum
-    first_neg_pair <- which(rho_pair_sum < 0)[1]
-    rho_part_sum <- sum(rho[1:(first_neg_pair - 1)])
-  }
-  
-  n_eff_dag <- 2*n_chains*n_within/(1 + 2*rho_part_sum)
-  n_eff <- c(n_eff, n_eff_dag)
-}
-bw1 <- bw %>% 
-  dplyr::bind_cols(n_eff = n_eff) %>%
-  dplyr::mutate(
-    p_sd = sqrt(p*(1.0 - p)/n_eff),
-    p_within_sd = (p >= p_true - p_sd) & (p <= p_true + p_sd)
-    )
-
-knitr::kable(bw1)
-```
-
 ## Analysing acceptance rates
 
 Acceptance per proposal after burnin.
@@ -403,14 +200,18 @@ knitr::kable(total_accept)
 ```
 
 
-Show DAGs
+## Estimating probabilities for each DAG
+
 
 ```{r, error = TRUE, fig.dim = c(6.0, 12.0)}
-n_chain_all <- dags %>%
-  unlist(recursive = FALSE) %>%
-  lapply(rlang::hash) %>%
-  unlist %>%
-  table
+dags <- eq_chains |>
+  lapply(function(x) x$dag) |> 
+  unlist(recursive = FALSE)
+
+n_chain_all <- dags |>
+  lapply(rlang::hash) |>
+  unlist() |>
+  table()
 p_chain_all <- n_chain_all/sum(n_chain_all)
 
 i_order <- order(p_true, decreasing = TRUE)
@@ -428,29 +229,3 @@ for (i in i_order) {
   graphics::text(300, 0, t)
 }
 ```
-
-
-<!-- # ```{r, error = TRUE, fig.dim = c(7.0, 12.0)} -->
-<!-- # n_chain_all <- dags %>% -->
-<!-- #   unlist(recursive = FALSE) %>% -->
-<!-- #   lapply(rlang::hash) %>% -->
-<!-- #   unlist %>% -->
-<!-- #   table -->
-<!-- # p_chain_all <- n_chain_all/sum(n_chain_all) -->
-<!-- #  -->
-<!-- # i_order <- order(p_true, decreasing = TRUE) -->
-<!-- # graphics::par(mfrow = c(4, 2)) -->
-<!-- # for (i in i_order[1:25]) { -->
-<!-- #   hash_focus_dag <- hash_all_dags[i] -->
-<!-- #   focus_dag <- all_dags[[i]] -->
-<!-- #    -->
-<!-- #   bn_focus <- bnlearn::empty.graph(nodes) -->
-<!-- #   bnlearn::amat(bn_focus) <- focus_dag -->
-<!-- #   plot(bn_focus) -->
-<!-- #    -->
-<!-- #   t <- paste('p_est: ', round(p_chain_all[hash_focus_dag], 4),  -->
-<!-- #              ', p_true: ', round(p_true[i], 4), sep = '') -->
-<!-- #   graphics::text(300, 0, t) -->
-<!-- # } -->
-<!-- # graphics::par(mfrow = c(1,1)) -->
-<!-- # ``` -->

@@ -22,7 +22,7 @@ BNLearnScorer('A', c('B', 'C'), data = data)
 BNLearnScorer('A', c(), data = data)
 BNLearnScorer('A', vector(), data = data)
 BNLearnScorer('A', NULL, data = data)
-BNLearnScorer('A', c('B', 'C'), data = data, type = 'bde', iss = 100)
-BNLearnScorer('A', c('B', 'C'), data = data, type = 'bde', iss = 1)
+BNLearnScorer('A', c('B', 'C'), data = data, type = "bde", iss = 100)
+BNLearnScorer('A', c('B', 'C'), data = data, type = "bde", iss = 1)
 
 }

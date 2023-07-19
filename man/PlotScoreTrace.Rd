@@ -16,7 +16,7 @@ PlotScoreTrace(
 \arguments{
 \item{chains}{MCMC chains.}
 
-\item{attribute}{Name of attribute to plot. Default is 'log_score'.}
+\item{attribute}{Name of attribute to plot. Default is "log_score".}
 
 \item{n_burnin}{Number of steps to remove as burnin.}
 

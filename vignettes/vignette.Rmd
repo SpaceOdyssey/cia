@@ -30,15 +30,15 @@ library(ggplot2)
 Get test problem from the bnlearn library.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-data <- bnlearn::alarm[1:100, ]
-type <- 'bde'
-modelstring <- paste0("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF][LVF]",
-  "[STKV|HYP:LVF][ERLO][HRBP|ERLO:HR][HREK|ERCA:HR][ERCA][HRSA|ERCA:HR][ANES]",
-  "[APL][TPR|APL][ECO2|ACO2:VLNG][KINK][MINV|INT:VLNG][FIO2][PVS|FIO2:VALV]",
-  "[SAO2|PVS:SHNT][PAP|PMB][PMB][SHNT|INT:PMB][INT][PRSS|INT:KINK:VTUB][DISC]",
-  "[MVS][VMCH|MVS][VTUB|DISC:VMCH][VLNG|INT:KINK:VTUB][VALV|INT:VLNG]",
-  "[ACO2|VALV][CCHL|ACO2:ANES:SAO2:TPR][HR|CCHL][CO|HR:STKV][BP|CO:TPR]")
-true_graph <- bnlearn::model2network(modelstring)
+# data <- bnlearn::alarm[1:100, ]
+# type <- 'bde'
+# modelstring <- paste0("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF][LVF]",
+#   "[STKV|HYP:LVF][ERLO][HRBP|ERLO:HR][HREK|ERCA:HR][ERCA][HRSA|ERCA:HR][ANES]",
+#   "[APL][TPR|APL][ECO2|ACO2:VLNG][KINK][MINV|INT:VLNG][FIO2][PVS|FIO2:VALV]",
+#   "[SAO2|PVS:SHNT][PAP|PMB][PMB][SHNT|INT:PMB][INT][PRSS|INT:KINK:VTUB][DISC]",
+#   "[MVS][VMCH|MVS][VTUB|DISC:VMCH][VLNG|INT:KINK:VTUB][VALV|INT:VLNG]",
+#   "[ACO2|VALV][CCHL|ACO2:ANES:SAO2:TPR][HR|CCHL][CO|HR:STKV][BP|CO:TPR]")
+# true_graph <- bnlearn::model2network(modelstring)
 
 # # Asia
 # data <- bnlearn::asia[1:1000, ]
@@ -80,31 +80,31 @@ true_graph <- bnlearn::model2network(modelstring)
 #                   dimnames = list(NULL, c('from', 'to')))
 
 
-# # BNlearn Gaussian test. A gaussian problem.
-# data <- bnlearn::gaussian.test[1:100, ]
-# type <- 'bge'
-# true_graph <- bnlearn::empty.graph(names(data))
-# arc_set <- matrix(c('A', 'F',
-#                     'A', 'C',
-#                     'B', 'C',
-#                     'B', 'D',
-#                     'G', 'F',
-#                     'D', 'F',
-#                     'E', 'F'),
-#                   ncol = 2, byrow = TRUE,
-#                   dimnames = list(NULL, c('from', 'to')))
+# BNlearn Gaussian test. A gaussian problem.
+data <- bnlearn::gaussian.test[1:100, ]
+type <- 'bge'
+true_graph <- bnlearn::empty.graph(names(data))
+arc_set <- matrix(c('A', 'F',
+                    'A', 'C',
+                    'B', 'C',
+                    'B', 'D',
+                    'G', 'F',
+                    'D', 'F',
+                    'E', 'F'),
+                  ncol = 2, byrow = TRUE,
+                  dimnames = list(NULL, c('from', 'to')))
 ```
 
 Plot true graph.
 
-#```{r, error = TRUE}
-# true_graph <- bnlearn::empty.graph(names(data))
-# bnlearn::arcs(true_graph) <- arc_set
-# true_adj <- true_graph %>%
-#   bnlearn::as.igraph() %>%
-#   igraph::as_adjacency_matrix() %>%
-#   as.matrix
-# ```
+```{r, error = TRUE}
+true_graph <- bnlearn::empty.graph(names(data))
+bnlearn::arcs(true_graph) <- arc_set
+true_adj <- true_graph %>%
+   bnlearn::as.igraph() %>%
+   igraph::as_adjacency_matrix() %>%
+   as.matrix
+```
 
 Show the true DAG from which the data were sampled.
 
@@ -126,7 +126,8 @@ setup.
 
 ```{r, error = TRUE}
 scorer <- CreateScorer(scorer = BNLearnScorer,
-                       data = data, type = type,
+                       data = data, 
+                       type = type,
                        max_parents = 3,
                        blacklist = NULL,
                        whitelist = NULL,
@@ -149,7 +150,7 @@ to check that similar results are being reached on each run.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 1000
+n_results <- 10000
 n_runs <- 4
 
 init_partitions <- list()
@@ -174,11 +175,11 @@ system.time(
                          n_parallel_chains = n_runs)
 )
 
-profvis::profvis(
-  chain <- SampleChain(n_results, init_partitions[[1]],
-                         transition = PartitionMCMC(),
-                         scorer = scorer)
-)
+# profvis::profvis(
+#   chain <- SampleChain(n_results, init_partitions[[1]],
+#                          transition = PartitionMCMC(),
+#                          scorer = scorer)
+# )
 ```
 
 ## Convergence the chains for convergence
@@ -194,7 +195,7 @@ PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 Post process by removing burnin and sampling DAGs from labelled partitions.
 
 ```{r, error = TRUE}
-n_burnin <- 900
+n_burnin <- 500
 eq_chains <- PostProcessChains(chains, n_burnin)
 system.time(
   eq_chains <- SampleChainDAGs(eq_chains, scorer)
@@ -242,34 +243,3 @@ Acceptance per proposal.
 prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
 ```
-
-
-
-<!-- ## Inference for marginalised edge probabilities  -->
-
-<!-- Plot trace for each marginalised edge probability to check for convergence. -->
-
-<!-- ```{r, error = TRUE, fig.dim = c(8.0, 6.0)} -->
-<!-- dags %>% -->
-<!--   unlist() %>% -->
-<!--   data.frame( -->
-<!--     save = rep(1:n_target_saves, each = ncol(data)^2), -->
-<!--     parent = rep(colnames(data), times = ncol(data)*n_target_saves), -->
-<!--     child = rep(colnames(data), each = ncol(data), times = n_target_saves), -->
-<!--     edge = . -->
-<!--   ) %>% -->
-<!--   dplyr::group_by(parent, child) %>% -->
-<!--   dplyr::mutate(edge = cummean(edge)) %>% -->
-<!--   ggplot2::ggplot(ggplot2::aes(save, edge, color = interaction(parent, child))) + -->
-<!--   ggplot2::geom_path() + -->
-<!--   ggplot2::ylab('probability') -->
-<!-- ``` -->
-
-<!-- Print marginalised edge probabilities. -->
-
-<!-- ```{r, error = TRUE} -->
-<!-- p_edge <- dags %>% -->
-<!--   simplify2array() %>% -->
-<!--   apply(c(1, 2), mean) -->
-<!-- print(p_edge) -->
-<!-- ``` -->

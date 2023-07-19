@@ -9,7 +9,7 @@ CalculateAcceptanceRates(chains, group_by = NULL)
 \arguments{
 \item{chains}{MCMC chains.}
 
-\item{group_by}{Vector of strings that are in c('chain', 'proposal_used').
+\item{group_by}{Vector of strings that are in c("chain", "proposal_used").
 Default is NULL which will return the acceptance rates marginalised over
 chains and the proposal used.}
 }
@@ -17,6 +17,6 @@ chains and the proposal used.}
 Summary of acceptance rates per grouping.
 }
 \description{
-This makes the assumption that the proposal has saved a variable 'proposal_used'
+This makes the assumption that the proposal has saved a variable "proposal_used"
 and mcmc has saved a variable 'accept'.
 }

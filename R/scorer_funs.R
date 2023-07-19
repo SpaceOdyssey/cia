@@ -187,9 +187,10 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer,
   if (!white_obeyed | !black_obeyed)
     return(-Inf)
   
-  # rescore_nodes <- FindChangedNodes(old_partitioned_nodes,
-  #                                   new_partitioned_nodes,
-  #                                   scorer)
+  if (is.null(rescore_nodes))
+    rescore_nodes <- FindChangedNodes(old_partitioned_nodes,
+                                      new_partitioned_nodes,
+                                      scorer)
   
   log_score_diff <- 0.0
   for (node in rescore_nodes) {
@@ -321,7 +322,7 @@ LogSumExp <- function(x) {
 #' Get number of partitions.
 #' 
 #' Calculate the number of partitions for a given labelled partition. This is 
-#' 'm' in Kuipers & Moffa (2015).
+#' `m' in Kuipers & Moffa (2015).
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 

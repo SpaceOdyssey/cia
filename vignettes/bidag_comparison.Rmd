@@ -1,0 +1,166 @@
+---
+title: "bidag_comparison"
+output: html_document
+date: '2022-07-13'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Comparing DAGMC to BiDAG
+
+## Setup
+
+```{r setup, message = FALSE}
+library(dagmc)
+library(bnlearn)
+library(dplyr)
+library(ggplot2)
+```
+
+Get data. Just using categorical learning.test data at this point. Comparisons
+with Gaussian data seem aren't consistent, which I think is due to BiDAG using
+the updated score in Kuipers, Moffa, & Heckerman (2014).
+
+```{r cars}
+data <- bnlearn::learning.test[1:100, ]
+type <- 'bde'
+# true_graph <- bnlearn::empty.graph(names(data))
+# arc_set <- matrix(c('A', 'F',
+#                     'A', 'C',
+#                     'B', 'C',
+#                     'B', 'D',
+#                     'G', 'F',
+#                     'D', 'F',
+#                     'E', 'F'),
+#                   ncol = 2, byrow = TRUE,
+#                   dimnames = list(NULL, c('from', 'to')))
+```
+
+
+# ```{r, error = TRUE}
+# true_graph <- bnlearn::empty.graph(names(data))
+# bnlearn::arcs(true_graph) <- arc_set
+# true_adj <- true_graph %>%
+#  bnlearn::as.igraph() %>%
+#  igraph::as_adjacency_matrix() %>%
+#  as.matrix
+# bnlearn::graphviz.plot(bnlearn::cpdag(true_graph))
+# ```
+
+## Posterior sampling
+
+
+### Using DAGMC
+
+Using 
+
+```{r, error = TRUE}
+system.time(
+  scorer <- CreateScorer(scorer = BNLearnScorer,
+                       data = data, type = type,
+                       max_parents = Inf,
+                       blacklist = NULL,
+                       whitelist = NULL,
+                       cache = TRUE)
+)
+```
+
+```{r, error = TRUE}
+set.seed(1)
+n_results <- 10000
+
+init_dag <- matrix(0L, 
+                   nrow = ncol(data), ncol = ncol(data), 
+                   dimnames = list(names(data), names(data)))
+init_partition <- GetPartitionedNodesFromAdjacencyMatrix(init_dag)
+
+system.time(
+  chain <- SampleChain(n_results, init_partition,
+                      transition = PartitionMCMC(),
+                      scorer = scorer)
+)
+```
+
+Sample DAGs from partitions.
+```{r, error = TRUE}
+system.time( chain <- SampleChainDAGs(chain, scorer) )
+```
+
+
+### Using BiDAG
+
+```{r, error = TRUE}
+bd_scorer <- BiDAG::scoreparameters(scoretype = 'bdecat',
+                                    data = data, 
+                                    bdecatpar = list(chi = 1.0, edgepf = 1.0))
+
+startspace <- matrix(1L, 
+                     nrow = ncol(data), ncol = ncol(data), 
+                     dimnames = list(names(data), names(data)))
+
+system.time(
+  bd_res <- BiDAG::partitionMCMC(bd_scorer,
+                                 iterations = n_results,
+                                 moveprobs = c(0.33, 0.0, 0.34, 0.33, 0.0),
+                                 stepsave = 1,
+                                 startspace = startspace,
+                                 verbose = TRUE)
+)
+```
+
+## Compare the two
+
+
+Check for convergence.
+
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+PlotScoreTrace(chain, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l', col = 'blue')
+lines(bd_res$trace)
+```
+
+Did they agree on probabilities for each DAG?
+
+```{r, error = TRUE}
+p_dagmc <- chain$dag %>%
+  sapply(rlang::hash) %>%
+  table %>%
+  "/"(n_results) %>%
+  data.frame %>%
+  tibble %>%
+  dplyr::rename(hash_dag = 1)
+
+bd_dags <- BiDAG::getTrace(bd_res, which = 1) %>%
+  lapply(function(x) as(x, 'matrix')) %>%
+  sapply(function(x) rlang::hash(x)) %>%
+  table %>%
+  "/"(sum(.)) %>%
+  data.frame %>%
+  tibble %>%
+  dplyr::rename(hash_dag = 1)
+
+dplyr::full_join(p_dagmc, bd_dags, by = 'hash_dag')
+```
+
+Do they have the same DAG probabilities?
+
+
+Check for convergence after burnin.
+
+```{r, error = TRUE}
+PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
+```
+
+Sample DAGs from partitions and plot the trace.
+```{r, error = TRUE}
+system.time(
+  eq_chains <- SampleChainDAGs(eq_chains, scorer)
+)
+PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
+```
+
+# Posterior sampling using BiDAG
+
+
+

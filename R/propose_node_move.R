@@ -15,7 +15,7 @@ NodeMove <- function(partitioned_nodes) {
   
   return(list(
     state = partitioned_nodes,
-    current_nbd = current_nbd, 
+    current_nbd = current_nbd,
     new_nbd = new_nbd,
     rescore_nodes = rescore_nodes))
 }

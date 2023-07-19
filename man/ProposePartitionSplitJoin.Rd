@@ -13,7 +13,7 @@ ProposePartitionSplitJoin(partitioned_nodes)
 A proposed labelled partition.
 }
 \description{
-This is the 'Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015). There
+This is the `Basic Move' (i.e. algorithm 1) in Kuipers & Moffa (2015). There
 is a caveat in that the split proposal for a partition with one element is
 ambiguous, as a split for such a partition element results in a stay still
 proposal. Such a proposal has been removed.
