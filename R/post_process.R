@@ -160,12 +160,11 @@ CalculateAcceptanceRates <- function(chains, group_by = NULL) {
   return(accept_summary)
 }
 
-#' Flatten list of chains. Not exporting at the moment. Not sure if this is how 
-#' I want this implemented. 
+#' Flatten list of chains.
 #' 
 #' @param chains MCMC chains.
 #' 
-#' @noRd
+#' @export
 FlattenChains <- function(chains) {
   
   stopifnot(MultipleChains(chains))
@@ -179,4 +178,51 @@ FlattenChains <- function(chains) {
   }
   
   return(chain)
+}
+
+#' Collect DAGs.
+#' 
+#' Get the unique set of DAGs along with their log_score. It also estimates
+#' the normalised log score assuming \eqn{\tilde{Z} = \Sigma_s^S p(G_s)p(D | G_s)} 
+#' where \eqn{\{G_1, G_2, G_3, ..., G_S\}} is the set of unique DAGs in the 
+#' the chain. This assumes that you have captured the most probable graphs, such 
+#' that \eqn{\tilde{Z}} is approximately equal to the true evidence 
+#' \eqn{Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)} 
+#' where you sum across all possible graphs \eqn{\mathcal{G}}. This
+#' also makes the assumption that the scoring method used is proportional to
+#' the posterior probability; \eqn{\text{score}(G, D) \propto p(G)p(G | D)}.
+#' 
+#' @param post_chain A flattened chain that includes a DAG per sample.
+#' 
+#' @returns dag_collection A list with entries:
+#'  dag: A list of all unique DAGs within the sample.
+#'  log_score: A vector with the log_scores for each DAG.
+#'  log_evidence: A numeric value representing the evidence \eqn{log(\tilde{Z}) = \Sigma_s^S log(p(G_s)p(D | G_s))}.
+#'  log_norm_score: A vector of normalised log_scores for each DAG \eqn{G_s} using \eqn{p(G_s | D) = log(p(G_s)p(D | G_s)) - log(\tilde{Z})}.
+#' 
+#' @export
+CollectDags <- function(post_chain) {
+  
+  dags <- post_chain$dag
+  log_score <- unlist(post_chain$log_score)
+  
+  # Assign hashs for each dag for simplicity of the next calculations.
+  hashs <- dags |>
+    lapply(rlang::hash) |>
+    unlist()
+  
+  # Summarise unique DAGs.
+  ihash <- match(unique(hashs), hashs)
+  unique_log_scores <- log_score[ihash]
+  unique_dags <- dags[ihash]
+  
+  log_evidence <- LogSumExp(unique_log_scores)
+  log_norm_score <- unique_log_scores - log_evidence
+  
+  col <- list(dag = unique_dags,
+              log_score = unique_log_scores,
+              log_norm_score = log_norm_score,
+              log_evidence = log_evidence)
+  
+  return(col)
 }

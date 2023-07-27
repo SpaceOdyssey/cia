@@ -25,7 +25,7 @@ library(dagmc)
 library(magrittr)
 ```
 
-Create conditional probability tables.
+Create conditional probability tables. Plot the CPDAG.
 
 ```{r, error = TRUE}
 # Three Node confounder problem
@@ -132,7 +132,7 @@ This gets n_results samples for each core.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- as.integer(1e6)
+n_results <- as.integer(1e4)
 n_chains <- 2
 
 init_partitions <- list()
@@ -177,11 +177,7 @@ PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', 
 ## Convergence of the score trace
 
 On inspection the score trace for both partitions and DAGs appears to have 
-converged across chains. However, I will look at this in more detail for the
-quantities of interest below.
-
-Rhat has gaussianity assumptions. What is the best statistical way to check for 
-convergence when the partition and DAG scores are not normally distributed?
+converged across chains. TODO: I should show a rolling average for each pairwise edge.
 
 ## Analysing acceptance rates
 

@@ -1,7 +1,9 @@
 ---
 title: "bidag_comparison"
-output: html_document
-date: '2022-07-13'
+output:
+  pdf_document: default
+  html_document: default
+date: "2022-07-13"
 ---
 
 ```{r setup, include=FALSE}
@@ -9,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Comparing DAGMC to BiDAG
+
+This isn't finished! So please ignore for now.
 
 ## Setup
 

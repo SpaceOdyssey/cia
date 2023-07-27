@@ -29,6 +29,9 @@ Suggests:
     knitr,
     testthat (>= 3.0.0),
     parallel,
-    gtools
+    gtools,
+    gRain,
+    gRbase,
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ## What is this for?
 
-This shows an example use of dagmc on the bnlearn gaussian.test data set. 
+This shows an example using dagmc on several bnlearn test data sets.
 
 ## Setup
 
@@ -30,6 +30,8 @@ library(ggplot2)
 Get test problem from the bnlearn library.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
+# Select a problem to test.
+
 # data <- bnlearn::alarm[1:100, ]
 # type <- 'bde'
 # modelstring <- paste0("[HIST|LVF][CVP|LVV][PCWP|LVV][HYP][LVV|HYP:LVF][LVF]",
@@ -79,9 +81,8 @@ Get test problem from the bnlearn library.
 #                   ncol = 2, byrow = TRUE,
 #                   dimnames = list(NULL, c('from', 'to')))
 
-
 # BNlearn Gaussian test. A gaussian problem.
-data <- bnlearn::gaussian.test[1:100, ]
+data <- bnlearn::gaussian.test[1:500, ]
 type <- 'bge'
 true_graph <- bnlearn::empty.graph(names(data))
 arc_set <- matrix(c('A', 'F',
@@ -100,10 +101,10 @@ Plot true graph.
 ```{r, error = TRUE}
 true_graph <- bnlearn::empty.graph(names(data))
 bnlearn::arcs(true_graph) <- arc_set
-true_adj <- true_graph %>%
-   bnlearn::as.igraph() %>%
-   igraph::as_adjacency_matrix() %>%
-   as.matrix
+true_adj <- true_graph |>
+   bnlearn::as.igraph() |>
+   igraph::as_adjacency_matrix() |>
+   as.matrix()
 ```
 
 Show the true DAG from which the data were sampled.
@@ -132,7 +133,6 @@ scorer <- CreateScorer(scorer = BNLearnScorer,
                        blacklist = NULL,
                        whitelist = NULL,
                        cache = FALSE)
-
 blacklist <- GetLowestScoringEdges(scorer, c = 20)
 system.time(
   scorer <- CreateScorer(scorer = BNLearnScorer,
@@ -174,15 +174,9 @@ system.time(
                          scorer = scorer,
                          n_parallel_chains = n_runs)
 )
-
-# profvis::profvis(
-#   chain <- SampleChain(n_results, init_partitions[[1]],
-#                          transition = PartitionMCMC(),
-#                          scorer = scorer)
-# )
 ```
 
-## Convergence the chains for convergence
+## Check the chains for convergence
 
 Plot trace of the labelled partition log scores. The aim is to check that the 
 MCMC is not getting stuck in local maxima for a large number of saves and that 
@@ -204,19 +198,19 @@ system.time(
 
 Plot partition score trace after removing burnin.
 
-```{r, error = TRUE}
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
 ```
 
 Plot DAG scores.
 
-```{r, error = TRUE}
+```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
 ## Inference for the Maximum a Posteriori (MAP)
 
-Plot the first found highest scoring DAG.
+Plot the first found highest scoring DAG. 
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
 flat_dags <- list()
@@ -237,9 +231,29 @@ plot(bnlearn::cpdag(map_dag))
 
 ## Analysing acceptance rates
 
-Acceptance per proposal.
+Acceptance per proposal. This is often incredibly low, so I do wonder if we've
+explored enough of the posterior space. Increasing the temperature of the score
+is likely to help.
 
 ```{r, error = TRUE}
 prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
+```
+
+## Collect most probable DAGs
+
+```{r, error = TRUE}
+flat_eq_chains <- FlattenChains(eq_chains)
+dag_collection <- CollectDags(flat_eq_chains)
+```
+
+Calculate pairwise edge probabilities using the DAG collection. 
+
+```{r, error = TRUE}
+dag_arr <- simplify2array(dag_collection$dag)
+p_vec <- exp(dag_collection$log_norm_score)
+for (i in 1:length(p_vec))
+  dag_arr[, , i] <- dag_arr[, , i]*p_vec[i]
+p_edge <- apply(dag_arr, c(1, 2), sum)
+knitr::kable(p_edge)
 ```
