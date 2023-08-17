@@ -127,13 +127,13 @@ setup.
 
 ```{r, error = TRUE}
 scorer <- CreateScorer(scorer = BNLearnScorer,
-                       data = data, 
+                       data = data,
                        type = type,
                        max_parents = 3,
                        blacklist = NULL,
                        whitelist = NULL,
                        cache = FALSE)
-blacklist <- GetLowestScoringEdges(scorer, c = 20)
+blacklist <- GetLowestPairwiseScoringEdges(scorer, c = 20)
 system.time(
   scorer <- CreateScorer(scorer = BNLearnScorer,
                          data = data, type = type,

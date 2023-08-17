@@ -201,7 +201,7 @@ knitr::kable(total_accept)
 
 ```{r, error = TRUE, fig.dim = c(6.0, 12.0)}
 dags <- eq_chains |>
-  lapply(function(x) x$dag) |> 
+  lapply(function(x) x$dag) |>
   unlist(recursive = FALSE)
 
 n_chain_all <- dags |>

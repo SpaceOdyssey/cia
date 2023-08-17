@@ -192,7 +192,7 @@ FlattenChains <- function(chains) {
 #' also makes the assumption that the scoring method used is proportional to
 #' the posterior probability; \eqn{\text{score}(G, D) \propto p(G)p(G | D)}.
 #' 
-#' @param post_chain A flattened chain that includes a DAG per sample.
+#' @param post_chain A chain that includes a DAG per sample.
 #' 
 #' @returns dag_collection A list with entries:
 #'  dag: A list of all unique DAGs within the sample.
@@ -206,7 +206,7 @@ CollectDags <- function(post_chain) {
   dags <- post_chain$dag
   log_score <- unlist(post_chain$log_score)
   
-  # Assign hashs for each dag for simplicity of the next calculations.
+  # Assign hashs for each dag to simplify the next calculations.
   hashs <- dags |>
     lapply(rlang::hash) |>
     unlist()

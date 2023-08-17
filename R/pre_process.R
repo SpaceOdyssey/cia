@@ -2,18 +2,26 @@
 
 #' Get the lowest pairwise scoring edges.
 #' 
-#' @description 
-#' Get the lowest c pairwise scoring edges represented as a blacklist matrix.
+#' @description
+#' Get the lowest c pairwise scoring edges represented as a blacklist matrix. 
+#' This blacklisting procedure is motivated by Koller & Friedman (2003).
 #' 
 #' @param scorer A scorer object.
-#' @param c An integer representing the number of edges to retain.
+#' @param n_retain An integer representing the number of edges to retain.
+#' 
+#' @returns A boolean matrix of (parent, child) pairs for blacklisting.
+#' 
+#' @references 
+#' 1. Koller D, Friedman N. Being Bayesian about network structure. A Bayesian 
+#' approach to structure discovery in Bayesian networks. Mach Learn. 
+#' 2003;50(1):95–125.
 #' 
 #' @export
-GetLowestScoringEdges <- function(scorer, c) {
+GetLowestPairwiseScoringEdges <- function(scorer, n_retain) {
   
-  blacklist <- scorer %>%
-    CalculatePairwiseScores %>% 
-    apply(2, function(x) x < sort(x, decreasing = TRUE)[c]) 
+  blacklist <- scorer |>
+    CalculatePairwiseScores |>
+    apply(2, function(x) x < sort(x, decreasing = TRUE)[n_retain]) 
   
   return(blacklist)
 }
@@ -23,6 +31,7 @@ GetLowestScoringEdges <- function(scorer, c) {
 #' The result can be used to blacklist low scoring edges.
 #' 
 #' @param scorer Scorer object.
+#' 
 #' @returns A matrix of (parent, child) scores. The diagonal represents the 
 #' 
 #' @noRd
