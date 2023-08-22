@@ -7,8 +7,8 @@ test_that("CalculatePairwiseScores return legitimate scores", {
   testthat::expect_true(all(scores[lower.tri(scores)] < 0.0))
 })
 
-c <- 2
-blacklist <- GetLowestScoringEdges(scorer, c)
+n_retain <- 2
+blacklist <- GetLowestPairwiseScoringEdges(scorer, n_retain)
 test_that("CalculatePairwiseScores return legitimate scores", {
-  testthat::expect_equal(sum(!blacklist, na.rm = TRUE), c*ncol(data))
+  testthat::expect_equal(sum(!blacklist, na.rm = TRUE), n_retain*ncol(data))
 })

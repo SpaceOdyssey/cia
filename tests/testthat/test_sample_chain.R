@@ -48,7 +48,7 @@ testthat::test_that('Check SampleChain returns correct scores', {
   )
 })
 
-blacklist <- GetLowestScoringEdges(scorer, c = 2)
+blacklist <- GetLowestPairwiseScoringEdges(scorer, n_retain = 2)
 scorer <- CreateScorer(data = data, blacklist = blacklist)
 dag[which(scorer$blacklist)] <- 0
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)

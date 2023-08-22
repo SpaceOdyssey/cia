@@ -7,7 +7,7 @@
 CollectDags(post_chain)
 }
 \arguments{
-\item{post_chain}{A flattened chain that includes a DAG per sample.}
+\item{post_chain}{A chain that includes a DAG per sample.}
 }
 \value{
 dag_collection A list with entries:

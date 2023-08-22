@@ -20,7 +20,7 @@
 GetLowestPairwiseScoringEdges <- function(scorer, n_retain) {
   
   blacklist <- scorer |>
-    CalculatePairwiseScores |>
+    CalculatePairwiseScores() |>
     apply(2, function(x) x < sort(x, decreasing = TRUE)[n_retain]) 
   
   return(blacklist)
