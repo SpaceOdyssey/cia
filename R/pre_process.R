@@ -44,11 +44,21 @@ CalculatePairwiseScores <- function(scorer) {
                    dimnames = list(nodes, nodes))
   
   for (parent in nodes) {
+    scorer$parameters$node <- parent 
+    scorer$parameters$parents <- vector()
+    parent_score <-  do.call(scorer$scorer, scorer$parameters)
     children <- setdiff(nodes, parent)
     for (child in children) {
       scorer$parameters$node <- child
       scorer$parameters$parents <- parent
-      scores[parent, child] <- do.call(scorer$scorer, scorer$parameters)
+      scores[parent, child] <- do.call(scorer$scorer, scorer$parameters) + parent_score
+      
+      other_children <- setdiff(children, child)
+      for(oth_child in other_children) { 
+        scorer$parameters$node <- oth_child
+        scorer$parameters$parents <- vector()
+        scores[parent, child] <- scores[parent, child] + do.call(scorer$scorer, scorer$parameters)
+        }
     }
   }
   
