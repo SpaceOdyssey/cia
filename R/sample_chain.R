@@ -1,7 +1,7 @@
 #' Sample multiple chains in parallel.
 #' 
 #' @examples
-#' data = bnlearn::learning.test
+#' data <- bnlearn::learning.test
 #' 
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
@@ -48,8 +48,8 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 
 #' Sample a single chain.
 #' 
-#' @examples 
-#' data = bnlearn::learning.test
+#' @examples
+#' data <- bnlearn::learning.test
 #' 
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)

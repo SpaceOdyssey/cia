@@ -48,7 +48,7 @@ CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf,
 #' A thin wrapper on the bnlearn::score function.
 #' 
 #' @param node Name of node to score.
-#' @param parents The parent nodes of node.
+#' @param parents The parents of node.
 #' @param ... The ellipsis is used to pass other parameters to the scorer.
 #' 
 #' @examples

@@ -9,7 +9,7 @@ BNLearnScorer(node, parents, ...)
 \arguments{
 \item{node}{Name of node to score.}
 
-\item{parents}{The parent nodes of node.}
+\item{parents}{The parents of node.}
 
 \item{...}{The ellipsis is used to pass other parameters to the scorer.}
 }

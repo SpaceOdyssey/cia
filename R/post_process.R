@@ -180,49 +180,71 @@ FlattenChains <- function(chains) {
   return(chain)
 }
 
-#' Collect DAGs.
+#' Collect unique state objects.
 #' 
-#' Get the unique set of DAGs along with their log_score. It also estimates
-#' the normalised log score assuming \eqn{\tilde{Z} = \Sigma_s^S p(G_s)p(D | G_s)} 
-#' where \eqn{\{G_1, G_2, G_3, ..., G_S\}} is the set of unique DAGs in the 
-#' the chain. This assumes that you have captured the most probable graphs, such 
-#' that \eqn{\tilde{Z}} is approximately equal to the true evidence 
-#' \eqn{Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)} 
-#' where you sum across all possible graphs \eqn{\mathcal{G}}. This
-#' also makes the assumption that the scoring method used is proportional to
-#' the posterior probability; \eqn{\text{score}(G, D) \propto p(G)p(G | D)}.
+#' Get the unique set of states and DAGs along with their log_score. It also e
+#' stimates the normalised log score assuming 
+#' \eqn{\tilde{Z} = \Sigma_s^S p(\mathcal{O}_s)p(D | \mathcal{O}_s)} where 
+#' \eqn{\{\mathcal{O}_1, \mathcal{O}_2, \mathcal{O}_3, ..., \mathcal{O}_S\}} is 
+#' the set of unique DAGs in the chain. This assumes that you have captured the 
+#' most probable objects, such that \eqn{\tilde{Z}} is approximately equal to 
+#' the true evidence \eqn{Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)} where you 
+#' sum across all possible graphs \eqn{\mathcal{G}}. This also makes the 
+#' assumption that the scoring method used is proportional to the posterior 
+#' probability; \eqn{\text{score}(G, D) \propto p(G)p(G | D)}.
 #' 
-#' @param post_chain A chain that includes a DAG per sample.
+#' @param chain A chain that includes a DAG per sample.
 #' 
 #' @returns dag_collection A list with entries:
-#'  dag: A list of all unique DAGs within the sample.
-#'  log_score: A vector with the log_scores for each DAG.
-#'  log_evidence: A numeric value representing the evidence \eqn{log(\tilde{Z}) = \Sigma_s^S log(p(G_s)p(D | G_s))}.
-#'  log_norm_score: A vector of normalised log_scores for each DAG \eqn{G_s} using \eqn{p(G_s | D) = log(p(G_s)p(D | G_s)) - log(\tilde{Z})}.
+#'  states: List of unique states.
+#'  log_evidence_states: Numeric value representing the evidence calculated from 
+#'  the states.
+#'  log_state_scores: Vector with the log scores for each state.
+#'  dags: List of unique DAGs.
+#'  dag_scores: Vector with the log scores for each DAG.
+#'  log_norm_dag_scores: Vector of normalised dag scores.
+#'  log_evidence_dags: Numeric value representing the evidence calculated from 
+#'  the DAGs.
 #' 
 #' @export
-CollectDags <- function(post_chain) {
+CollectUniqueObjects <- function(chain) {
   
-  dags <- post_chain$dag
-  log_score <- unlist(post_chain$log_score)
+  # States calculations.
+  states <- chain$state
+  state_scores <- chain$log_score
+  state_hashes <- states |>
+    lapply(rlang::hash) |>
+    unlist()
   
-  # Assign hashs for each dag to simplify the next calculations.
-  hashs <- dags |>
+  # Summarise unique states.
+  state_ihash <- match(unique(state_hashes), state_hashes)
+  unique_state_scores <- state_scores[state_ihash]
+  log_evidence_states <- LogSumExp(unique_state_scores)
+  log_norm_state_scores <- unique_state_scores - log_evidence_states
+  
+  # DAG calculations.
+  dags <- chain$dag
+  dag_scores <- unlist(chain$log_dag_score)
+  dag_hashes <- dags |>
     lapply(rlang::hash) |>
     unlist()
   
   # Summarise unique DAGs.
-  ihash <- match(unique(hashs), hashs)
-  unique_log_scores <- log_score[ihash]
-  unique_dags <- dags[ihash]
+  dag_ihash <- match(unique(dag_hashes), dag_hashes)
+  unique_dag_scores <- dag_scores[dag_ihash]
+  unique_dags <- dags[dag_ihash]
+  log_evidence_dags <- LogSumExp(unique_dag_scores)
   
-  log_evidence <- LogSumExp(unique_log_scores)
-  log_norm_score <- unique_log_scores - log_evidence
+  log_norm_dag_scores <- unique_dag_scores - log_evidence_dags
   
-  col <- list(dag = unique_dags,
-              log_score = unique_log_scores,
-              log_norm_score = log_norm_score,
-              log_evidence = log_evidence)
+  col <- list(states = unique_states,
+              log_evidence_states = log_evidence_states,
+              log_state_scores = unique_state_scores,
+              log_norm_state_scores = log_norm_state_scores,
+              dags = unique_dags,
+              dag_scores = unique_dag_scores,
+              log_norm_dag_scores = log_norm_dag_scores,
+              log_evidence_dags = log_evidence_dags)
   
   return(col)
 }

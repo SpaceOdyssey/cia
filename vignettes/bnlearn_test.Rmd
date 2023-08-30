@@ -133,7 +133,7 @@ scorer <- CreateScorer(scorer = BNLearnScorer,
                        blacklist = NULL,
                        whitelist = NULL,
                        cache = FALSE)
-blacklist <- GetLowestPairwiseScoringEdges(scorer, c = 20)
+blacklist <- GetLowestPairwiseScoringEdges(scorer, n_retain = 20)
 system.time(
   scorer <- CreateScorer(scorer = BNLearnScorer,
                          data = data, type = type,
@@ -231,7 +231,7 @@ plot(bnlearn::cpdag(map_dag))
 
 ## Analysing acceptance rates
 
-Acceptance per proposal. This is often incredibly low, so I do wonder if we've
+Acceptance per proposal. This is often incredibly slow, so I do wonder if we've
 explored enough of the posterior space. Increasing the temperature of the score
 is likely to help.
 

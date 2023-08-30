@@ -34,7 +34,7 @@ List of results.
 Sample multiple chains in parallel.
 }
 \examples{
-data = bnlearn::learning.test
+data <- bnlearn::learning.test
 
 dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
