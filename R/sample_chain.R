@@ -27,7 +27,8 @@
 SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1, 
                          n_parallel_chains = 2) {
   
-  doParallel::registerDoParallel(n_parallel_chains)
+  cl <- parallel::makeCluster(n_parallel_chains)
+  doParallel::registerDoParallel(cl)
   
   i <- NULL
   trace <- foreach::foreach(i = 1:n_parallel_chains) %dopar% {
@@ -40,6 +41,7 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 
     SampleChain(n_results, init_state_each, transition, scorer)
   }
+  parallel::stopCluster(cl)
   
   return(trace)
 }

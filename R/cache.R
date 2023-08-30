@@ -42,8 +42,6 @@ BuildCache <- function(scorer, max_size = NULL) {
       setdiff(blacklisted_nodes)
     n_allowed <- length(allowed_nodes)
     
-    if (n_allowed == 0)
-      next
     
     # Calculate score for allowed parent combinations.
     scorer$parameters$node <- node
@@ -54,18 +52,21 @@ BuildCache <- function(scorer, max_size = NULL) {
     scorer$parameters$parents <- vector()
     node_cache[[parents_key]] <- do.call(scorer$scorer, scorer$parameters)
     
-    # Add all other possibilities.
-    # Get all possible combinations of allowed parents subject to max_parents.
-    max_parents <- min(n_allowed, scorer$max_parents)
-    parent_coms <- (1:max_parents) %>%
-      lapply(function(k) arrangements::combinations(allowed_nodes, k, layout = 'list')) %>%
-      unlist(recursive = FALSE)
+    if (n_allowed > 0) {
     
-    # Calculate and add scores to cache.
-    for (parents_com in parent_coms) {
-      parents_key <- GetParentsKey(parents_com, nodes)
-      scorer$parameters$parents <- parents_com
-      node_cache[[parents_key]] <- do.call(scorer$scorer, scorer$parameters)
+      # Add all other possibilities.
+      # Get all possible combinations of allowed parents subject to max_parents.
+      max_parents <- min(n_allowed, scorer$max_parents)
+      parent_coms <- (1:max_parents) %>%
+        lapply(function(k) arrangements::combinations(allowed_nodes, k, layout = 'list')) %>%
+        unlist(recursive = FALSE)
+      
+      # Calculate and add scores to cache.
+      for (parents_com in parent_coms) {
+        parents_key <- GetParentsKey(parents_com, nodes)
+        scorer$parameters$parents <- parents_com
+        node_cache[[parents_key]] <- do.call(scorer$scorer, scorer$parameters)
+      }
     }
     cache[[node]] <- node_cache
   }

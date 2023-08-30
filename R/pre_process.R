@@ -64,3 +64,56 @@ CalculatePairwiseScores <- function(scorer) {
   
   return(scores)
 }
+
+#' Get the score of the empty DAG
+#' 
+#'@param scorer A scorer object.
+#' 
+#'@returns A Boolean matrix of (parent, child) pairs for blacklisting..
+#'
+#'@noRd
+
+GetIncrementalScoringEdges <- function(scorer){
+  
+  inc_score <- CalculateIncrementalPairwiseScores(scorer)
+  blacklist <- inc_score < 0.0
+  
+  return(blacklist)
+}
+
+
+
+#' Get the score of the empty DAG
+#' 
+#'@param scorer A scorer object.
+#' 
+#'@returns log of empty DAG.
+#'
+#'@noRd
+ScoreEmptyDAG <- function(scorer) {
+  
+  nodes <- colnames(scorer$parameters$data)
+  empty_dag <- matrix(0L, nrow = ncol(scorer$parameters$data), ncol = ncol(scorer$parameters$data),
+                      dimnames = list(nodes, nodes))
+  log_score <- ScoreDAG(empty_dag, scorer)
+  
+  return(log_score)
+}
+
+
+#' Get the positive incremental pairwise scoring edges
+#' 
+#' @description Get the positive incremental pairwise scoring edges represented as a blacklist matrix
+#' 
+#' 
+#'@param scorer A scorer object.
+#' 
+#'@returns A matrix of the difference between Pairwise Score and EmptyDAG Score
+#'
+#'@noRd
+CalculateIncrementalPairwiseScores <- function(scorer) {
+  
+  inc_score <- CalculatePairwiseScores(scorer) - ScoreEmptyDAG(scorer)
+  
+  return(inc_score)
+}
