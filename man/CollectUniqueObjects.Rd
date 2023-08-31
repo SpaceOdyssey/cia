@@ -2,7 +2,7 @@
 % Please edit documentation in R/post_process.R
 \name{CollectUniqueObjects}
 \alias{CollectUniqueObjects}
-\title{Collect DAGs.}
+\title{Collect unique state objects.}
 \usage{
 CollectUniqueObjects(chain)
 }
@@ -10,20 +10,44 @@ CollectUniqueObjects(chain)
 \item{chain}{A chain that includes a DAG per sample.}
 }
 \value{
-dag_collection A list with entries:
-dag: A list of all unique DAGs within the sample.
-log_score: A vector with the log_scores for each DAG.
-log_evidence: A numeric value representing the evidence \eqn{log(\tilde{Z}) = \Sigma_s^S log(p(G_s)p(D | G_s))}.
-log_norm_score: A vector of normalised log_scores for each DAG \eqn{G_s} using \eqn{p(G_s | D) = log(p(G_s)p(D | G_s)) - log(\tilde{Z})}.
+dag_collection: A list with entries:
+\itemize{
+\item states: List of unique states.
+\item log_evidence_states: Numeric value representing the evidence calculated from
+the states.
+\item log_state_scores: Vector with the log scores for each state.
+\item dags: List of unique DAGs.
+\item dag_scores: Vector with the log scores for each DAG.
+\item log_norm_dag_scores: Vector of normalised dag scores.
+\item log_evidence_dags: Numeric value representing the evidence calculated from
+the DAGs.
+}
 }
 \description{
-Get the unique set of DAGs along with their log_score. It also estimates
-the normalised log score assuming \eqn{\tilde{Z} = \Sigma_s^S p(G_s)p(D | G_s)}
-where \eqn{\{G_1, G_2, G_3, ..., G_S\}} is the set of unique DAGs in the
-the chain. This assumes that you have captured the most probable graphs, such
-that \eqn{\tilde{Z}} is approximately equal to the true evidence
-\eqn{Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)}
-where you sum across all possible graphs \eqn{\mathcal{G}}. This
-also makes the assumption that the scoring method used is proportional to
-the posterior probability; \eqn{\text{score}(G, D) \propto p(G)p(G | D)}.
+Get the unique set of states and DAGs along with their log score.
+}
+\details{
+This gets the unique set of states and DAGs which are
+referred to as objects (\eqn{\mathcal{O}}). Then estimates the log of the
+normalisation constant assuming
+\eqn{\tilde{Z}_\mathcal{O} = \Sigma_s^S p(\mathcal{O}_s)p(D | \mathcal{O}_s)} where
+\eqn{\{\mathcal{O}_1, \mathcal{O}_2, \mathcal{O}_3, ..., \mathcal{O}_S\}} is
+the set of unique objects in the chain. This assumes that you have captured the
+most probable objects, such that \eqn{\tilde{Z}_\mathcal{O}} is approximately equal to
+the true evidence \eqn{Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)} where you
+sum across all possible DAGs (\eqn{\mathcal{G}}). This also makes the
+assumption that the exponential of the score is proportional to the posterior
+probability, such that
+\deqn{p(G|D) \propto p(G)p(D | G) = \prod_i \exp(\text{score}(X_i, \text{Pa}_G(X_i) | D))}
+where \eqn{\text{Pa}_G(X_i)} is the parents set for node \eqn{X_i}.
+
+We calculate the estimator using both the states (e.g., labelled partitions)
+and DAGs. The estimator using the labelled partitions is more accurate as it
+includes the sum over a greater number of DAGs. However, they should be
+approximately the same value. If they are not, then you probably haven't
+sampled enough DAGs from your states.
+
+After the normalisation constant has been estimated we then estimate the
+log probability of each graph as,
+\deqn{\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z_\mathcal{O}})}.
 }
