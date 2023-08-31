@@ -1,6 +1,6 @@
 Package: dagmc
 Title: MCMC sampler for Directed Acyclic Graphs
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person(given = "Mathew",
            family = "Varidel",
