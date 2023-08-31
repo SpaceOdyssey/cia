@@ -1,20 +1,22 @@
 Package: dagmc
 Title: MCMC sampler for Directed Acyclic Graphs
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     person(given = "Mathew",
            family = "Varidel",
            role = c("aut", "cre"),
            email = "mathew.varidel@sydney.edu.au",
            comment = c(ORCID = "0000-0002-1648-8317"))
-Description: What the package does (one paragraph).
+Description: An implementation of the partition MCMC algorithm for Directed Acyclic Graphs. The default scoring function uses bnlearn, which means that you have access to all of their scoring options and functionality.
+	References:
+	J. Kuipers and G. Moffa (2017) <doi:10.1080/01621459.2015.1133426>,
+	M. Scutari (2010) <doi:10.18637/jss.v035.i03>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
-    magrittr,
     bnlearn,
     igraph,
     doParallel,
