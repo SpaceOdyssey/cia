@@ -383,8 +383,8 @@ GetParentCombinations <- function(partitioned_nodes, node, scorer) {
   
   # Get possible parents from adjacent element.
   direct_pas <- partitioned_nodes$node[partitioned_nodes$partition == node_el - 1]
-  direct_pas <- direct_pas %>% 
-    setdiff(whitelist_parents) %>%
+  direct_pas <- direct_pas |> 
+    setdiff(whitelist_parents) |>
     setdiff(blacklist_parents)
   
   # Add direct parent combinations.
@@ -394,15 +394,15 @@ GetParentCombinations <- function(partitioned_nodes, node, scorer) {
       function(x) arrangements::combinations(direct_pas, x, layout = 'list')
     ) 
   
-  parent_combinations <- ls_direct_pa_coms %>%
-    unlist(recursive = FALSE) %>%
+  parent_combinations <- ls_direct_pa_coms |>
+    unlist(recursive = FALSE) |>
     lapply(function(x) c(whitelist_parents, x))
   
   # Get possible parents from non-adjacent elements.
   if (node_el > 2) {
     indirect_pas <- partitioned_nodes$node[partitioned_nodes$partition < node_el - 1]
-    indirect_pas <- indirect_pas %>%
-      setdiff(whitelist_parents) %>%
+    indirect_pas <- indirect_pas |>
+      setdiff(whitelist_parents) |>
       setdiff(blacklist_parents)
   
     # Get possible parents from non-adjacent elements.

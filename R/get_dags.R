@@ -6,9 +6,9 @@
 #' @export
 UniformlySampleDAG <- function(nodes) {
   
-  dag <- nodes %>%
-    bnlearn::random.graph(method = 'melancon') %>%
-    BNLearnToMatrix
+  dag <- nodes |>
+    bnlearn::random.graph(method = 'melancon') |>
+    BNLearnToMatrix()
   
   return(dag)
 }
@@ -41,10 +41,10 @@ GetEmptyDAG <- function(nodes) {
 #' @noRd
 BNLearnToMatrix <- function(network) {
   
-  mat <- network %>%
-    bnlearn::as.igraph() %>%
-    igraph::as_adjacency_matrix() %>%
-    as.matrix
+  mat <- network |>
+    bnlearn::as.igraph() |>
+    igraph::as_adjacency_matrix() |>
+    as.matrix()
   
   return(mat)
 }

@@ -37,8 +37,8 @@ BuildCache <- function(scorer, max_size = NULL) {
   for (node in nodes) {
     # Remove disallowed parents.
     blacklisted_nodes <- GetRestrictedParents(node, scorer$blacklist)
-    allowed_nodes <- nodes %>%
-      setdiff(node) %>%
+    allowed_nodes <- nodes |>
+      setdiff(node) |>
       setdiff(blacklisted_nodes)
     n_allowed <- length(allowed_nodes)
     
@@ -57,8 +57,8 @@ BuildCache <- function(scorer, max_size = NULL) {
       # Add all other possibilities.
       # Get all possible combinations of allowed parents subject to max_parents.
       max_parents <- min(n_allowed, scorer$max_parents)
-      parent_coms <- (1:max_parents) %>%
-        lapply(function(k) arrangements::combinations(allowed_nodes, k, layout = 'list')) %>%
+      parent_coms <- (1:max_parents) |>
+        lapply(function(k) arrangements::combinations(allowed_nodes, k, layout = 'list')) |>
         unlist(recursive = FALSE)
       
       # Calculate and add scores to cache.

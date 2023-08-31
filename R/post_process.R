@@ -151,8 +151,8 @@ CalculateAcceptanceRates <- function(chains, group_by = NULL) {
   }
   chain_info <- dplyr::bind_rows(chain_info)
   
-  accept_summary <- chain_info %>%
-    dplyr::group_by_at(group_by) %>%
+  accept_summary <- chain_info |>
+    dplyr::group_by_at(group_by) |>
     dplyr::summarise(mean_accept = mean(.data$accept), 
                      n_accept = sum(.data$accept), 
                      n_total = dplyr::n())
