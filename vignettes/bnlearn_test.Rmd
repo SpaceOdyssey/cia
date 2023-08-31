@@ -23,6 +23,7 @@ This shows an example using dagmc on several bnlearn test data sets.
 ```{r setup, message = FALSE}
 library(dagmc)
 library(bnlearn)
+library(Rgraphviz)
 library(dplyr)
 library(ggplot2)
 ```
@@ -112,10 +113,6 @@ Show the true DAG from which the data were sampled.
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
 graphviz.plot(bnlearn::cpdag(true_graph))
 ```
-
-## Optimise for the known solution
-
-Start with a DAG drawn uniformly from the prior space.
 
 ## Posterior sampling.
 
@@ -211,7 +208,7 @@ PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', 
 
 ## Analysing acceptance rates
 
-Acceptance per proposal. This is often incredibly slow, so I do wonder if we've
+Acceptance per proposal. This is often incredibly low, so I do wonder if we've
 explored enough of the posterior space. Increasing the temperature of the score
 is likely to help.
 
@@ -229,18 +226,18 @@ chain_collection <- CollectUniqueObjects(flat_eq_chains)
 
 Get most probable DAGs. I'm just plotting the CPDAG of the first map DAG found here.
 
-```{r, error = TRUE}
+```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
 map_dags <- GetMAPDAG(chain_collection)
 
 bn_map_dag <- bnlearn::empty.graph(colnames(data))
-bnlearn::amat(map_dag) <- map_dags$dag[[1]]
+bnlearn::amat(bn_map_dag) <- map_dags$dag[[1]]
 
-plot(bnlearn::cpdag(map_dag))
+plot(bnlearn::cpdag(bn_map_dag))
 ```
 
 Calculate marginalised pairwise edge probabilities using the DAG collection. 
 
 ```{r, error = TRUE}
 p_edge <- CalculateEdgeProbabilities(chain_collection)
-knitr::kable(p_edge)
+knitr::kable(round(p_edge, 3))
 ```

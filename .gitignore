@@ -9,3 +9,4 @@
 .Rhistory
 inst/doc
 *.csv
+/inst
