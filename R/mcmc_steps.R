@@ -25,7 +25,7 @@
 #' pmcmc(current_state, scorer)
 #' 
 #' @param proposal Proposal function. Default is the DefaultProposal.
-#' @param verbose Flag to pass mcmc information.
+#' @param verbose Flag to pass MCMC information.
 #'
 #' @returns Function that takes the current state and scorer that outputs a new
 #' state.

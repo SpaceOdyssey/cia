@@ -13,7 +13,7 @@ SampleDAGFromLabelledPartition(partitioned_nodes, scorer)
 }
 \value{
 A matrix with elements of (parent, child) cells with 1 representing
-and edge and 0 otherwise.
+an edge and 0 otherwise.
 }
 \description{
 Sample a DAG from a labelled partition.

@@ -17,7 +17,10 @@ A boolean matrix of (parent, child) pairs for blacklisting.
 }
 \description{
 Get the lowest c pairwise scoring edges represented as a blacklist matrix.
-This blacklisting procedure is motivated by Koller & Friedman (2003).
+This blacklisting procedure is motivated by Koller & Friedman (2003). This
+is rarely used now as we found that it blacklists edges that have significant
+dependencies but are not in the top \eqn{n} edges. We prefer
+the GetIncrementalScoringEdges method.
 }
 \references{
 \enumerate{

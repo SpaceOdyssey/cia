@@ -10,7 +10,7 @@ PartitionMCMC(proposal = NULL, verbose = TRUE)
 \arguments{
 \item{proposal}{Proposal function. Default is the DefaultProposal.}
 
-\item{verbose}{Flag to pass mcmc information.}
+\item{verbose}{Flag to pass MCMC information.}
 }
 \value{
 Function that takes the current state and scorer that outputs a new

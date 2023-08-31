@@ -126,10 +126,11 @@ First, a function that calculates the score of a given (node, parents) is
 setup.
 
 ```{r, error = TRUE}
+max_parents <- Inf
 scorer <- CreateScorer(scorer = BNLearnScorer,
                        data = data,
                        type = type,
-                       max_parents = 3,
+                       max_parents = max_parents,
                        blacklist = NULL,
                        whitelist = NULL,
                        cache = FALSE)
@@ -137,7 +138,7 @@ blacklist <- GetLowestPairwiseScoringEdges(scorer, n_retain = 20)
 system.time(
   scorer <- CreateScorer(scorer = BNLearnScorer,
                          data = data, type = type,
-                         max_parents = 3,
+                         max_parents = max_parents,
                          blacklist = blacklist,
                          whitelist = NULL,
                          cache = TRUE)
@@ -208,27 +209,6 @@ Plot DAG scores.
 PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
-## Inference for the Maximum a Posteriori (MAP)
-
-Plot the first found highest scoring DAG. 
-
-```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-flat_dags <- list()
-flat_dag_score <- c()
-for (i in 1:length(eq_chains)) {
-  flat_dags <- c(flat_dags, eq_chains[[i]]$dag)
-  flat_dag_score <- c(flat_dag_score, eq_chains[[i]]$log_dag_score)
-}
-
-map_dags <- flat_dags[which(flat_dag_score == max(flat_dag_score))]
-map_mat <- unique(map_dags)[[1]]  # Just gets the first instance for now.
-
-map_dag <- bnlearn::empty.graph(colnames(data))
-bnlearn::amat(map_dag) <- map_mat
-
-plot(bnlearn::cpdag(map_dag))
-```
-
 ## Analysing acceptance rates
 
 Acceptance per proposal. This is often incredibly slow, so I do wonder if we've
@@ -240,20 +220,27 @@ prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
 ```
 
-## Collect most probable DAGs
+## Collect most probable DAGs and perform inference for features of interest
 
 ```{r, error = TRUE}
 flat_eq_chains <- FlattenChains(eq_chains)
-dag_collection <- CollectDags(flat_eq_chains)
+chain_collection <- CollectUniqueObjects(flat_eq_chains)
 ```
 
-Calculate pairwise edge probabilities using the DAG collection. 
+Get most probable DAGs. I'm just plotting the CPDAG of the first map DAG found here.
 
 ```{r, error = TRUE}
-dag_arr <- simplify2array(dag_collection$dag)
-p_vec <- exp(dag_collection$log_norm_score)
-for (i in 1:length(p_vec))
-  dag_arr[, , i] <- dag_arr[, , i]*p_vec[i]
-p_edge <- apply(dag_arr, c(1, 2), sum)
+map_dags <- GetMAPDAG(chain_collection)
+
+bn_map_dag <- bnlearn::empty.graph(colnames(data))
+bnlearn::amat(map_dag) <- map_dags$dag[[1]]
+
+plot(bnlearn::cpdag(map_dag))
+```
+
+Calculate marginalised pairwise edge probabilities using the DAG collection. 
+
+```{r, error = TRUE}
+p_edge <- CalculateEdgeProbabilities(chain_collection)
 knitr::kable(p_edge)
 ```

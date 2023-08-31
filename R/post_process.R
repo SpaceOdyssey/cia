@@ -169,11 +169,26 @@ FlattenChains <- function(chains) {
   
   stopifnot(MultipleChains(chains))
   
+  n_chains <- length(chains)
   chain <- list()
-  for (name in names(chains[[i]])) {
-    chain[[name]] <- list()
-    for (i in 1:length(chains)) {
-      chain[[name]] <- c(chain[[name]], chains[[i]][[name]])
+  
+  chain$state <- list()
+  chain$log_score <- c()
+  chain$proposal_info <- list()
+  chain$mcmc_info <- list()
+  for (i in 1:n_chains) {
+    chain$state <- c(chain$state, chains[[i]]$state)
+    chain$log_score <- c(chain$log_score, chains[[i]]$log_score)
+    chain$proposal_info <- c(chain$proposal_info, chains[[i]]$proposal_info)
+    chain$mcmc_info <- c(chain$mcmc_info, chains[[i]]$mcmc_info)
+  }
+  
+  if ('dag' %in% names(chains[[1]])) {
+    chain$dag <- list()
+    chain$log_dag_score <- c()
+    for (i in 1:n_chains) {
+     chain$dag <- c(chain$dag, chains[[i]]$dag)
+     chain$log_dag_score <- c(chain$log_dag_score, chains[[i]]$log_dag_score)
     }
   }
   
@@ -213,14 +228,14 @@ FlattenChains <- function(chains) {
 #' 
 #' @returns dag_collection: A list with entries:
 #' \itemize{
-#'  \item states: List of unique states.
-#'  \item log_evidence_states: Numeric value representing the evidence calculated from 
+#'  \item state: List of unique states.
+#'  \item log_evidence_state: Numeric value representing the evidence calculated from 
 #'  the states.
-#'  \item log_state_scores: Vector with the log scores for each state.
-#'  \item dags: List of unique DAGs.
-#'  \item dag_scores: Vector with the log scores for each DAG.
-#'  \item log_norm_dag_scores: Vector of normalised dag scores.
-#'  \item log_evidence_dags: Numeric value representing the evidence calculated from 
+#'  \item log_state_score: Vector with the log scores for each state.
+#'  \item dag: List of unique DAGs.
+#'  \item dag_score: Vector with the log scores for each DAG.
+#'  \item log_norm_dag_score: Vector of normalised dag scores.
+#'  \item log_evidence_dag: Numeric value representing the evidence calculated from 
 #'  the DAGs.
 #' }
 #' 
@@ -256,14 +271,90 @@ CollectUniqueObjects <- function(chain) {
   
   log_norm_dag_scores <- unique_dag_scores - log_evidence_dags
   
-  col <- list(states = unique_states,
-              log_evidence_states = log_evidence_states,
-              log_state_scores = unique_state_scores,
-              log_norm_state_scores = log_norm_state_scores,
-              dags = unique_dags,
-              dag_scores = unique_dag_scores,
-              log_norm_dag_scores = log_norm_dag_scores,
-              log_evidence_dags = log_evidence_dags)
+  col <- list(state = unique_states,
+              log_evidence_state = log_evidence_states,
+              log_state_score = unique_state_scores,
+              log_norm_state_score = log_norm_state_scores,
+              dag = unique_dags,
+              dag_score = unique_dag_scores,
+              log_norm_dag_score = log_norm_dag_scores,
+              log_evidence_dag = log_evidence_dags)
   
   return(col)
+}
+
+
+#' Calculate marginalised edge probabilities.
+#' 
+#' Calculate the probability of a given edge (\eqn{E}) given the data which
+#' is given by, \deqn{p(E|D) = \sum_\mathcal{G} p(E|G)p(G|D)}).
+#' 
+#' @param collection A collection of objects. See CollectUniqueObjects.
+#' 
+#' @returns p_edge An adjacency matrix representing the edge probabilities.
+#' 
+#' @export
+CalculateEdgeProbabilities <- function(collection) {
+  
+  dags <- simplify2array(collection$dag)
+  p_dag <- exp(collection$log_norm_dag_score)
+  for (i in 1:length(p_dag))
+    dags[, , i] <- dags[, , i]*p_dag[i]
+  p_edge <- apply(dags, c(1, 2), sum)
+  
+  return(p_edge)
+}
+
+#' Collect DAG feature probability.
+#' 
+#' @description
+#' Calculate the feature (\eqn{f}) probability whereby 
+#' \eqn{p(f|D) = \sum_\mathcal{G \in G} p(G|D)p(f|G)}.
+#' 
+#' @param collection A collection of unique objects. See CollectUniqueObjects.
+#' @param p_feature A function that takes an adjacency matrix and collection object 
+#' and returns a numeric value equal to p(f|G). Therefore, it must be of the 
+#' form p_feature(dag).
+#' 
+#' @returns p_post_feature A numeric value representing the posterior probability
+#' of the feature.
+#' 
+#' @export
+CalculateFeatureProbability <- function(collection, p_feature) {
+  
+  p_post_feature <- 0.0
+  p_dag <- exp(collection$log_norm_dag_score)
+  for (i in 1:length(p_vec))
+    p_post_feature <- p_post_feature + p_dag[i]*p_feature(collection$dag[[i]])
+  
+  return(p_post_feature)
+}
+
+#' Get MAP DAG.
+#' 
+#' Get the maximum a posteriori DAG.
+#' 
+#' @param collection A collection of unique objects. See CollectUniqueObjects.
+#' 
+#' @returns dag A list with the adjacency matrix for the map and it's posterior 
+#' probability. It is possible for it to return multiple DAGs. The list has
+#' elements;
+#' \itemize{
+#'  \item dag: List of MAP DAGs.
+#'  \item log_p: Vector with the log posterior probability for each DAG.
+#' }
+#' 
+#' @export
+GetMAPDAG <- function(collection) {
+  
+  p_maps <- max(collection$log_norm_dag_score)
+  ip_map <- which(collection$log_norm_dag_score == p_maps)
+  dags <- chain_collection$dag[ip_map]
+  
+  maps <- list(
+    dag = dags,
+    log_p = exp(p_maps)
+  )
+  
+  return(maps)
 }

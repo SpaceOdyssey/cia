@@ -7,12 +7,12 @@ partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 scorer <- CreateScorer(data = data)
 
 chain <- SampleChain(10, partitioned_nodes, PartitionMCMC(), scorer)
-test_that("SampleChainDAGs Single", {
+test_that('SampleChainDAGs Single', {
   testthat::expect_equal(length(SampleChainDAGs(chain, scorer)), length(chain) + 2)
 })
 
 chains <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
-test_that("SampleChainDAGs Multiple", {
+test_that('SampleChainDAGs Multiple', {
   testthat::expect_equal(length(SampleChainDAGs(chains, scorer)), length(chains))
 })
 
@@ -25,6 +25,18 @@ ls <- PostProcessChains(chains, n_burnin = 2, n_thin = 2)[[1]]$log_score
 test_that('PostProcessChains object have same length', {
   testthat::expect_true(length(ls) < length(chains[[1]]$log_score))
 })
+
+flat_chains <- FlattenChains(chains)
+test_that(
+  'Flattened chains should include chain attributes', {
+    testthat::expect_true(
+      length(
+        setdiff(c('state', 'log_score', 'proposal_info', 'mcmc_info'),
+                names(flat_eq_chains))
+        ) == 0
+    )
+  }
+)
 
 accept_rate <- CalculateAcceptanceRates(chains)
 test_that('CalculateAcceptanceRates works', {

@@ -14,7 +14,7 @@
 #' @param scorer Scorer object.
 #' 
 #' @returns A matrix with elements of (parent, child) cells with 1 representing
-#' and edge and 0 otherwise.
+#' an edge and 0 otherwise.
 #' 
 #' @export
 SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {

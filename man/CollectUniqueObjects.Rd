@@ -12,14 +12,14 @@ CollectUniqueObjects(chain)
 \value{
 dag_collection: A list with entries:
 \itemize{
-\item states: List of unique states.
-\item log_evidence_states: Numeric value representing the evidence calculated from
+\item state: List of unique states.
+\item log_evidence_state: Numeric value representing the evidence calculated from
 the states.
-\item log_state_scores: Vector with the log scores for each state.
-\item dags: List of unique DAGs.
-\item dag_scores: Vector with the log scores for each DAG.
-\item log_norm_dag_scores: Vector of normalised dag scores.
-\item log_evidence_dags: Numeric value representing the evidence calculated from
+\item log_state_score: Vector with the log scores for each state.
+\item dag: List of unique DAGs.
+\item dag_score: Vector with the log scores for each DAG.
+\item log_norm_dag_score: Vector of normalised dag scores.
+\item log_evidence_dag: Numeric value representing the evidence calculated from
 the DAGs.
 }
 }

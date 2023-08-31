@@ -4,7 +4,10 @@
 #' 
 #' @description
 #' Get the lowest c pairwise scoring edges represented as a blacklist matrix. 
-#' This blacklisting procedure is motivated by Koller & Friedman (2003).
+#' This blacklisting procedure is motivated by Koller & Friedman (2003). This
+#' is rarely used now as we found that it blacklists edges that have significant
+#' dependencies but are not in the top \eqn{n} edges. We prefer 
+#' the GetIncrementalScoringEdges method.
 #' 
 #' @param scorer A scorer object.
 #' @param n_retain An integer representing the number of edges to retain.
@@ -71,8 +74,7 @@ CalculatePairwiseScores <- function(scorer) {
 #' 
 #'@returns A Boolean matrix of (parent, child) pairs for blacklisting..
 #'
-#'@noRd
-
+#'@export
 GetIncrementalScoringEdges <- function(scorer){
   
   inc_score <- CalculateIncrementalPairwiseScores(scorer)

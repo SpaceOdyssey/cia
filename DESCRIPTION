@@ -1,6 +1,6 @@
 Package: dagmc
 Title: MCMC sampler for Directed Acyclic Graphs
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: 
     person(given = "Mathew",
            family = "Varidel",
@@ -18,23 +18,8 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
-    bnlearn,
-    igraph,
-    doParallel,
-    parallel,
-    foreach,
-    arrangements,
-    graphics,
-    dplyr,
-    rlang,
-    fastmatch
+    bnlearn, igraph, doParallel, parallel, foreach, arrangements, graphics, dplyr, rlang, fastmatch
 Suggests: 
-    rmarkdown,
-    knitr,
-    testthat (>= 3.0.0),
-    gtools,
-    gRain,
-    gRbase,
-    ggplot2
+    rmarkdown, knitr, testthat (>= 3.0.0), gtools, gRain, gRbase, ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
