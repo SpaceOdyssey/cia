@@ -6,7 +6,7 @@
 \alias{dagmc-package}
 \title{dagmc: MCMC sampler for Directed Acyclic Graphs}
 \description{
-An implementation of the partition MCMC algorithm for Directed Acyclic Graphs. The default scoring function uses bnlearn, which means that you have access to all of their scoring options and functionality. References: J. Kuipers and G. Moffa (2017) \doi{10.1080/01621459.2015.1133426}, M. Scutari (2010) \doi{10.18637/jss.v035.i03}.
+An implementation of the partition MCMC algorithm for Directed Acyclic Graphs. The default implementation should be consistent with BiDAG with some extra functionality allowing you to create your own proposals. The default scoring function uses bnlearn, which means that you have access to all of their scoring options and functionality. You can also build your own scorer if you wish to do so.
 }
 \author{
 \strong{Maintainer}: Mathew Varidel \email{mathew.varidel@sydney.edu.au} (\href{https://orcid.org/0000-0002-1648-8317}{ORCID})
