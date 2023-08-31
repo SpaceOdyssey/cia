@@ -180,7 +180,7 @@ FlattenChains <- function(chains) {
   return(chain)
 }
 
-#' Collect unique state objects.
+#' Collect unique objects.
 #' 
 #' @description
 #' Get the unique set of states and DAGs along with their log score.
@@ -206,7 +206,7 @@ FlattenChains <- function(chains) {
 #' sampled enough DAGs from your states.
 #' 
 #' After the normalisation constant has been estimated we then estimate the 
-#' log probability of each graph as,
+#' log probability of each object as,
 #' \deqn{\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z_\mathcal{O}})}.
 #' 
 #' @param chain A chain that includes a DAG per sample.

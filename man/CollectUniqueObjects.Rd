@@ -2,7 +2,7 @@
 % Please edit documentation in R/post_process.R
 \name{CollectUniqueObjects}
 \alias{CollectUniqueObjects}
-\title{Collect unique state objects.}
+\title{Collect unique objects.}
 \usage{
 CollectUniqueObjects(chain)
 }
@@ -48,6 +48,6 @@ approximately the same value. If they are not, then you probably haven't
 sampled enough DAGs from your states.
 
 After the normalisation constant has been estimated we then estimate the
-log probability of each graph as,
+log probability of each object as,
 \deqn{\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z_\mathcal{O}})}.
 }
