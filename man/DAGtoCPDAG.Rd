@@ -2,21 +2,17 @@
 % Please edit documentation in R/dag_to_cpdag.R
 \name{DAGtoCPDAG}
 \alias{DAGtoCPDAG}
-\title{Convert chain DAGs to CPDAGs. TODO: I'm not sure this is how I want this setup.
-When does this get ran in the workflow? Does it run on the chain collection,
-a single chain, or multiple chains?}
+\title{Convert DAG to CPDAG.}
 \usage{
 DAGtoCPDAG(x)
 }
 \arguments{
-\item{x}{A matrix, dagmc_chian, or dagmc_chains object. When it is a chain(s)
+\item{x}{A matrix, dagmc_chain, or dagmc_chains object. When it is a chain(s)
 object the state must be an adjacency matrix.}
 }
 \value{
 x Returns same object type converted to a CPDAG.
 }
 \description{
-Convert chain DAGs to CPDAGs. TODO: I'm not sure this is how I want this setup.
-When does this get ran in the workflow? Does it run on the chain collection,
-a single chain, or multiple chains?
+Convert DAG to CPDAG.
 }
