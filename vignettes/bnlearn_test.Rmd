@@ -226,7 +226,7 @@ Get most probable DAGs. I'm just plotting the CPDAG of the first map DAG found h
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
 map_dags <- GetMAP(cpdag_collection)
-bn_map_dag <- MatrixtoBNLearn(map_dags$state[[1]])
+bn_map_dag <- toBNLearn(map_dags$state[[1]])
 plot(bnlearn::cpdag(bn_map_dag))
 ```
 
