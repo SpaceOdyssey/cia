@@ -218,7 +218,7 @@ go both ways.
 
 ```{r, error = TRUE}
 eq_cpdag_chains <- DAGtoCPDAG(eq_dag_chains)
-flat_eq_dag_chains <- FlattenChains(eq_cpdag_chains)
+flat_eq_cpdag_chains <- FlattenChains(eq_cpdag_chains)
 cpdag_collection <- CollectUniqueObjects(flat_eq_cpdag_chains)
 ```
 
