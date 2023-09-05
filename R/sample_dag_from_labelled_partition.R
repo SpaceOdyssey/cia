@@ -27,6 +27,7 @@ SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {
     dimnames = list(nodes, nodes)
   )
   
+  log_score <- 0.0
   for (node in nodes) {
     score_table <- ScoreTableNode(partitioned_nodes, node, scorer)
     
@@ -45,7 +46,8 @@ SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {
 
     # Add (node, parents) to DAG.
     dag[parents, node] <- 1L
+    log_score <- log_score + score_table$log_scores[i_parents]
   }
   
-  return(dag)
+  return(list(state = dag, log_score = log_score))
 }

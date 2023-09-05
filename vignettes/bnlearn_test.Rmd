@@ -1,5 +1,5 @@
 ---
-title: "Partition MCMC applied to a bnlearn test set"
+title: "Partition MCMC applied to a test data set"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{vignette}
@@ -111,7 +111,7 @@ true_adj <- true_graph |>
 Show the true DAG from which the data were sampled.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-graphviz.plot(bnlearn::cpdag(true_graph))
+plot(bnlearn::cpdag(true_graph))
 ```
 
 ## Posterior sampling.
@@ -184,26 +184,20 @@ multiple chains reach the same maxima.
 PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 ```
 
-Post process by removing burnin and sampling DAGs from labelled partitions.
-
-```{r, error = TRUE}
-n_burnin <- 500
-eq_chains <- PostProcessChains(chains, n_burnin)
-system.time(
-  eq_chains <- SampleChainDAGs(eq_chains, scorer)
-)
-```
-
-Plot partition score trace after removing burnin.
+Plot the score trace after removing a burn-in.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
+n_burnin <- 500
+eq_chains <- chains[(1 + n_burnin):n_results]
 PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
 ```
 
-Plot DAG scores.
+Plot DAG scores. Involes sampling a DAG per iteration and plotting the corresponding
+score.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
+eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
+PlotScoreTrace(eq_dag_chains, attribute = 'log_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
 ## Analysing acceptance rates
@@ -217,27 +211,30 @@ prop_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'proposal_used')
 knitr::kable(prop_accept)
 ```
 
-## Collect most probable DAGs and perform inference for features of interest
+## Collect most probable CPDAGs and perform inference for features of interest
+
+It's often more robust to look at the probabilities of CPDAGs, where edges can
+go both ways.
 
 ```{r, error = TRUE}
-flat_eq_chains <- FlattenChains(eq_chains)
-chain_collection <- CollectUniqueObjects(flat_eq_chains)
+eq_cpdag_chains <- DAGtoCPDAG(eq_dag_chains)
+flat_eq_dag_chains <- FlattenChains(eq_cpdag_chains)
+cpdag_collection <- CollectUniqueObjects(flat_eq_dag_chains)
 ```
 
 Get most probable DAGs. I'm just plotting the CPDAG of the first map DAG found here.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 6.0)}
-map_dags <- GetMAPDAG(chain_collection)
-
-bn_map_dag <- bnlearn::empty.graph(colnames(data))
-bnlearn::amat(bn_map_dag) <- map_dags$dag[[1]]
-
+map_dags <- GetMAP(cpdag_collection)
+bn_map_dag <- MatrixtoBNLearn(map_dags$state[[1]])
 plot(bnlearn::cpdag(bn_map_dag))
 ```
 
-Calculate marginalised pairwise edge probabilities using the DAG collection. 
+
+
+Calculate marginalised pairwise edge probabilities using a CPDAG collection. 
 
 ```{r, error = TRUE}
-p_edge <- CalculateEdgeProbabilities(chain_collection)
+p_edge <- CalculateEdgeProbabilities(cpdag_collection)
 knitr::kable(round(p_edge, 3))
 ```

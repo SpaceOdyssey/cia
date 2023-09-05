@@ -7,7 +7,7 @@
 CalculateEdgeProbabilities(collection)
 }
 \arguments{
-\item{collection}{A collection of objects. See CollectUniqueObjects.}
+\item{collection}{A collection object where states are DAGs. See CollectUniqueObjects.}
 }
 \value{
 p_edge An adjacency matrix representing the edge probabilities.

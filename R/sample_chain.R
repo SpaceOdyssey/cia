@@ -31,7 +31,7 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
   doParallel::registerDoParallel(cl)
   
   i <- NULL
-  trace <- foreach::foreach(i = 1:n_parallel_chains) %dopar% {
+  chains <- foreach::foreach(i = 1:n_parallel_chains) %dopar% {
     
     if (is.data.frame(init_state)) {
       init_state_each <- init_state
@@ -43,7 +43,9 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
   }
   parallel::stopCluster(cl)
   
-  return(trace)
+  chains <- new_dagmc_chains(chains)
+  
+  return(chains)
 }
 
 #' Sample a single chain.
@@ -102,8 +104,105 @@ SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
     log_scores[[i]] <- current_state$log_score
   }
   
-  return(list(state = states, 
-              log_score = log_scores, 
-              proposal_info = proposal_info, 
-              mcmc_info = mcmc_info))
+  chain <- new_dagmc_chain(
+    list(state = states, 
+         log_score = log_scores, 
+         proposal_info = proposal_info, 
+         mcmc_info = mcmc_info)
+  )
+  
+  return(chain)
 }
+
+
+#' Constructor for a single chain.
+#' 
+#' @param x A list corresponding to a single mcmc chain.
+#' @returns dagmc_chain A dagmc_chain object.
+#' 
+#' @noRd
+new_dagmc_chain <- function(x = list()) {
+  
+  stopifnot(is.list(x))
+  dagmc_chain <- structure(x, class = 'dagmc_chain')
+  
+  return(dagmc_chain)
+}
+
+#' Indexing with respect to iterations.
+#' 
+#' @param x A dagmc_chain object.
+#' @param i An index.
+#' @param ... ellipsis for extra indexing parameters.
+#'
+#' @returns chain A dagmc_chain.
+#' 
+#' @export
+`[.dagmc_chain` <- function(x = list(), i, ...) {
+  
+  class(x) <- 'list'
+  
+  chain <- list()
+  chain$state <- x$state[i, ...]
+  chain$log_score <- x$log_score[i, ...]
+  chain$proposal_info <- x$proposal_info[i, ...]
+  chain$mcmc_info <- x$mcmc_info[i, ...]
+  
+  chain <- new_dagmc_chain(chain)
+  
+  return(chain)
+}
+
+#' Constructor for more than one chain.
+#' 
+#' @param x A list corresponding to more than one mcmc chain.
+#' @returns dagmc_chains A dagmc_chains object.
+#' 
+#' @noRd
+new_dagmc_chains <- function(x = list()) {
+  
+  stopifnot(is.list(x))
+  dagmc_chains <- structure(x, class = 'dagmc_chains')
+  
+  return(dagmc_chains)
+}
+
+#' Index a dagmc_chains object.
+#' 
+#' @param x A dagmc_chains object.
+#' @param i An index to get the dagmc_chain.
+#' @param ... ellipsis for extra indexing parameters.
+#'
+#' @returns chain A dagmc_chains object. 
+#'
+#' @export
+`[[.dagmc_chains` <- function(x, i, ...) {
+  
+  class(x) <- 'list'
+  return(new_dagmc_chain(x[[i, ...]]))
+}
+
+#' Index a dagmc_chains object with respect to iterations.
+#' 
+#' @param x A dagmc_chain object.
+#' @param i An index to get the dagmc_chain iterations.
+#' @param ... ellipsis for extra indexing parameters.
+#'
+#' @returns chain A dagmc_chains object. 
+#' 
+#' @export
+`[.dagmc_chains` <- function(x = list(), i, ...) {
+  
+  class(x) <- 'list'
+  
+  n_chains <- length(x)
+  chains <- list()
+  for (j in 1:n_chains) {
+    chains[[j]] <- x[[j]][i, ...]
+  }
+  
+  chains <- new_dagmc_chains(chains)
+  
+  return(chains)
+}
+

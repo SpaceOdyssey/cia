@@ -60,9 +60,9 @@ testthat::test_that('SampleChain works for blacklist', {
 })
 
 chain <- SampleChain(100, partitioned_nodes, PartitionMCMC(), scorer = scorer)
-dags <- SampleChainDAGs(chain, scorer)
+dags <- PartitiontoDAG(chain, scorer)
 testthat::test_that('SampleChain does not return DAGs with blacklisted edges.', {
   testthat::expect_equal(
-    sum(sapply(1:100, function(x) sum(simplify2array(dags$dag)[, , x] * scorer$blacklist, na.rm = TRUE))),
+    sum(sapply(1:100, function(x) sum(simplify2array(dags$state)[, , x] * scorer$blacklist, na.rm = TRUE))),
     0)
 })
