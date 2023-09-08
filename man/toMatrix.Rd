@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_matrix.R
 \name{toMatrix}
 \alias{toMatrix}
-\title{Convert bnlearn network object to an adjacency matrix.}
+\title{Convert network to an adjacency matrix.}
 \usage{
 toMatrix(network)
 }
@@ -13,9 +13,10 @@ toMatrix(network)
 An adjacency matrix representation of network.
 }
 \description{
-Convert bnlearn network object to an adjacency matrix.
+Convert a bnlearn or igraph object to an adjacency matrix.
 }
 \examples{
 toMatrix(bnlearn::empty.graph(LETTERS[1:6]))
+toMatrix(igraph::sample_k_regular(10, 2))
 
 }

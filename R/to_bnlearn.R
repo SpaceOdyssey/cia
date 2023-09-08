@@ -1,4 +1,4 @@
-#' Convert adjacency matrix to bnlearn object.
+#' Convert to bnlearn object.
 #' 
 #' @param x Adjacency matrix.
 #' @returns bn_obj A bn object.

@@ -28,7 +28,7 @@ be a single state or a list of states for each parallel chain.}
 \item{n_parallel_chains}{Number of chains to run in parallel. Default is 2.}
 }
 \value{
-List of results.
+chains A dagmc_chains object.
 }
 \description{
 Sample multiple chains in parallel.

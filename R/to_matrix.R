@@ -1,7 +1,11 @@
-#' Convert bnlearn network object to an adjacency matrix. 
+#' Convert network to an adjacency matrix. 
+#' 
+#' @description
+#' Convert a bnlearn or igraph object to an adjacency matrix.
 #' 
 #' @examples
 #' toMatrix(bnlearn::empty.graph(LETTERS[1:6]))
+#' toMatrix(igraph::sample_k_regular(10, 2))
 #' 
 #' @param network A network object from bnlearn or igraph. 
 #' @returns An adjacency matrix representation of network.

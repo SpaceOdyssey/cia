@@ -2,7 +2,7 @@
 % Please edit documentation in R/to_bnlearn.R
 \name{toBNLearn}
 \alias{toBNLearn}
-\title{Convert adjacency matrix to bnlearn object.}
+\title{Convert to bnlearn object.}
 \usage{
 toBNLearn(x)
 }
@@ -13,7 +13,7 @@ toBNLearn(x)
 bn_obj A bn object.
 }
 \description{
-Convert adjacency matrix to bnlearn object.
+Convert to bnlearn object.
 }
 \examples{
 adj <- UniformlySampleDAG(c('A', 'B', 'C'))

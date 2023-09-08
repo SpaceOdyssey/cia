@@ -12,11 +12,18 @@ SampleDAGFromLabelledPartition(partitioned_nodes, scorer)
 \item{scorer}{Scorer object.}
 }
 \value{
-A matrix with elements of (parent, child) cells with 1 representing
-an edge and 0 otherwise.
+A list with elements:
+\itemize{
+\item state Adjacency matrix.
+\item log_score Score of the sampled DAG.
+}
 }
 \description{
-Sample a DAG from a labelled partition.
+Sample a single DAG with  from the set of DAGs that is consistent with a labelled
+partition. That is, given a set of DAGs \eqn{\mathcal{G}} that is consistent
+with a labelled partition \eqn{\Lambda} then it will sample a given DAG
+\eqn{G} where \eqn{G \in \mathcal{G}} with probability
+\eqn{p(G|D, \Lambda) = p(G)p(D | G) / \sum_{G \in \mathcal{G}} p(G)p(D | G)}.
 }
 \examples{
 data <- bnlearn::learning.test
@@ -26,6 +33,6 @@ partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 
 scorer <- CreateScorer(data = data)
 
-SampleDAGFromLabelledPartition(partitioned_nodes, scorer = scorer)
+SampleDAGFromLabelledPartition(partitioned_nodes, scorer)
 
 }

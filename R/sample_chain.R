@@ -21,7 +21,7 @@
 #' @param n_thin Number of steps between saved states.
 #' @param n_parallel_chains Number of chains to run in parallel. Default is 2.
 #' 
-#' @returns List of results.
+#' @returns chains A dagmc_chains object.
 #' 
 #' @export
 SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1, 
@@ -68,6 +68,8 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 #' @param transition A transition function.
 #' @param scorer A scorer object.
 #' @param n_thin Number of steps between saved states.
+#' 
+#' @returns chain A dagmc_chain object.
 #' 
 #' @export
 SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {

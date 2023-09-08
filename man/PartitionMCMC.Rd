@@ -3,7 +3,7 @@
 \name{PartitionMCMC}
 \alias{PartitionMCMC}
 \title{Transition objects.
-A one step implementation of partition MCMC. This acts as a constructor.}
+One step implementation of partition MCMC. This acts as a constructor.}
 \usage{
 PartitionMCMC(proposal = NULL, verbose = TRUE)
 }

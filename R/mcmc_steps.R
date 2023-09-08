@@ -1,6 +1,6 @@
 #' Transition objects.
 
-#' A one step implementation of partition MCMC. This acts as a constructor.
+#' One step implementation of partition MCMC. This acts as a constructor.
 #' 
 #' @description 
 #' This is a constructor for a single Partition MCMC step. The function
@@ -38,18 +38,83 @@ PartitionMCMC <- function(proposal = NULL, verbose = TRUE) {
   
   function(current_state, scorer) {
     proposed <- proposal(current_state$state)
+    current_state$proposal_info <- proposed$proposal_info
     
     log_score_diff <- ScoreDiff(current_state$state, proposed$state, 
                                 scorer, proposed$rescore_nodes)
+    
     log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + log_score_diff
     
     accept <- AcceptProposal(log_r)
     if (accept) {
       current_state$state <- proposed$state
       current_state$log_score <- current_state$log_score + log_score_diff
-      current_state$proposal_info <- proposed$proposal_info
-    } else {
-      current_state$proposal_info <- proposed$proposal_info
+    }
+    
+    if (verbose)
+      current_state$mcmc_info <- list(accept = accept)
+    
+    return(current_state)
+  }
+}
+
+
+#' One step implementation of the tempered partition MCMC. This acts as a constructor.
+#' 
+#' @description 
+#' This is a constructor for a single Tempered Partition MCMC step. The function
+#' constructs an environment with the proposal, inverse temperature, and verbose 
+#' flag. It then returns a function which takes the current_state and a scorer 
+#' object. This only allows the scores to be raised to a constant temperature
+#' for every step.
+#' 
+#' @examples
+#' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
+#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer,
+#'   parameters = list(data = bnlearn::learning.test)
+#'   )
+#' 
+#' current_state <- list(
+#'   state = partitioned_nodes,
+#'   log_score = ScoreLabelledPartition(partitioned_nodes, scorer)
+#'   )
+#' 
+#' tpmcmc <- TemperedPartitionMCMC(proposal = NodeMove, temperature = 1.0)
+#' tpmcmc(current_state, scorer)
+#' 
+#' @param proposal Proposal function. Default is the DefaultProposal.
+#' @param temperature Numeric value representing the temperature to raise the 
+#' score to.
+#' @param verbose Flag to pass MCMC information.
+#'
+#' @returns Function that takes the current state and scorer that outputs a new
+#' state.
+#' 
+#' @export
+TemperedPartitionMCMC <- function(proposal = NULL, temperature = 1.0, 
+                                  verbose = TRUE) {
+  
+  if (is.null(proposal))
+    proposal <- DefaultProposal()
+  
+  beta <- 1.0/temperature
+  
+  function(current_state, scorer) {
+    proposed <- proposal(current_state$state)
+    current_state$proposal_info <- proposed$proposal_info
+    
+    log_score_diff <- ScoreDiff(current_state$state, proposed$state, 
+                                scorer, proposed$rescore_nodes)
+    
+    log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + beta*log_score_diff
+    
+    accept <- AcceptProposal(log_r)
+    if (accept) {
+      current_state$state <- proposed$state
+      current_state$log_score <- current_state$log_score + log_score_diff
     }
     
     if (verbose)
@@ -62,7 +127,7 @@ PartitionMCMC <- function(proposal = NULL, verbose = TRUE) {
 #' Metropolis-Hastings acceptance.
 #' 
 #' @param log_r Log of Metropolis-Hastings ratio.
-#' @return accept flag.
+#' @return accept A boolean indicating whether we accept the proposal.
 #' 
 #' @noRd
 AcceptProposal <- function(log_r) {
