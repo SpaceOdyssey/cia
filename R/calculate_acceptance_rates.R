@@ -20,7 +20,8 @@ CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) {
   for (i in 1:n_chains) {
     chain_info[[i]] <- dplyr::bind_cols(
       proposal_used = sapply(chains[[i]]$proposal_info, function(x) x$proposal_used),
-      accept = sapply(chains[[i]]$mcmc_info, function(x) x$accept)
+      accept = sapply(chains[[i]]$mcmc_info, function(x) x$accept),
+      blacklist = sapply(chains[[i]]$mcmc_info, function(x) x$blacklist)
     )
   }
   chain_info <- dplyr::bind_rows(chain_info, .id = 'chain')
@@ -29,7 +30,9 @@ CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) {
     dplyr::group_by_at(group_by) |>
     dplyr::summarise(mean_accept = mean(.data$accept), 
                      n_accept = sum(.data$accept), 
-                     n_total = dplyr::n())
+                     n_total = dplyr::n(),
+                     conditional_accept_true = mean(.data$accept[blacklist == TRUE]),
+                     conditional_accept_false = mean(.data$accept[blacklist == FALSE]))
   
   return(accept_summary)
 }

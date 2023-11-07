@@ -106,11 +106,15 @@ TemperedPartitionMCMC <- function(proposal = NULL, temperature = 1.0,
     proposed <- proposal(current_state$state)
     current_state$proposal_info <- proposed$proposal_info
     
+    black_obeyed <- CheckBlacklistObeyed(proposed$state, scorer$blacklist)
+    
     log_score_diff <- ScoreDiff(current_state$state, proposed$state, 
                                 scorer, proposed$rescore_nodes)
     
-    log_r <- log(proposed$current_nbd) - log(proposed$new_nbd) + beta*log_score_diff
-    
+    jac <- log(proposed$current_nbd) - log(proposed$new_nbd)
+    mhr <-beta*log_score_diff
+    log_r <- jac + mhr
+      
     accept <- AcceptProposal(log_r)
     if (accept) {
       current_state$state <- proposed$state
@@ -118,7 +122,11 @@ TemperedPartitionMCMC <- function(proposal = NULL, temperature = 1.0,
     }
     
     if (verbose)
-      current_state$mcmc_info <- list(accept = accept)
+      current_state$mcmc_info <- list(accept = accept, 
+                                      blacklist = black_obeyed,
+                                      jac = jac, 
+                                      mhr = mhr)
+    
     
     return(current_state)
   }
