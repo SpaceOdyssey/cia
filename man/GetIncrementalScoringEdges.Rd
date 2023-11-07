@@ -4,10 +4,12 @@
 \alias{GetIncrementalScoringEdges}
 \title{Get the score of the empty DAG}
 \usage{
-GetIncrementalScoringEdges(scorer)
+GetIncrementalScoringEdges(scorer, cutoff = 0)
 }
 \arguments{
 \item{scorer}{A scorer object.}
+
+\item{cutoff}{A score cutoff.}
 }
 \value{
 A Boolean matrix of (parent, child) pairs for blacklisting..

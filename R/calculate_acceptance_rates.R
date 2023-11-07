@@ -21,25 +21,28 @@ CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) {
     chain_info[[i]] <- dplyr::bind_cols(
       proposal_used = sapply(chains[[i]]$proposal_info, function(x) x$proposal_used),
       accept = sapply(chains[[i]]$mcmc_info, function(x) x$accept),
-      blacklist = sapply(chains[[i]]$mcmc_info, function(x) x$blacklist)
+      black_obeyed = sapply(chains[[i]]$mcmc_info, function(x) x$black_obeyed),
+      white_obeyed = sapply(chains[[i]]$mcmc_info, function(x) x$white_obeyed)
     )
   }
   chain_info <- dplyr::bind_rows(chain_info, .id = 'chain')
   
+  print(chain_info)
+  
   accept_summary <- chain_info |>
     dplyr::group_by_at(group_by) |>
-    dplyr::summarise(mean_accept = mean(.data$accept), 
-                     n_accept = sum(.data$accept), 
-                     n_total = dplyr::n(),
-                     conditional_accept_true = mean(.data$accept[blacklist == TRUE]),
-                     conditional_accept_false = mean(.data$accept[blacklist == FALSE]))
+    dplyr::summarise(mean_accept = mean(.data$accept),
+                     mean_black_obeyed = mean(.data$black_obeyed),
+                     mean_white_obeyed = mean(.data$white_obeyed),
+                     n_accept = sum(.data$accept),
+                     n_total = dplyr::n())
   
   return(accept_summary)
 }
 
 #' @export
 CalculateAcceptanceRates.dagmc_chain <- function(chains, group_by = NULL) { 
-  chains <- new_dagmc_chains(chains)
+  chains <- new_dagmc_chain(chains)
   accept_summary <- CalculateAcceptanceRates(chains)
   
   return(accept_summary)

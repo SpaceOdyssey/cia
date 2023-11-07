@@ -10,7 +10,8 @@ CreateScorer(
   max_parents = Inf,
   blacklist = NULL,
   whitelist = NULL,
-  cache = FALSE
+  cache = FALSE,
+  nthreads = 1
 )
 }
 \arguments{
@@ -33,6 +34,8 @@ no whitelisting.}
 \item{cache}{A boolean to indicate whether to build the cache. The
 cache only works for problems where the scorer only varies as a function of
 (node, parents). Default is FALSE.}
+
+\item{nthreads}{Number of threads used to construct cache.}
 }
 \description{
 Scorer constructor.

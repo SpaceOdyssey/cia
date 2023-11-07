@@ -31,7 +31,8 @@ GetLowestPairwiseScoringEdges <- function(scorer, n_retain) {
 
 #' Calculate pairwise scores. 
 #' 
-#' The result can be used to blacklist low scoring edges.
+#' The result can be used to blacklist low scoring edges. This is looking at
+#' marginal effects.
 #' 
 #' @param scorer Scorer object.
 #' 
@@ -41,15 +42,15 @@ GetLowestPairwiseScoringEdges <- function(scorer, n_retain) {
 CalculatePairwiseScores <- function(scorer) {
   
   nodes <- names(scorer$parameters$data)
-  scores <- matrix(NA, 
-                   nrow = length(nodes), 
+  scores <- matrix(NA,
+                   nrow = length(nodes),
                    ncol = length(nodes), 
                    dimnames = list(nodes, nodes))
   
   for (parent in nodes) {
     scorer$parameters$node <- parent 
     scorer$parameters$parents <- vector()
-    parent_score <-  do.call(scorer$scorer, scorer$parameters)
+    parent_score <- do.call(scorer$scorer, scorer$parameters)
     children <- setdiff(nodes, parent)
     for (child in children) {
       scorer$parameters$node <- child
@@ -57,7 +58,7 @@ CalculatePairwiseScores <- function(scorer) {
       scores[parent, child] <- do.call(scorer$scorer, scorer$parameters) + parent_score
       
       other_children <- setdiff(children, child)
-      for(oth_child in other_children) { 
+      for (oth_child in other_children) { 
         scorer$parameters$node <- oth_child
         scorer$parameters$parents <- vector()
         scores[parent, child] <- scores[parent, child] + do.call(scorer$scorer, scorer$parameters)
@@ -70,15 +71,16 @@ CalculatePairwiseScores <- function(scorer) {
 
 #' Get the score of the empty DAG
 #' 
-#'@param scorer A scorer object.
+#' @param scorer A scorer object.
+#' @param cutoff A score cutoff.
 #' 
 #'@returns A Boolean matrix of (parent, child) pairs for blacklisting..
 #'
 #'@export
-GetIncrementalScoringEdges <- function(scorer){
+GetIncrementalScoringEdges <- function(scorer, cutoff = 0.0){
   
   inc_score <- CalculateIncrementalPairwiseScores(scorer)
-  blacklist <- inc_score < 0.0
+  blacklist <- inc_score < cutoff
   
   return(blacklist)
 }
@@ -118,4 +120,67 @@ CalculateIncrementalPairwiseScores <- function(scorer) {
   inc_score <- CalculatePairwiseScores(scorer) - ScoreEmptyDAG(scorer)
   
   return(inc_score)
+}
+
+
+
+#' Get partially incremental scoring edges.
+#' 
+#' @description Get the positive incremental scoring edges after conditioning
+#' on all other variables.
+#' 
+#' @param scorer A scorer object.
+#' @param cutoff A cutoff value for the blacklist. Less than this value is 
+#' blacklisted.
+#' 
+#' @export
+GetPartiallyIncrementalEdges <- function(scorer, cutoff = 0.0) {
+  
+  part_score <- CalculatePartiallyIncrementalScores(scorer)
+  blacklist <- part_score < cutoff
+  part_score[is.na(part_score)] <- TRUE
+  
+  return(blacklist) 
+}
+
+#' Calculate partially incremental scoring edges.
+#' 
+#' @noRd
+CalculatePartiallyIncrementalScores <- function(scorer) {
+  
+  nodes <- names(scorer$parameters$data)
+  part_scores <- matrix(NA, 
+                        nrow = length(nodes),
+                        ncol = length(nodes),
+                        dimnames = list(nodes, nodes))
+  
+  for (child in nodes) {
+    retrict_pas <- GetRestrictedParents(child, scorer$blacklist)
+    poss_pas <- setdiff(nodes, c(child, retrict_pas))
+    for (poss_pa in poss_pas) {
+      cond_nodes <- setdiff(poss_pas, poss_pa)
+      
+      # Empty conditional node scores.
+      cond_score_pa <- 0.0
+      for (cond_node in cond_nodes) {
+        scorer$parameters$node <- cond_node
+        scorer$parameters$parents <- vector()
+        cond_score_pa <- cond_score_pa + do.call(scorer$scorer, scorer$parameters)
+      }
+      
+      # Calculate score of total graph wrt all conditional nodes.
+      scorer$parameters$node <- child
+      scorer$parameters$parents <- cond_nodes
+      cond_score <- do.call(scorer$scorer, scorer$parameters) + cond_score_pa
+      
+      # Calculate score of total graph with all conditional nodes + poss parent.
+      scorer$parameters$node <- child
+      scorer$parameters$parents <- poss_pas
+      poss_pa_score <- do.call(scorer$scorer, scorer$parameters) + cond_score_pa      
+      
+      part_scores[poss_pa, child] <- poss_pa_score - cond_score
+    }
+  }
+  
+  return(part_scores)
 }

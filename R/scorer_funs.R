@@ -98,10 +98,11 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
 #' @export
 ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
   
-  whitelist_obeyed <- CheckWhitelistObeyed(partitioned_nodes, scorer$whitelist)
-  blacklist_obeyed <- CheckBlacklistObeyed(partitioned_nodes, scorer$blacklist)
-  if (!whitelist_obeyed | !blacklist_obeyed)
-    return(-Inf)
+  # Dealt with in the MCMC steps.
+  # whitelist_obeyed <- CheckWhitelistObeyed(partitioned_nodes, scorer$whitelist)
+  # blacklist_obeyed <- CheckBlacklistObeyed(partitioned_nodes, scorer$blacklist)
+  # if (!whitelist_obeyed | !blacklist_obeyed)
+  #   return(-Inf)
   
   log_partition_score <- 0.0
   for (node in partitioned_nodes$node) {
@@ -182,10 +183,11 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, score
 ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer, 
                       rescore_nodes = NULL) {
   
-  white_obeyed <- CheckWhitelistObeyed(new_partitioned_nodes, scorer$whitelist)
-  black_obeyed <- CheckBlacklistObeyed(new_partitioned_nodes, scorer$blacklist)
-  if (!white_obeyed | !black_obeyed)
-    return(-Inf)
+  # This is dealt with in the MCMC steps.
+  # white_obeyed <- CheckWhitelistObeyed(new_partitioned_nodes, scorer$whitelist)
+  # black_obeyed <- CheckBlacklistObeyed(new_partitioned_nodes, scorer$blacklist)
+  # if (!white_obeyed | !black_obeyed)
+  #   return(-Inf)
   
   if (is.null(rescore_nodes))
     rescore_nodes <- FindChangedNodes(old_partitioned_nodes,

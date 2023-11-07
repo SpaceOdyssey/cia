@@ -5,7 +5,7 @@
 \title{This builds the score cache. It can be used for problems where the score only
 changes as a function of (node, parents).}
 \usage{
-CachedScorer(scorer, max_size = NULL)
+CachedScorer(scorer, max_size = NULL, nthreads = 1)
 }
 \arguments{
 \item{scorer}{A scorer.}
@@ -13,6 +13,8 @@ CachedScorer(scorer, max_size = NULL)
 \item{max_size}{Not implemented. Maximum number of scores to store in the
 cache. If the total number of combinations is greater than this number then
 the cache follows a least recently used replacement policy.}
+
+\item{nthreads}{The number of threads used to create the cache.}
 }
 \description{
 This builds the score cache. It can be used for problems where the score only

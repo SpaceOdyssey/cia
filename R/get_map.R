@@ -30,11 +30,12 @@ GetMAP.dagmc_collection <- function(x) {
   
   p_maps <- max(x$log_norm_state_score)
   ip_map <- which(x$log_norm_state_score == p_maps)
-  states <- x$state[ip_map]
   
   maps <- list(
-    state = states,
-    log_p = exp(p_maps)
+    state = x$state[ip_map],
+    log_p = exp(p_maps),
+    log_state_score = x$log_state_score[ip_map],
+    log_norm_state_score = x$log_norm_state_score[ip_map]
   )
   
   return(maps)

@@ -22,13 +22,15 @@
 #' @param cache A boolean to indicate whether to build the cache. The 
 #' cache only works for problems where the scorer only varies as a function of 
 #' (node, parents). Default is FALSE.
+#' @param nthreads Number of threads used to construct cache.
 #' 
 #' @examples
 #' scorer <- CreateScorer(data = bnlearn::asia)
 #' 
 #' @export
 CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf, 
-                         blacklist = NULL, whitelist = NULL, cache = FALSE) {
+                         blacklist = NULL, whitelist = NULL, cache = FALSE,
+                         nthreads = 1) {
   
   scorer <- list(scorer = scorer,
                  parameters = list(...),
@@ -37,7 +39,7 @@ CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf,
                  whitelist = whitelist)
   
   if (cache)
-    scorer$scorer <- CachedScorer(scorer, max_size = NULL)
+    scorer$scorer <- CachedScorer(scorer, max_size = NULL, nthreads = nthreads)
   
   return(scorer)
 }
@@ -102,6 +104,9 @@ BNLearnScorer <- function(node, parents, ...) {
 BNLearnScoreSingleNode <- function(x, data, node, type = NULL, ..., debug = FALSE) {
   
   # Check the score label.
+  CheckData <- utils::getFromNamespace('check.data', 'bnlearn')
+  data <- CheckData(data)
+  
   CheckScore <- utils::getFromNamespace('check.score', 'bnlearn')
   type <- CheckScore(type, data)
     

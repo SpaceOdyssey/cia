@@ -3,12 +3,27 @@
 \name{PartitionMCMC}
 \alias{PartitionMCMC}
 \title{Transition objects.
-One step implementation of partition MCMC. This acts as a constructor.}
+One step implementation of the tempered partition MCMC. This acts as a
+constructor.}
 \usage{
-PartitionMCMC(proposal = NULL, verbose = TRUE)
+PartitionMCMC(
+  proposal = NULL,
+  temperature = 1,
+  prerejection = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{proposal}{Proposal function. Default is the DefaultProposal.}
+
+\item{temperature}{Numeric value representing the temperature to raise the
+score to.}
+
+\item{prerejection}{Boolean flag to reject due to the proposal disobeying the
+black or white lists. Only set to TRUE if you want to understand
+how often you are proposing states that disobey the black or white lists. Can
+be useful for debugging or understanding the efficiency of specific proposal
+types.}
 
 \item{verbose}{Flag to pass MCMC information.}
 }
@@ -17,9 +32,11 @@ Function that takes the current state and scorer that outputs a new
 state.
 }
 \description{
-This is a constructor for a single Partition MCMC step. The function
-constructs an environment with the proposal and verbose flag. It then returns
-a function which takes the current_state and a scorer object.
+This is a constructor for a single Tempered Partition MCMC step. The function
+constructs an environment with the proposal, inverse temperature, and verbose
+flag. It then returns a function which takes the current_state and a scorer
+object. This only allows the scores to be raised to a constant temperature
+for every step.
 }
 \examples{
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
@@ -35,7 +52,7 @@ current_state <- list(
   log_score = ScoreLabelledPartition(partitioned_nodes, scorer)
   )
 
-pmcmc <- PartitionMCMC(proposal = PartitionSplitJoin)
+pmcmc <- PartitionMCMC(proposal = NodeMove, temperature = 1.0)
 pmcmc(current_state, scorer)
 
 }
