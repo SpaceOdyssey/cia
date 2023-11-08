@@ -15,7 +15,7 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
-    bnlearn, igraph, doParallel, parallel, foreach, arrangements, graphics, dplyr, rlang, fastmatch, methods
+    bnlearn (>= 4.9), igraph, doParallel, parallel, foreach, arrangements, graphics, dplyr, rlang, fastmatch, methods
 Suggests: 
     rmarkdown, knitr, testthat (>= 3.0.0), gtools, gRain, gRbase, ggplot2
 Config/testthat/edition: 3
