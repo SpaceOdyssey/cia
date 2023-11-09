@@ -31,10 +31,10 @@
 #' @param temperature Numeric value representing the temperature to raise the 
 #' score to.
 #' @param prerejection Boolean flag to reject due to the proposal disobeying the 
-#' black or white lists. Only set to TRUE if you want to understand
+#' black or white lists. Only set to FALSE if you want to understand
 #' how often you are proposing states that disobey the black or white lists. Can 
 #' be useful for debugging or understanding the efficiency of specific proposal 
-#' types.
+#' distributions.
 #' @param verbose Flag to pass MCMC information.
 #'
 #' @returns Function that takes the current state and scorer that outputs a new
