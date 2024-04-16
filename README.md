@@ -1,6 +1,6 @@
 # dagmc
 
-An implementation of partition Markov Chain Monte Carlo (PMCMC) methods in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and prior edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm returns partitions rather than DAGs and provides acceptance rates for various steps in order to understand how well we are sampling in the partition space.
+An implementation of partition Markov Chain Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and prior edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm returns partitions rather than DAGs and provides acceptance rates for various steps in order to understand how well we are sampling in the partition space.
 
 ## Installation
 
@@ -11,10 +11,6 @@ devtools::install_github("mvar0005/dagmc", host="github.sydney.edu.au/api/v3", a
 You can get an 'auth_token' by following the instructions at:
 
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-
-## Current State
-
-I am prototyping the partition MCMC algorithm (Kuipers & Moffa, 2015).
 
 ## Use
 
