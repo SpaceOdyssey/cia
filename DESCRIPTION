@@ -13,10 +13,26 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Imports:
-    bnlearn (>= 4.9), igraph, doParallel, parallel, foreach, arrangements, graphics, dplyr, rlang, fastmatch, methods
+    bnlearn (>= 4.9),
+    igraph,
+    doParallel,
+    parallel,
+    foreach,
+    arrangements,
+    graphics,
+    dplyr,
+    rlang,
+    fastmatch,
+    methods,
+    gRain
 Suggests: 
-    rmarkdown, knitr, testthat (>= 3.0.0), gtools, gRain, gRbase, ggplot2
+    rmarkdown,
+    knitr,
+    testthat (>= 3.0.0),
+    gtools,
+    gRbase,
+    ggplot2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
