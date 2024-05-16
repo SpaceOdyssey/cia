@@ -7,7 +7,7 @@ One step implementation of the tempered partition MCMC. This acts as a
 constructor.}
 \usage{
 PartitionMCMC(
-  proposal = NULL,
+  proposal = DefaultProposal(),
   temperature = 1,
   prerejection = TRUE,
   verbose = TRUE

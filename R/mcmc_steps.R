@@ -41,11 +41,10 @@
 #' state.
 #' 
 #' @export
-PartitionMCMC <- function(proposal = NULL, temperature = 1.0, prerejection = TRUE,
+PartitionMCMC <- function(proposal = DefaultProposal(), 
+                          temperature = 1.0, 
+                          prerejection = TRUE,
                           verbose = TRUE) {
-  
-  if (is.null(proposal))
-    proposal <- DefaultProposal()
   
   beta <- 1.0/temperature
   

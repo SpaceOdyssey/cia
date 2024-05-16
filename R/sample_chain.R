@@ -39,7 +39,7 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
       init_state_each <- init_state[[i]]
     }
 
-    SampleChain(n_results, init_state_each, transition, scorer)
+    SampleChain(n_results, init_state_each, transition, scorer, n_thin)
   }
   parallel::stopCluster(cl)
   
