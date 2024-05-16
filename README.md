@@ -1,8 +1,8 @@
 # dagmc
 
-An implementation of partition Markov Chain Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and prior edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm returns partitions rather than DAGs and provides acceptance rates per proposal to understand how well we are sampling in the partition space.
+The bulk of this package is an implementation of partition Markov Chain Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and priors for pairwise edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm can return both partitions and DAGs while providing acceptance rates per proposal to understand how well we are sampling in the partition space.
 
-There is also some simple functionality to help perform probabilistic queries within gRain. Please see the documentation for more details.
+There is also some simple functionality to help perform probabilistic queries of directed acyclic graphs for categorical data. Please see the documentation for more details.
 
 ## Installation
 
