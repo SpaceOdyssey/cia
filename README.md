@@ -2,6 +2,8 @@
 
 An implementation of partition Markov Chain Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and prior edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm returns partitions rather than DAGs and provides acceptance rates per proposal to understand how well we are sampling in the partition space.
 
+There is also some simple functionality to help perform probabilistic queries within gRain. Please see the documentation for more details.
+
 ## Installation
 
 You should be able to install directly from GitHub using the following:
