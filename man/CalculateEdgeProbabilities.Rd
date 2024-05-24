@@ -2,21 +2,21 @@
 % Please edit documentation in R/edge_probabilities.R
 \name{CalculateEdgeProbabilities}
 \alias{CalculateEdgeProbabilities}
-\title{Calculate marginalised edge probabilities.}
+\title{Calculate pairwise edge probabilities marginalised over the graph structure.}
 \usage{
 CalculateEdgeProbabilities(x, ...)
 }
 \arguments{
+\item{x}{A chain(s) or collection object where states are DAGs.}
+
 \item{...}{Extra parameters sent to the methods. For a dag collection you can
 choose to use method='sampled' for MCMC sampled frequency (which is our
 recommended method) or method='score' which uses the normalised scores.}
-
-\item{collection}{A collection object where states are DAGs. See CollectUniqueObjects.}
 }
 \value{
 p_edge An adjacency matrix representing the edge probabilities.
 }
 \description{
 Calculate the probability of a given edge (\eqn{E}) given the data which
-is given by, \deqn{p(E|D) = \sum_\mathcal{G} p(E|G)p(G|D)}).
+is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D)}.
 }

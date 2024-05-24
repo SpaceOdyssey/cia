@@ -1,9 +1,9 @@
-#' Calculate marginalised edge probabilities.
+#' Calculate pairwise edge probabilities marginalised over the graph structure.
 #' 
 #' Calculate the probability of a given edge (\eqn{E}) given the data which
-#' is given by, \deqn{p(E|D) = \sum_\mathcal{G} p(E|G)p(G|D)}).
+#' is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D)}.
 #' 
-#' @param x A chain(s) or collection object where states are DAGs. See CollectUniqueObjects.
+#' @param x A chain(s) or collection object where states are DAGs.
 #' @param ... Extra parameters sent to the methods. For a dag collection you can
 #' choose to use method='sampled' for MCMC sampled frequency (which is our 
 #' recommended method) or method='score' which uses the normalised scores.
@@ -13,7 +13,8 @@
 #' @export
 CalculateEdgeProbabilities <- function(x, ...) UseMethod('CalculateEdgeProbabilities')
 
-CalculateEdgeProbabilities.dagmc_chain <- function(x) {
+#' @export
+CalculateEdgeProbabilities.dagmc_chain <- function(x, ...) {
   
   p_edge <- x$state |>
     simplify2array() |>
@@ -22,11 +23,48 @@ CalculateEdgeProbabilities.dagmc_chain <- function(x) {
   return(p_edge)
 }
 
-CalculateEdgeProbabilities.dagmc_chains <- function(chains) {
+#' @export
+CalculateEdgeProbabilities.dagmc_chains <- function(x, ...) {
   
   p_edge <- list()
-  for (i in 1:length(chains)) {
-    p_edge[[i]] <- CalculateEdgeProbabilities(chains[[i]])
+  for (i in 1:length(x)) {
+    p_edge[[i]] <- CalculateEdgeProbabilities(x[[i]])
+  }
+  
+  return(p_edge)
+}
+
+#' @export
+CalculateEdgeProbabilities.dagmc_collection <- function(x, ...) {
+  
+  y <- list(...)
+  if (!'method' %in% names(y))
+    y$method <- 'sampled'
+  
+  stopifnot(y$method %in% c('sampled', 'score'))
+  
+  if (y$method == 'sampled') {
+    p <- exp(x$log_sampling_prob)
+  } else if (y$method == 'score') {
+    p <- exp(x$log_norm_state_score)
+  }
+  
+  names <- colnames(x$state[[1]])
+  n <- length(names)
+  p_edge <- matrix(0.0, nrow = n, ncol = n, dimnames = list(names, names))
+  for (i in 1:length(x$state)) {
+    p_edge <- p_edge + p[i]*x$state[[i]]
+  }
+  
+  return(p_edge)
+}
+
+#' @export
+CalculateEdgeProbabilities.dagmc_collections <- function(x, ...) {
+  
+  p_edge <- list()
+  for (i in 1:length(x)) {
+    p_edge[[i]] <- CalculateEdgeProbabilities(x[[i]], ...)
   }
   
   return(p_edge)

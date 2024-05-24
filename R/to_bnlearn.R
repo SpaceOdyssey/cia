@@ -33,8 +33,8 @@ toBNLearn.bn <- function(x) {
 
 #' @export
 toBNLearn.igraph <- function(x) {
-  bn_obj <- gr_dag$dag |>
-    as('matrix') |> 
+  bn_obj <- x$dag |>
+    methods::as('matrix') |> 
     toBNLearn.matrix()
   
   return(bn_obj)
