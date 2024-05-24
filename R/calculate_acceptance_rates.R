@@ -27,8 +27,6 @@ CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) {
   }
   chain_info <- dplyr::bind_rows(chain_info, .id = 'chain')
   
-  print(chain_info)
-  
   accept_summary <- chain_info |>
     dplyr::group_by_at(group_by) |>
     dplyr::summarise(mean_accept = mean(.data$accept),

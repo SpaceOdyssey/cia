@@ -16,18 +16,19 @@ knitr::opts_chunk$set(
 
 ## What is this for?
 
-This shows inference on a data set drawn from a fully connected three node DAG.
-As the number of possible three node DAGs is 25, this allows for a direct 
-comparison between the expected and actual frequency of samples for each DAG.
+This shows inference for the DAG using data drawn from a fully connected three 
+node DAG. The total number of possible three node DAGs is 25, which allows for a 
+direct comparison between the estimated and actual frequency of samples for each 
+DAG.
 
 ```{r setup}
 library(dagmc)
 library(magrittr)
 ```
 
-Create conditional probability tables. Plot the CPDAG.
+Create conditional probability tables and plot the true DAG.
 
-```{r, error = TRUE}
+```{r, error = TRUE, fig.dim = c(5.0, 5.0)}
 # Three Node confounder problem
 levels <- c('yes', 'no')
 all_levels <- list(A = levels, B = levels, C = levels)
@@ -44,8 +45,8 @@ bn_arr[[3]] <- gRbase::parray(c('C', 'B'), levels = all_levels,
 nodes <- names(all_levels)
 cpt <- gRain::compileCPT(bn_arr)
 gr_dag <- gRain::grain(cpt)
-true_dag <- as(gr_dag$dag, 'matrix')
-plot(gr_dag)
+true_dag <- toBNLearn(gr_dag$dag)
+plot(true_dag)
 ```
 
 Draw samples from the true DAG. There appears to be a bug somewhere here such that
@@ -132,7 +133,7 @@ This gets n_results samples for each core.
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- as.integer(1e4)
+n_results <- 1e4
 n_chains <- 2
 
 init_partitions <- list()
@@ -143,10 +144,12 @@ for (i in 1:n_chains) {
 
 # Only use the move-node proposal. There are some minor issues with following 
 # detailed balance by using the others.
-proposal <- DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0)) 
 system.time(
-  chains <- SampleChains(n_results, init_partitions,
-                         transition = PartitionMCMC(proposal = proposal),
+  chains <- SampleChains(n_results,
+                         init_partitions,
+                         transition = PartitionMCMC(
+                           proposal = DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0))
+                           ),
                          scorer = scorer,
                          n_parallel_chains = n_chains)
 )
@@ -164,14 +167,14 @@ Converting the partitions into DAGs.
 
 ```{r, error = TRUE}
 n_burnin <- 500
-eq_chains <- PostProcessChains(chains, n_burnin)
-eq_chains <- SampleChainDAGs(eq_chains, scorer)
+eq_chains <- chains[(1 + n_burnin):n_results]
+eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
 ```
 
 Plot trace of DAG scores for equilibrium states.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-PlotScoreTrace(eq_chains, attribute = 'log_dag_score', ylab = 'log(DAG score)', type = 'l')
+PlotScoreTrace(eq_chains, attribute = 'log_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
 ## Convergence of the score trace
@@ -191,37 +194,42 @@ knitr::kable(prop_accept)
 Overall acceptance proposal.
 
 ```{r, error = TRUE}
-total_accept <- CalculateAcceptanceRates(eq_chains)
+total_accept <- CalculateAcceptanceRates(eq_chains, group_by = 'chain')
 knitr::kable(total_accept)
 ```
 
 
 ## Estimating probabilities for each DAG
 
+This shows the estimate (p_true) and true (p_true) probabilities for each
+DAG that was visited in the sampling procedure.
 
-```{r, error = TRUE, fig.dim = c(6.0, 12.0)}
-dags <- eq_chains |>
-  lapply(function(x) x$dag) |>
-  unlist(recursive = FALSE)
+```{r, error = TRUE, fig.dim = c(5.0, 5.0)}
+collect_dags <- eq_dag_chains |>
+  FlattenChains() |>
+  CollectUniqueObjects()
+p_ordered_dags <- sort(collect_dags$log_sampling_prob,
+                       decreasing = TRUE,
+                       index.return = TRUE)
 
-n_chain_all <- dags |>
-  lapply(rlang::hash) |>
-  unlist() |>
-  table()
-p_chain_all <- n_chain_all/sum(n_chain_all)
-
-i_order <- order(p_true, decreasing = TRUE)
-graphics::par(mfrow = c(4, 2), mar = c(1, 1, 1, 1))
-for (i in i_order) {
-  hash_focus_dag <- hash_all_dags[i]
-  focus_dag <- all_dags[[i]]
+for (i in 1:length(collect_dags$state)) {
+  adj <- collect_dags$state[[p_ordered_dags$ix[i]]]
+  bn_obj <- toBNLearn(adj)
+  plot(bn_obj)
   
-  bn_focus <- bnlearn::empty.graph(nodes)
-  bnlearn::amat(bn_focus) <- focus_dag
-  plot(bn_focus)
+  p_est <- p_ordered_dags$x[i] |>
+    exp() |>
+    round(4)
   
-  t <- paste('p_est: ', round(p_chain_all[hash_focus_dag], 4), 
-             ', p_true: ', round(p_true[i], 4), sep = '')
+  p_true <- p_summary |>
+    dplyr::filter(hash_dag == rlang::hash(adj)) |>
+    dplyr::select(p_true) |>
+    as.numeric() |>
+    round(4)
+  
+  t <- paste('p_est: ', round(p_est, 4),
+             ', p_true: ', round(p_true, 4), sep = '')
   graphics::text(300, 0, t)
+  
 }
 ```

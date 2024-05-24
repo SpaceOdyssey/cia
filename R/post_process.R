@@ -167,27 +167,6 @@ FlattenChains <- function(chains) {
   return(chain)
 }
 
-#' Calculate marginalised edge probabilities.
-#' 
-#' Calculate the probability of a given edge (\eqn{E}) given the data which
-#' is given by, \deqn{p(E|D) = \sum_\mathcal{G} p(E|G)p(G|D)}).
-#' 
-#' @param collection A collection object where states are DAGs. See CollectUniqueObjects.
-#' 
-#' @returns p_edge An adjacency matrix representing the edge probabilities.
-#' 
-#' @export
-CalculateEdgeProbabilities <- function(collection) {
-  
-  dags <- simplify2array(collection$state)
-  p_dag <- exp(collection$log_norm_state_score)
-  for (i in 1:length(p_dag))
-    dags[, , i] <- dags[, , i]*p_dag[i]
-  p_edge <- apply(dags, c(1, 2), sum)
-  
-  return(p_edge)
-}
-
 #' Collect DAG feature probability.
 #' 
 #' @description

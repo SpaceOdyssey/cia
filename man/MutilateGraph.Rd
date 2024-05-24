@@ -13,7 +13,8 @@ MutilateGraph(grain_object, intervention)
 distribution represented as a vector of unconditional probabilities.}
 }
 \value{
-A grain object.
+A grain object. Please note that any evidence set within the grain
+object will not be passed to the new object.
 }
 \description{
 This creates a mutilated graph in accordance with an intervention.

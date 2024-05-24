@@ -1,6 +1,6 @@
 #' Convert to bnlearn object.
 #' 
-#' @param x Adjacency matrix.
+#' @param x An object that represents a DAG.
 #' @returns bn_obj A bn object.
 #' 
 #' @examples
@@ -12,6 +12,7 @@ toBNLearn <- function(x) UseMethod('toBNLearn')
 
 #' @export
 toBNLearn.default <- function(x) { 
+  print('here2')
   return(toBNLearn.matrix(x)) 
 }
 
@@ -28,4 +29,13 @@ toBNLearn.matrix <- function(x) {
 #' @export
 toBNLearn.bn <- function(x) {
   return(x)
+}
+
+#' @export
+toBNLearn.igraph <- function(x) {
+  bn_obj <- gr_dag$dag |>
+    as('matrix') |> 
+    toBNLearn.matrix()
+  
+  return(bn_obj)
 }

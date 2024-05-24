@@ -57,7 +57,8 @@ CollectUniqueObjects.dagmc_chain <- function(x) {
     unlist()
   
   # Summarise unique states.
-  state_ihash <- match(unique(state_hashes), state_hashes)
+  unique_hashes <- unique(state_hashes)
+  state_ihash <- match(unique_hashes, state_hashes)
   unique_states <- states[state_ihash]
   unique_state_scores <- state_scores[state_ihash]
   log_evidence_states <- LogSumExp(unique_state_scores)
@@ -65,7 +66,7 @@ CollectUniqueObjects.dagmc_chain <- function(x) {
   
   # Estimate probability using sampled frequency.
   log_p_unord <- log(table(state_hashes)) - log(length(state_hashes))
-  log_sampling_prob <- as.vector(sapply(unique_states, FUN = function(x) log_p_unord[x]))
+  log_sampling_prob <- as.vector(log_p_unord[unique_hashes])
   
   collection <- list(state = unique_states,
                      log_evidence_state = log_evidence_states,

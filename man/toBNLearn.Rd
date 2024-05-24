@@ -7,7 +7,7 @@
 toBNLearn(x)
 }
 \arguments{
-\item{x}{Adjacency matrix.}
+\item{x}{An object that represents a DAG.}
 }
 \value{
 bn_obj A bn object.

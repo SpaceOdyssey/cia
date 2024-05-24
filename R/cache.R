@@ -41,6 +41,8 @@ BuildCache <- function(scorer, max_size = NULL, nthreads = 1) {
   node <- NULL
   cache <- foreach::foreach(node = nodes) %dopar% {
     
+    library(dagmc)
+    
     # Remove disallowed parents.
     blacklisted_nodes <- GetRestrictedParents(node, scorer$blacklist)
     allowed_nodes <- nodes |>
