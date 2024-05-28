@@ -35,7 +35,7 @@ CalculateEdgeProbabilities.dagmc_chains <- function(x, ...) {
 }
 
 #' @export
-CalculateEdgeProbabilities.dagmc_collection <- function(x, ...) {
+CalculateEdgeProbabilities.dagmc_collection <- function(x, method = 'sampled', ...) {
   
   y <- list(...)
   if (!'method' %in% names(y))
