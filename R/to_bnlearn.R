@@ -12,7 +12,6 @@ toBNLearn <- function(x) UseMethod('toBNLearn')
 
 #' @export
 toBNLearn.default <- function(x) { 
-  print('here2')
   return(toBNLearn.matrix(x)) 
 }
 
@@ -33,7 +32,7 @@ toBNLearn.bn <- function(x) {
 
 #' @export
 toBNLearn.igraph <- function(x) {
-  bn_obj <- x$dag |>
+  bn_obj <- x |>
     methods::as('matrix') |> 
     toBNLearn.matrix()
   
