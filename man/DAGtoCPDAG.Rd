@@ -7,7 +7,7 @@
 DAGtoCPDAG(x)
 }
 \arguments{
-\item{x}{A matrix, dagmc_chain, or dagmc_chains object. When it is a chain(s)
+\item{x}{A matrix, cia_chain, or cia_chains object. When it is a chain(s)
 object the state must be an adjacency matrix.}
 }
 \value{

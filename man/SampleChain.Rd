@@ -18,7 +18,7 @@ SampleChain(n_results, init_state, transition, scorer, n_thin = 1)
 \item{n_thin}{Number of steps between saved states.}
 }
 \value{
-chain A dagmc_chain object.
+chain A cia_chain object.
 }
 \description{
 Sample a single chain.

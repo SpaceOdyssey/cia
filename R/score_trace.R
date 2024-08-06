@@ -13,7 +13,7 @@ PlotScoreTrace <- function(chains, attribute = 'log_score', n_burnin = 0,
                            same_plot = TRUE, col = NULL, ...) UseMethod('PlotScoreTrace')
 
 #' @export
-PlotScoreTrace.dagmc_chains <- function(chains, attribute = 'log_score', n_burnin = 0, 
+PlotScoreTrace.cia_chains <- function(chains, attribute = 'log_score', n_burnin = 0, 
                                         same_plot = TRUE, col = NULL, ...) {
   
   if (is.null(col))
@@ -39,7 +39,7 @@ PlotScoreTrace.dagmc_chains <- function(chains, attribute = 'log_score', n_burni
 }
 
 #' @export
-PlotScoreTrace.dagmc_chain <- function(chains, attribute = 'log_score', n_burnin = 0, 
+PlotScoreTrace.cia_chain <- function(chains, attribute = 'log_score', n_burnin = 0, 
                                        same_plot = TRUE, col = NULL, ...) {
   
   if (is.null(col))

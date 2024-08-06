@@ -3,7 +3,7 @@
 #' @description
 #' Get the unique set of states along with their log score.
 #' 
-#' @details This gets the unique set of states in a dagmc_object
+#' @details This gets the unique set of states in a cia_object
 #' referred to as objects (\eqn{\mathcal{O}}). Then it estimates the probability
 #' for each state using two methods. The log_sampling_prob uses the MCMC sampled 
 #' frequency to estimate the posterior probability.
@@ -31,7 +31,7 @@
 #' and therefore is our preferred method. However, more work needs to be done 
 #' here.
 #' 
-#' @param x A dagmc_chains or dagmc_chain object.
+#' @param x A cia_chains or cia_chain object.
 #' 
 #' @returns dag_collection: A list with entries:
 #' \itemize{
@@ -47,7 +47,7 @@
 CollectUniqueObjects <- function(x) UseMethod('CollectUniqueObjects')
 
 #' @export
-CollectUniqueObjects.dagmc_chain <- function(x) {
+CollectUniqueObjects.cia_chain <- function(x) {
   
   # States calculations.
   states <- x$state
@@ -74,50 +74,50 @@ CollectUniqueObjects.dagmc_chain <- function(x) {
                      log_norm_state_score = log_norm_state_scores,
                      log_sampling_prob = log_sampling_prob)
   
-  collection <- new_dagmc_collection(collection)
+  collection <- new_cia_collection(collection)
   
   return(collection)
 }
 
 #' @export
-CollectUniqueObjects.dagmc_chains <- function(x) {
+CollectUniqueObjects.cia_chains <- function(x) {
   
   collections <- list()
   n_chains <- length(x)
   for (i in 1:n_chains) {
     collections[[i]] <- CollectUniqueObjects(x[[i]])
-    collections[[i]] <- new_dagmc_collection(collections[[i]])
+    collections[[i]] <- new_cia_collection(collections[[i]])
   }
   
-  collections <- new_dagmc_collections(collections)
+  collections <- new_cia_collections(collections)
   
   return(collections)
 }
 
-#' Constructor for a dagmc_chains collection.
+#' Constructor for a cia_chains collection.
 #' 
 #' @param x A list corresponding to a single mcmc chain.
-#' @returns dagmc_chain A dagmc_chain object.
+#' @returns cia_chain A cia_chain object.
 #' 
 #' @noRd
-new_dagmc_collections <- function(x) {
+new_cia_collections <- function(x) {
   
   stopifnot(is.list(x))
-  dagmc_collections <- structure(x, class = 'dagmc_collections')
+  cia_collections <- structure(x, class = 'cia_collections')
   
-  return(dagmc_collections)
+  return(cia_collections)
 }
 
-#' Constructor for a dagmc_chain collection.
+#' Constructor for a cia_chain collection.
 #' 
 #' @param x A list corresponding to a single mcmc chain.
-#' @returns dagmc_chain A dagmc_chain object.
+#' @returns cia_chain A cia_chain object.
 #' 
 #' @noRd
-new_dagmc_collection <- function(x) {
+new_cia_collection <- function(x) {
   
   stopifnot(is.list(x))
-  dagmc_collection <- structure(x, class = 'dagmc_collection')
+  cia_collection <- structure(x, class = 'cia_collection')
   
-  return(dagmc_collection)
+  return(cia_collection)
 }

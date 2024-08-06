@@ -17,7 +17,7 @@ This isn't finished! So please ignore for now.
 ## Setup
 
 ```{r setup, message = FALSE}
-library(dagmc)
+library(cia)
 library(bnlearn)
 library(dplyr)
 library(ggplot2)

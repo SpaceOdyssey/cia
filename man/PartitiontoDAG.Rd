@@ -7,7 +7,7 @@
 PartitiontoDAG(partitions, scorer)
 }
 \arguments{
-\item{partitions}{A dagms_chains, dagmc_chain, or matrix.}
+\item{partitions}{A dagms_chains, cia_chain, or matrix.}
 
 \item{scorer}{A scorer object.}
 }

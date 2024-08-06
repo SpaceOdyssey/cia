@@ -1,4 +1,4 @@
 library(testthat)
-library(dagmc)
+library(cia)
 
-test_check("dagmc")
+test_check("cia")

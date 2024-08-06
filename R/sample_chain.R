@@ -21,7 +21,7 @@
 #' @param n_thin Number of steps between saved states.
 #' @param n_parallel_chains Number of chains to run in parallel. Default is 2.
 #' 
-#' @returns chains A dagmc_chains object.
+#' @returns chains A cia_chains object.
 #' 
 #' @export
 SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1, 
@@ -43,7 +43,7 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
   }
   parallel::stopCluster(cl)
   
-  chains <- new_dagmc_chains(chains)
+  chains <- new_cia_chains(chains)
   
   return(chains)
 }
@@ -69,7 +69,7 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 #' @param scorer A scorer object.
 #' @param n_thin Number of steps between saved states.
 #' 
-#' @returns chain A dagmc_chain object.
+#' @returns chain A cia_chain object.
 #' 
 #' @export
 SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
@@ -106,7 +106,7 @@ SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
     log_scores[[i]] <- current_state$log_score
   }
   
-  chain <- new_dagmc_chain(
+  chain <- new_cia_chain(
     list(state = states, 
          log_score = log_scores, 
          proposal_info = proposal_info, 
@@ -120,27 +120,27 @@ SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
 #' Constructor for a single chain.
 #' 
 #' @param x A list corresponding to a single mcmc chain.
-#' @returns dagmc_chain A dagmc_chain object.
+#' @returns cia_chain A cia_chain object.
 #' 
 #' @noRd
-new_dagmc_chain <- function(x = list()) {
+new_cia_chain <- function(x = list()) {
   
   stopifnot(is.list(x))
-  dagmc_chain <- structure(x, class = 'dagmc_chain')
+  cia_chain <- structure(x, class = 'cia_chain')
   
-  return(dagmc_chain)
+  return(cia_chain)
 }
 
 #' Indexing with respect to iterations.
 #' 
-#' @param x A dagmc_chain object.
+#' @param x A cia_chain object.
 #' @param i An index.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A dagmc_chain.
+#' @returns chain A cia_chain.
 #' 
 #' @export
-`[.dagmc_chain` <- function(x = list(), i, ...) {
+`[.cia_chain` <- function(x = list(), i, ...) {
   
   class(x) <- 'list'
   
@@ -150,7 +150,7 @@ new_dagmc_chain <- function(x = list()) {
   chain$proposal_info <- x$proposal_info[i, ...]
   chain$mcmc_info <- x$mcmc_info[i, ...]
   
-  chain <- new_dagmc_chain(chain)
+  chain <- new_cia_chain(chain)
   
   return(chain)
 }
@@ -158,42 +158,42 @@ new_dagmc_chain <- function(x = list()) {
 #' Constructor for more than one chain.
 #' 
 #' @param x A list corresponding to more than one mcmc chain.
-#' @returns dagmc_chains A dagmc_chains object.
+#' @returns cia_chains A cia_chains object.
 #' 
 #' @noRd
-new_dagmc_chains <- function(x = list()) {
+new_cia_chains <- function(x = list()) {
   
   stopifnot(is.list(x))
-  dagmc_chains <- structure(x, class = 'dagmc_chains')
+  cia_chains <- structure(x, class = 'cia_chains')
   
-  return(dagmc_chains)
+  return(cia_chains)
 }
 
-#' Index a dagmc_chains object.
+#' Index a cia_chains object.
 #' 
-#' @param x A dagmc_chains object.
-#' @param i An index to get the dagmc_chain.
+#' @param x A cia_chains object.
+#' @param i An index to get the cia_chain.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A dagmc_chains object. 
+#' @returns chain A cia_chains object. 
 #'
 #' @export
-`[[.dagmc_chains` <- function(x, i, ...) {
+`[[.cia_chains` <- function(x, i, ...) {
   
   class(x) <- 'list'
-  return(new_dagmc_chain(x[[i, ...]]))
+  return(new_cia_chain(x[[i, ...]]))
 }
 
-#' Index a dagmc_chains object with respect to iterations.
+#' Index a cia_chains object with respect to iterations.
 #' 
-#' @param x A dagmc_chain object.
-#' @param i An index to get the dagmc_chain iterations.
+#' @param x A cia_chain object.
+#' @param i An index to get the cia_chain iterations.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A dagmc_chains object. 
+#' @returns chain A cia_chains object. 
 #' 
 #' @export
-`[.dagmc_chains` <- function(x = list(), i, ...) {
+`[.cia_chains` <- function(x = list(), i, ...) {
   
   class(x) <- 'list'
   
@@ -203,7 +203,7 @@ new_dagmc_chains <- function(x = list()) {
     chains[[j]] <- x[[j]][i, ...]
   }
   
-  chains <- new_dagmc_chains(chains)
+  chains <- new_cia_chains(chains)
   
   return(chains)
 }

@@ -14,7 +14,7 @@
 CalculateAcceptanceRates <- function(chains, group_by = NULL) UseMethod('CalculateAcceptanceRates')
 
 #' @export
-CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) { 
+CalculateAcceptanceRates.cia_chains <- function(chains, group_by = NULL) { 
   n_chains <- length(chains)
   chain_info <- list()
   for (i in 1:n_chains) {
@@ -39,8 +39,8 @@ CalculateAcceptanceRates.dagmc_chains <- function(chains, group_by = NULL) {
 }
 
 #' @export
-CalculateAcceptanceRates.dagmc_chain <- function(chains, group_by = NULL) { 
-  chains <- new_dagmc_chain(chains)
+CalculateAcceptanceRates.cia_chain <- function(chains, group_by = NULL) { 
+  chains <- new_cia_chain(chains)
   accept_summary <- CalculateAcceptanceRates(chains)
   
   return(accept_summary)

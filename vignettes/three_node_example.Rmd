@@ -22,7 +22,7 @@ direct comparison between the estimated and actual frequency of samples for each
 DAG.
 
 ```{r setup}
-library(dagmc)
+library(cia)
 library(magrittr)
 ```
 

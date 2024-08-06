@@ -1,6 +1,6 @@
 #' Convert DAG to CPDAG.
 #' 
-#' @param x A matrix, dagmc_chain, or dagmc_chains object. When it is a chain(s)
+#' @param x A matrix, cia_chain, or cia_chains object. When it is a chain(s)
 #' object the state must be an adjacency matrix.
 #' @returns x Returns same object type converted to a CPDAG.
 #' 
@@ -19,7 +19,7 @@ DAGtoCPDAG.matrix <- function(x) {
 }
 
 #' @export
-DAGtoCPDAG.dagmc_chains <- function(x) {
+DAGtoCPDAG.cia_chains <- function(x) {
   
   n_chains <- length(x)
   
@@ -31,13 +31,13 @@ DAGtoCPDAG.dagmc_chains <- function(x) {
   }
   parallel::stopCluster(cl)
   
-  chains <- new_dagmc_chains(chains)
+  chains <- new_cia_chains(chains)
   
   return(chains)
 }
 
 #' @export
-DAGtoCPDAG.dagmc_chain <- function(x) {
+DAGtoCPDAG.cia_chain <- function(x) {
   
   x$state <- lapply(x$state, DAGtoCPDAG)
   

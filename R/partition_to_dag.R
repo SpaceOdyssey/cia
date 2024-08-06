@@ -1,13 +1,13 @@
 #' Sample DAGs from labelled partitions.
 #' 
-#' @param partitions A dagms_chains, dagmc_chain, or matrix.
+#' @param partitions A dagms_chains, cia_chain, or matrix.
 #' @param scorer A scorer object.
 #' 
 #' @export
 PartitiontoDAG <- function(partitions, scorer) UseMethod('PartitiontoDAG')
 
 #' @export
-PartitiontoDAG.dagmc_chains <- function(partitions, scorer) {
+PartitiontoDAG.cia_chains <- function(partitions, scorer) {
   
   n_chains <- length(partitions)
   
@@ -19,13 +19,13 @@ PartitiontoDAG.dagmc_chains <- function(partitions, scorer) {
   }
   parallel::stopCluster(cl)
   
-  chains <- new_dagmc_chains(chains)
+  chains <- new_cia_chains(chains)
   
   return(chains)
 }
 
 #' @export
-PartitiontoDAG.dagmc_chain <- function(partitions, scorer) {
+PartitiontoDAG.cia_chain <- function(partitions, scorer) {
   
   n_results <- length(partitions$state)
   
@@ -39,7 +39,7 @@ PartitiontoDAG.dagmc_chain <- function(partitions, scorer) {
     chain$log_score[i] <- dag$log_score
   }
   
-  chain <- new_dagmc_chain(chain)
+  chain <- new_cia_chain(chain)
   
   return(chain)
 }

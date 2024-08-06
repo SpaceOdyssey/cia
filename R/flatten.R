@@ -5,7 +5,7 @@
 #' @export
 FlattenChains <- function(chains) {
   
-  stopifnot(methods::is(chains, 'dagmc_chains'))
+  stopifnot(methods::is(chains, 'cia_chains'))
   
   n_chains <- length(chains)
   chain <- list()
@@ -21,7 +21,7 @@ FlattenChains <- function(chains) {
     chain$mcmc_info <- c(chain$mcmc_info, chains[[i]]$mcmc_info)
   }
   
-  chain <- new_dagmc_chain(chain)
+  chain <- new_cia_chain(chain)
   
   return(chain)
 }

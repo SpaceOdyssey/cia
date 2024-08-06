@@ -2,21 +2,21 @@
 % Please edit documentation in R/concordance.R
 \name{PlotConcordance}
 \alias{PlotConcordance}
-\title{Concordance plot as outl.}
+\title{Concordance plot.}
 \usage{
 PlotConcordance(x, ...)
 }
 \arguments{
-\item{x}{A list of edge probabilities, a chains object, or a collections object.}
+\item{x}{A list of adjacency matrices representing edge probabilities, a
+chains object, or a collections object with states as DAGs.}
 
 \item{...}{Additional parameter to send to the appropriate method. This includes
 'highlight' (defauled to 0.3) which sets the cutoff difference that is used to
 highlight the points, and the probability edge estimation 'method' for a
-dagmc_collections object.}
+cia_collections object.}
 }
 \description{
-This is a thin wrapper to pass dagmc objects to the BiDAG concordance
-plot code.
+Concordance plot.
 }
 \examples{
 data <- bnlearn::learning.test
@@ -24,9 +24,12 @@ dag <- UniformlySampleDAG(colnames(data))
 partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 scorer <- CreateScorer(scorer = BNLearnScorer, data = data)
 
-results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer)
+results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 2)
 dags <- PartitiontoDAG(results, scorer)
+PlotConcordance(dags)
+
+# OR
 p_edge <- CalculateEdgeProbabilities(dags)
-g <- PlotConcordance(p_edge)
+PlotConcordance(p_edge)
 
 }

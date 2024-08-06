@@ -14,7 +14,7 @@
 CalculateEdgeProbabilities <- function(x, ...) UseMethod('CalculateEdgeProbabilities')
 
 #' @export
-CalculateEdgeProbabilities.dagmc_chain <- function(x, ...) {
+CalculateEdgeProbabilities.cia_chain <- function(x, ...) {
   
   p_edge <- x$state |>
     simplify2array() |>
@@ -24,7 +24,7 @@ CalculateEdgeProbabilities.dagmc_chain <- function(x, ...) {
 }
 
 #' @export
-CalculateEdgeProbabilities.dagmc_chains <- function(x, ...) {
+CalculateEdgeProbabilities.cia_chains <- function(x, ...) {
   
   p_edge <- list()
   for (i in 1:length(x)) {
@@ -35,7 +35,7 @@ CalculateEdgeProbabilities.dagmc_chains <- function(x, ...) {
 }
 
 #' @export
-CalculateEdgeProbabilities.dagmc_collection <- function(x, method = 'sampled', ...) {
+CalculateEdgeProbabilities.cia_collection <- function(x, method = 'sampled', ...) {
   
   y <- list(...)
   if (!'method' %in% names(y))
@@ -60,7 +60,7 @@ CalculateEdgeProbabilities.dagmc_collection <- function(x, method = 'sampled', .
 }
 
 #' @export
-CalculateEdgeProbabilities.dagmc_collections <- function(x, ...) {
+CalculateEdgeProbabilities.cia_collections <- function(x, ...) {
   
   p_edge <- list()
   for (i in 1:length(x)) {

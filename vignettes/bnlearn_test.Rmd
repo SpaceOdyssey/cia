@@ -16,12 +16,12 @@ knitr::opts_chunk$set(
 
 ## What is this for?
 
-This shows an example using dagmc on several bnlearn test data sets.
+This shows an example using cia on several bnlearn test data sets.
 
 ## Setup
 
 ```{r setup, message = FALSE}
-library(dagmc)
+library(cia)
 library(bnlearn)
 library(Rgraphviz)
 library(dplyr)
@@ -116,7 +116,7 @@ plot(bnlearn::cpdag(true_graph))
 
 ## Posterior sampling.
 
-The aim of dagmc is to sample from the posterior distribution of DAGs. This is
+The aim of cia is to sample from the posterior distribution of DAGs. This is
 what is done here.
 
 First, a function that calculates the score of a given (node, parents) is

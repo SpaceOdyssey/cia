@@ -1,14 +1,11 @@
-#' Concordance plot as outl.
-#' 
-#' This is a thin wrapper to pass dagmc objects to the BiDAG concordance
-#' plot code.
+#' Concordance plot.
 #' 
 #' @param x A list of adjacency matrices representing edge probabilities, a 
 #' chains object, or a collections object with states as DAGs.
 #' @param ... Additional parameter to send to the appropriate method. This includes
 #' 'highlight' (defauled to 0.3) which sets the cutoff difference that is used to
 #' highlight the points, and the probability edge estimation 'method' for a 
-#' dagmc_collections object.
+#' cia_collections object.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test
@@ -16,7 +13,7 @@
 #' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' scorer <- CreateScorer(scorer = BNLearnScorer, data = data)
 #' 
-#' results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 4)
+#' results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 2)
 #' dags <- PartitiontoDAG(results, scorer)
 #' PlotConcordance(dags)
 #' 
@@ -65,7 +62,7 @@ PlotConcordance.list <- function(x, highlight = 0.3, ...) {
 }
 
 #' @export
-PlotConcordance.dagmc_chains <- function(x, highlight = 0.3, ...) {
+PlotConcordance.cia_chains <- function(x, highlight = 0.3, ...) {
   
   p_edge <- CalculateEdgeProbabilities(x)
   g <- PlotConcordance(p_edge, highlight = highlight)
@@ -74,7 +71,7 @@ PlotConcordance.dagmc_chains <- function(x, highlight = 0.3, ...) {
 }
 
 #' @export
-PlotConcordance.dagmc_collections <- function(x, highlight = 0.3, method = 'sampled', ...) {
+PlotConcordance.cia_collections <- function(x, highlight = 0.3, method = 'sampled', ...) {
 
   p_edge <- CalculateEdgeProbabilities(x, highlight = highlight, method = method)
   g <- PlotConcordance(p_edge)

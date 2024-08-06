@@ -6,7 +6,7 @@
 #' 
 #' @examples
 #' dag <- bnlearn::model2network("[A][C][F][B|A][D|A:C][E|B:F]")
-#' gRain_obj <- togRain(x = dag |> dagmc::toMatrix(), data = bnlearn::learning.test)
+#' gRain_obj <- togRain(x = dag |> toMatrix(), data = bnlearn::learning.test)
 #' 
 #' @export
 togRain <- function(x, ...) UseMethod("togRain")

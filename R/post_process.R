@@ -11,7 +11,7 @@
 #' @export
 PostProcessChains <- function(chains, n_burnin = 0, n_thin = 1) {
   
-  if (methods::is(chains, 'dagmc_chains')) {
+  if (methods::is(chains, 'cia_chains')) {
     for (i in 1:length(chains)) {
       chains[[i]] <- PostProcessChain(chains[[i]], n_burnin, n_thin)
     }

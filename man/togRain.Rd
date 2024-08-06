@@ -19,6 +19,6 @@ Convert an adjacency matrix or igraph object to a gRain object.
 }
 \examples{
 dag <- bnlearn::model2network("[A][C][F][B|A][D|A:C][E|B:F]")
-gRain_obj <- togRain(x = dag |> dagmc::toMatrix(), data = bnlearn::learning.test)
+gRain_obj <- togRain(x = dag |> toMatrix(), data = bnlearn::learning.test)
 
 }

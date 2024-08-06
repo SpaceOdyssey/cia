@@ -7,7 +7,7 @@
 CollectUniqueObjects(x)
 }
 \arguments{
-\item{x}{A dagmc_chains or dagmc_chain object.}
+\item{x}{A cia_chains or cia_chain object.}
 }
 \value{
 dag_collection: A list with entries:
@@ -24,7 +24,7 @@ state estimated using the MCMC sampling frequency.
 Get the unique set of states along with their log score.
 }
 \details{
-This gets the unique set of states in a dagmc_object
+This gets the unique set of states in a cia_object
 referred to as objects (\eqn{\mathcal{O}}). Then it estimates the probability
 for each state using two methods. The log_sampling_prob uses the MCMC sampled
 frequency to estimate the posterior probability.

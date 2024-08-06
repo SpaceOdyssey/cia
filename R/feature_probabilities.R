@@ -19,7 +19,7 @@
 CalculateFeatureProbability <- function(x, p_feature, ...) UseMethod('CalculateFeatureProbability')
 
 #' @export
-CalculateFeatureProbability.dagmc_chain <- function(x, p_feature, ...) {
+CalculateFeatureProbability.cia_chain <- function(x, p_feature, ...) {
   
   n <- length(x$state)
   p <- 0.0
@@ -30,7 +30,7 @@ CalculateFeatureProbability.dagmc_chain <- function(x, p_feature, ...) {
 }
 
 #' @export
-CalculateFeatureProbability.dagmc_chains <- function(x, p_feature, ...) {
+CalculateFeatureProbability.cia_chains <- function(x, p_feature, ...) {
   
   p <- list()
   for (i in 1:length(x)) {
@@ -41,7 +41,7 @@ CalculateFeatureProbability.dagmc_chains <- function(x, p_feature, ...) {
 }
 
 #' @export
-CalculateFeatureProbability.dagmc_collection <- function(x, p_feature, ...) {
+CalculateFeatureProbability.cia_collection <- function(x, p_feature, ...) {
   
   y <- list(...)
   if (!'method' %in% names(y))
@@ -63,7 +63,7 @@ CalculateFeatureProbability.dagmc_collection <- function(x, p_feature, ...) {
 }
 
 #' @export
-CalculateFeatureProbability.dagmc_collections <- function(x, p_feature, ...) {
+CalculateFeatureProbability.cia_collections <- function(x, p_feature, ...) {
   
   p <- list()
   for (i in 1:length(x)) {
