@@ -3,9 +3,10 @@
 #' @param chains MCMC chains.
 #' 
 #' @export
-FlattenChains <- function(chains) {
-  
-  stopifnot(methods::is(chains, 'cia_chains'))
+FlattenChains <- function(chains) UseMethod('FlattenChains')
+
+#' @export
+FlattenChains.cia_chains <- function(chains) {
   
   n_chains <- length(chains)
   chain <- list()
@@ -25,3 +26,14 @@ FlattenChains <- function(chains) {
   
   return(chain)
 }
+
+#' @export
+FlattenChains.cia_post_chains <- function(chains) {
+  
+  chain <- chains |>
+    do.call(rbind, args = _) |>
+    new_cia_post_chain()
+  
+  return(chain)
+}
+

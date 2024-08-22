@@ -18,5 +18,5 @@ p_edge An adjacency matrix representing the edge probabilities.
 }
 \description{
 Calculate the probability of a given edge (\eqn{E}) given the data which
-is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D)}.
+is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D).}
 }

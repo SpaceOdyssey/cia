@@ -23,7 +23,7 @@
 #' gRain::querygrain(mut_graph, 'G')
 #' 
 #' # You can also perform an observational query for a node not affected
-#' # by the intervention. For example, p(R | do(S = 'yes')) = p(R) is given by,
+#' # by the intervention. For example, p(R | do(S = 'yes')) is given by,
 #' gRain::querygrain(mut_graph, 'R')
 #' 
 #' @export

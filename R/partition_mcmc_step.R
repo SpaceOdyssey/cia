@@ -1,18 +1,17 @@
 #' Transition objects.
 
-#' One step implementation of the tempered partition MCMC. This acts as a 
-#' constructor.
+#' One step implementation of the tempered partition MCMC.
 #' 
 #' @description 
 #' This is a constructor for a single Tempered Partition MCMC step. The function
 #' constructs an environment with the proposal, inverse temperature, and verbose 
-#' flag. It then returns a function which takes the current_state and a scorer 
+#' flag. It then returns a function that takes the current_state and a scorer 
 #' object. This only allows the scores to be raised to a constant temperature
 #' for every step.
 #' 
 #' @examples
 #' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
-#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' partitioned_nodes <- DAGtoPartition(dag)
 #' 
 #' scorer <- list(
 #'   scorer = BNLearnScorer,
@@ -24,12 +23,12 @@
 #'   log_score = ScoreLabelledPartition(partitioned_nodes, scorer)
 #'   )
 #' 
-#' pmcmc <- PartitionMCMC(proposal = NodeMove, temperature = 1.0)
+#' pmcmc <- PartitionMCMC(proposal = DefaultProposal(), temperature = 1.0)
 #' pmcmc(current_state, scorer)
 #' 
 #' @param proposal Proposal function. Default is the DefaultProposal.
 #' @param temperature Numeric value representing the temperature to raise the 
-#' score to.
+#' score to. Default is 1.
 #' @param prerejection Boolean flag to reject due to the proposal disobeying the 
 #' black or white lists. Only set to FALSE if you want to understand
 #' how often you are proposing states that disobey the black or white lists. Can 
@@ -123,7 +122,7 @@ PartitionMCMC <- function(proposal = DefaultProposal(),
 AcceptProposal <- function(log_r) {
   log_p <- min(0.0, log_r)
   log_alpha <- log(stats::runif(1))
-  if (log_alpha < log_p) {
+  if (log_alpha <= log_p) {
     accept <- TRUE
   } else {
     accept <- FALSE

@@ -2,7 +2,7 @@ data <- bnlearn::learning.test
 
 set.seed(1)
 dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 scorer <- CreateScorer(data = data)
 

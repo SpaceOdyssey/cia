@@ -26,7 +26,7 @@
 #'    \item log_score Score of the sampled DAG.
 #'  }
 #' 
-#' @export
+#' @noRd
 SampleDAGFromLabelledPartition <- function(partitioned_nodes, scorer) {
   
   nodes <- sort(partitioned_nodes$node)

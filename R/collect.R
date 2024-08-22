@@ -24,7 +24,7 @@
 #' 
 #' After the normalisation constant has been estimated we then estimate the 
 #' log probability of each object as,
-#' \deqn{\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z_\mathcal{O}}).}
+#' \deqn{\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z}_\mathcal{O}).}
 #' 
 #' Preliminary analysis suggests that the sampling frequency approach is more
 #' consistent across chains when estimating marginalised edge probabilities, 

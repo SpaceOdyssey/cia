@@ -2,7 +2,7 @@
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 StayStill <- function(partitioned_nodes) {
   
   current_nbd <- CalculateStayStillNeighbourhood(partitioned_nodes)
@@ -22,7 +22,6 @@ StayStill <- function(partitioned_nodes) {
 
 #' Propose that the partition stays still.
 #' 
-#' @examples
 #' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
 #' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
 #' ProposeStayStill(partitioned_nodes)
@@ -31,7 +30,7 @@ StayStill <- function(partitioned_nodes) {
 #' 
 #' @return A proposed labelled partition.
 #' 
-#' @export
+#' @noRd
 ProposeStayStill <- function(partitioned_nodes) {
   return(list(partitioned_nodes = partitioned_nodes, 
               rescore_nodes = NULL))
@@ -41,7 +40,7 @@ ProposeStayStill <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes A labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateStayStillNeighbourhood <- function(partitioned_nodes) {
   return(1)
 }

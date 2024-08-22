@@ -1,7 +1,7 @@
 data <- bnlearn::learning.test
 
 dag <- UniformlySampleDAG(names(data))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 scorer_1 <- CreateScorer(data = data)
 scorer_2 <- CreateScorer(data = data, type = 'bde', iss = 1)

@@ -2,7 +2,7 @@
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 SwapNode <- function(partitioned_nodes) {
   current_nbd <- CalculateSwapNodeNeighbourhood(partitioned_nodes)
   
@@ -30,7 +30,7 @@ SwapNode <- function(partitioned_nodes) {
 #' 
 #' @return A proposed labelled partition.
 #' 
-#' @export
+#' @noRd
 ProposeSwapNode <- function(partitioned_nodes) {
   
   if (GetNumberOfPartitions(partitioned_nodes) > 1) {
@@ -77,7 +77,7 @@ ProposeSwapNode <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateSwapNodeNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)

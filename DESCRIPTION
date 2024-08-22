@@ -1,6 +1,6 @@
 Package: cia
 Title: Causal inference assistant (CIA)
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: 
     person(given = "Mathew",
            family = "Varidel",
@@ -8,7 +8,7 @@ Authors@R:
            email = "mathew.varidel@sydney.edu.au",
            comment = c(ORCID = "0000-0002-1648-8317"))
 Description: A library for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference.
-References: Kuipers and Moffa (2017) <doi:10.1080/01621459.2015.1133426>, Scutari (2010) <doi:10.18637/jss.v035.i03>, Suter et al. (2023) <doi:10.18637/jss.v105.i09>.
+References: Kuipers and Moffa (2017) <doi:10.1080/01621459.2015.1133426>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -27,7 +27,8 @@ Imports:
     fastmatch,
     methods,
     gRain,
-    patchwork
+    patchwork,
+    tidyr
 Suggests: 
     rmarkdown,
     knitr,

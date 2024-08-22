@@ -1,7 +1,7 @@
 #' Calculate pairwise edge probabilities marginalised over the graph structure.
 #' 
 #' Calculate the probability of a given edge (\eqn{E}) given the data which
-#' is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D)}.
+#' is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D).}
 #' 
 #' @param x A chain(s) or collection object where states are DAGs.
 #' @param ... Extra parameters sent to the methods. For a dag collection you can

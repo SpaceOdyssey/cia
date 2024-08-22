@@ -2,7 +2,7 @@
 #' 
 #' @param partitioned_nodes Labelled partition.
 #'
-#' @export
+#' @noRd
 PartitionSplitJoin <- function(partitioned_nodes) {
   
   current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
@@ -37,7 +37,7 @@ PartitionSplitJoin <- function(partitioned_nodes) {
 #' 
 #' @return A proposed labelled partition.
 #' 
-#' @export
+#' @noRd
 ProposePartitionSplitJoin <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
@@ -114,7 +114,7 @@ ProposePartitionSplitJoin <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateSplitJoinNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)

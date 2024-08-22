@@ -12,7 +12,7 @@
 #' cached_scorer <- CachedScorer(scorer)
 #' cached_scorer('A', c('B', 'C'))
 #' 
-#' @export
+#' @noRd
 CachedScorer <- function(scorer, max_size = NULL, nthreads = 1) {
   
   cache <- BuildCache(scorer, max_size = max_size, nthreads = nthreads)
@@ -94,7 +94,7 @@ BuildCache <- function(scorer, max_size = NULL, nthreads = 1) {
 #' @param parents A character vector of the parent nodes.
 #' @param nodes A character vector for all nodes.
 #' 
-#' @export
+#' @noRd
 GetParentsKey <- function(parents, nodes) {
   parents_key <- rlang::hash(nodes %fin% parents)
   

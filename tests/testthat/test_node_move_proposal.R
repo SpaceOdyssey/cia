@@ -1,6 +1,6 @@
 set.seed(1)
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 testthat::test_that('NodeMove has attributes', {
   expect_identical(

@@ -18,7 +18,6 @@ DefaultProposal <- function(p = c(0.33, 0.33, 0.165, 0.165, 0.01),
         proposal_info <- list(proposal_used = 'split_join')
       
       current_nbd <- CalculateSplitJoinNeighbourhood(partitioned_nodes)
-      
       proposed <- ProposePartitionSplitJoin(partitioned_nodes)
       partitioned_nodes <- proposed$partitioned_nodes
       rescore_nodes <- proposed$rescore_nodes

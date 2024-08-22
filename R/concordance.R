@@ -10,14 +10,12 @@
 #' @examples
 #' data <- bnlearn::learning.test
 #' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' partitioned_nodes <- DAGtoPartition(dag)
 #' scorer <- CreateScorer(scorer = BNLearnScorer, data = data)
 #' 
 #' results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 2)
 #' dags <- PartitiontoDAG(results, scorer)
-#' PlotConcordance(dags)
 #' 
-#' # OR
 #' p_edge <- CalculateEdgeProbabilities(dags)
 #' PlotConcordance(p_edge)
 #' 
@@ -55,39 +53,28 @@ PlotConcordance.default <- function(x, highlight = 0.3, ...) {
 
 #' @export
 PlotConcordance.list <- function(x, highlight = 0.3, ...) {
-
+  
   g <- PlotConcordance.default(x, highlight = highlight)
   
   return(g)
 }
 
-#' @export
-PlotConcordance.cia_chains <- function(x, highlight = 0.3, ...) {
-  
-  p_edge <- CalculateEdgeProbabilities(x)
-  g <- PlotConcordance(p_edge, highlight = highlight)
-  
-  return(g)
-}
-
-#' @export
-PlotConcordance.cia_collections <- function(x, highlight = 0.3, method = 'sampled', ...) {
-
-  p_edge <- CalculateEdgeProbabilities(x, highlight = highlight, method = method)
-  g <- PlotConcordance(p_edge)
-  
-  return(g)
-
-}
-
 #' @noRd
 PlotConcordanceSingle <- function(x_state, y_state, highlight = 0.3) {
   
-  diag(x_state) <- NA
+  # If the input is a matrix, I assume that the diagonals are NULL. Which
+  # is an appropriate assumption when describing most quantities derived from
+  # an adjacency matrix.
+  if (is.matrix(x_state))
+    diag(x_state) <- NA
+  
+  if (is.matrix(y_state))
+    diag(y_state) <- NA
+  
   x_k <- as.vector(x_state)
   x_k <- x_k[!is.na(x_k)]
   
-  diag(y_state) <- NA
+
   y_k <- as.vector(y_state)
   y_k <- y_k[!is.na(y_k)]
   
@@ -118,8 +105,10 @@ PlotConcordanceSingle <- function(x_state, y_state, highlight = 0.3) {
   
   g <- g +
     ggplot2::scale_x_continuous(name = ggplot2::element_blank(),
+                                limits = c(0.0, 1.0),
                                 breaks = c(0.0, 0.5, 1.0)) +
     ggplot2::scale_y_continuous(name = ggplot2::element_blank(),
+                                limits = c(0.0, 1.0),
                                 breaks = c(0.0, 0.5, 1.0)) +
     ggplot2::theme_classic() +
     ggplot2::theme(legend.position = 'none', aspect.ratio = 1.0)

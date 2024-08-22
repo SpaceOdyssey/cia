@@ -21,14 +21,12 @@ Concordance plot.
 \examples{
 data <- bnlearn::learning.test
 dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 scorer <- CreateScorer(scorer = BNLearnScorer, data = data)
 
 results <- SampleChains(300, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 2)
 dags <- PartitiontoDAG(results, scorer)
-PlotConcordance(dags)
 
-# OR
 p_edge <- CalculateEdgeProbabilities(dags)
 PlotConcordance(p_edge)
 

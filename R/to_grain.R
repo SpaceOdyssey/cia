@@ -40,7 +40,19 @@ togRain.igraph <- function(x,
                            ...
 ) {
   gRbase::compile(gRain::grain(x, control, smooth, compile, details, data, ...))
-  
+}
+
+#' @export
+togRain.bn <- function(x, 
+                       control = list(),
+                       smooth = 0,
+                       compile = TRUE,
+                       details = 0,
+                       data = NULL,
+                       ...
+) {
+  igraph_obj <- igraph::as.igraph(x)
+  togRain(igraph_obj, control, smooth, compile, details, data, ...)
 }
 
 #' @export  

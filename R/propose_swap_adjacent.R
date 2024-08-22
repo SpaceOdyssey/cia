@@ -2,7 +2,7 @@
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 SwapAdjacentNode <- function(partitioned_nodes) {
   current_nbd <- CalculateSwapAdjacentNodeNeighbourhood(partitioned_nodes)
   proposed <- ProposeSwapAdjacentNode(partitioned_nodes)
@@ -25,7 +25,7 @@ SwapAdjacentNode <- function(partitioned_nodes) {
 #' 
 #' @return A proposed labelled partition.
 #' 
-#' @export
+#' @noRd
 ProposeSwapAdjacentNode <- function(partitioned_nodes) {
   
   if (GetNumberOfPartitions(partitioned_nodes) > 1) {
@@ -73,7 +73,7 @@ ProposeSwapAdjacentNode <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateSwapAdjacentNodeNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)

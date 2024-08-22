@@ -4,7 +4,7 @@
 #' data <- bnlearn::learning.test
 #' 
 #' dag <- UniformlySampleDAG(names(data))
-#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' partitioned_nodes <- DAGtoPartition(dag)
 #' 
 #' scorer <- list(
 #'   scorer = BNLearnScorer, 
@@ -19,7 +19,7 @@
 #'
 #' @return List of log_scores for each combination in parent_combinations.
 #' 
-#' @export
+#' @noRd
 ScoreTableNode <- function(partitioned_nodes, node, scorer) {
   
   scorer$parameters$node <- node
@@ -51,7 +51,7 @@ ScoreTableNode <- function(partitioned_nodes, node, scorer) {
 #' data <- bnlearn::learning.test
 #' 
 #' dag <- UniformlySampleDAG(names(data))
-#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' partitioned_nodes <- DAGtoPartition(dag)
 #' 
 #' scorer <- list(
 #'   scorer = BNLearnScorer, 
@@ -66,7 +66,7 @@ ScoreTableNode <- function(partitioned_nodes, node, scorer) {
 #' 
 #' @return Log of the node score.
 #' 
-#' @export
+#' @noRd
 ScoreNode <- function(partitioned_nodes, node, scorer) {
   
   score_table <- ScoreTableNode(partitioned_nodes, node, scorer)
@@ -81,7 +81,7 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
 #' data <- bnlearn::learning.test
 #' 
 #' dag <- UniformlySampleDAG(names(data))
-#' partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+#' partitioned_nodes <- DAGtoPartition(dag)
 #' 
 #' scorer <- list(
 #'   scorer = BNLearnScorer, 
@@ -124,10 +124,10 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' scorer = CreateScorer()
 #' 
 #' old_dag <- UniformlySampleDAG(LETTERS[1:5])
-#' old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+#' old_partitioned_nodes <- DAGtoPartition(old_dag)
 #' 
 #' new_dag <- UniformlySampleDAG(LETTERS[1:5])
-#' new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+#' new_partitioned_nodes <- DAGtoPartition(new_dag)
 #' 
 #' changed_nodes <- FindChangedNodes(old_partitioned_nodes, new_partitioned_nodes, scorer)
 #' 
@@ -137,7 +137,7 @@ ScoreLabelledPartition <- function(partitioned_nodes, scorer) {
 #' 
 #' @return Vector of changed nodes.
 #' 
-#' @export
+#' @noRd
 FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, scorer) {
   
   changed_nodes <- c()
@@ -160,10 +160,10 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, score
 #' data <- bnlearn::learning.test
 #' 
 #' old_dag <- UniformlySampleDAG(names(data))
-#' old_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(old_dag)
+#' old_partitioned_nodes <- DAGtoPartition(old_dag)
 #' 
 #' new_dag <- UniformlySampleDAG(names(data))
-#' new_partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(new_dag)
+#' new_partitioned_nodes <- DAGtoPartition(new_dag)
 #'
 #' scorer <- list(
 #'   scorer = BNLearnScorer, 
@@ -179,7 +179,7 @@ FindChangedNodes <- function(old_partitioned_nodes, new_partitioned_nodes, score
 #' 
 #' @return Log of score difference between two labelled partitions.
 #' 
-#' @export
+#' @noRd
 ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer, 
                       rescore_nodes = NULL) {
   
@@ -213,7 +213,7 @@ ScoreDiff <- function(old_partitioned_nodes, new_partitioned_nodes, scorer,
 #' @param nodes A vector of node names to check. Default is to check all 
 #' child nodes in the whitelist.
 #' 
-#' @export
+#' @noRd
 CheckWhitelistObeyed <- function(partitioned_nodes, whitelist = NULL, nodes = NULL) {
   
   if (is.null(whitelist))
@@ -250,7 +250,7 @@ CheckWhitelistObeyed <- function(partitioned_nodes, whitelist = NULL, nodes = NU
 #' @param nodes A vector of node names to check. Default is to check all 
 #' child nodes in the blacklist.
 #'
-#' @export
+#' @noRd
 CheckBlacklistObeyed <- function(partitioned_nodes, blacklist = NULL, 
                                  nodes = NULL) {
   
@@ -313,7 +313,7 @@ ScoreDAG <- function(dag, scorer) {
 #' @param x A vector of numeric.
 #' @return Log-Sum-Exponential (LSE) of x.
 #' 
-#' @export
+#' @noRd
 LogSumExp <- function(x) {
   x_max <- max(x)
   lse <- x_max + log(sum(exp(x - x_max)))
@@ -328,7 +328,7 @@ LogSumExp <- function(x) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 GetNumberOfPartitions <- function(partitioned_nodes) {
   return(max(partitioned_nodes$partition))
 }
@@ -340,7 +340,7 @@ GetNumberOfPartitions <- function(partitioned_nodes) {
 #' 
 #' @return Node's partition element number.
 #' 
-#' @export
+#' @noRd
 GetNodePartition <- function(partitioned_nodes, node) {
   node_partition <- partitioned_nodes$partition[partitioned_nodes$node == node]
   
@@ -352,7 +352,7 @@ GetNodePartition <- function(partitioned_nodes, node) {
 #' @param partitioned_nodes Labelled partition.
 #' @param elements An integer or vector of integers for the partition element number.
 #' 
-#' @export
+#' @noRd
 GetPartitionNodes <- function(partitioned_nodes, elements) {
   nodes <- partitioned_nodes$node[partitioned_nodes$partition %in% elements]
   
@@ -367,7 +367,7 @@ GetPartitionNodes <- function(partitioned_nodes, elements) {
 #' 
 #' @return List of parent combinations.
 #' 
-#' @export
+#' @noRd
 GetParentCombinations <- function(partitioned_nodes, node, scorer) {
   
   # If this function is exported I probably need to check if whitelist/blacklist are obeyed.
@@ -438,7 +438,7 @@ GetParentCombinations <- function(partitioned_nodes, node, scorer) {
 #' @param node The name of the node to get white or black listed parents.
 #' @param listed A black or white list.
 #'
-#' @export
+#' @noRd
 GetRestrictedParents <- function(node, listed = NULL) {
   
   if (is.null(listed)) {
@@ -454,47 +454,11 @@ GetRestrictedParents <- function(node, listed = NULL) {
 #'
 #' @param list A black or white list.
 #'
-#' @export
+#' @noRd
 GetRestrictedNodes <- function(list) {
   nodes <- names(which(colSums(list, na.rm = TRUE) > 0))
   
   return(nodes)
-}
-
-#' Map DAG to a labelled partition.
-#'
-#' This partitions nodes into levels of outpoints as explained in Section 4.1 of
-#' Kuipers & Moffa 2015. This takes an adjacency matrix and returns a data.frame
-#' of (partition, node) pairs
-#'
-#' @param adjacency Adjacency matrix.
-#' @returns Labelled partition for the given adjacency matrix.
-#'
-#' @export
-GetPartitionedNodesFromAdjacencyMatrix <- function(adjacency) {
-  remaining_nodes <- colnames(adjacency)
-  partitions <- c()
-  nodes <- c()
-  i <- 1
-  while (length(remaining_nodes) > 1) {
-    outpoint_bool <- colSums(adjacency[remaining_nodes, remaining_nodes]) == 0
-
-    nodes <- c(nodes, names(which(outpoint_bool)))
-    partitions <- c(partitions, rep(i, sum(outpoint_bool)))
-
-    remaining_nodes <- names(which(!outpoint_bool))
-    i <- i + 1
-  }
-
-  if (length(remaining_nodes) == 1) {
-    nodes <- c(nodes, remaining_nodes)
-    partitions <- c(partitions, i)
-  }
-
-  partitioned_nodes <- data.frame(partition = partitions, node = nodes)
-  partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
-
-  return(partitioned_nodes)
 }
 
 #' Order partitioned nodes.
@@ -502,7 +466,7 @@ GetPartitionedNodesFromAdjacencyMatrix <- function(adjacency) {
 #' @param partitioned_nodes Labelled partition.
 #' @return Labelled partitioned in descending partition element order.
 #' 
-#' @export
+#' @noRd
 OrderPartitionedNodes <- function(partitioned_nodes) {
   ord <- order(partitioned_nodes$partition, partitioned_nodes$node)
   partitioned_nodes <- partitioned_nodes[ord, ]
@@ -518,7 +482,7 @@ OrderPartitionedNodes <- function(partitioned_nodes) {
 #' @param partitioned_nodes Labelled partition.
 #' @return Ordered partition. 
 #'
-#' @export
+#' @noRd
 GetOrderedPartition <- function(partitioned_nodes) {
   
   tab <- tabulate(partitioned_nodes$partition)

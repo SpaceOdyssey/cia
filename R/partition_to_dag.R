@@ -1,6 +1,6 @@
 #' Sample DAGs from labelled partitions.
 #' 
-#' @param partitions A dagms_chains, cia_chain, or matrix.
+#' @param partitions A cia_chains, cia_chain, or adjacency matrix.
 #' @param scorer A scorer object.
 #' 
 #' @export

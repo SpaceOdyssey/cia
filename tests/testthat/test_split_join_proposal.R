@@ -1,5 +1,5 @@
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 testthat::test_that('SplitJoin proposal has attributes', {
   testthat::expect_identical(

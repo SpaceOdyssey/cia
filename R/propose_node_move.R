@@ -2,7 +2,7 @@
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 NodeMove <- function(partitioned_nodes) {
   
   current_nbd <- CalculateNodeMoveNeighbourhood(partitioned_nodes)
@@ -23,15 +23,15 @@ NodeMove <- function(partitioned_nodes) {
 #' Propose individual node movement. 
 #' 
 #' This proposes that a single node selected uniformly can either:
-#'   1) Move to any current partition.
-#'   2) Move to any gap between or at the ends of the partitions.
+#'   1) Move to any current set within the partition.
+#'   2) Move to any gap between or at the ends of the sets in the partition.
 #'   
 #'  Any of these moves are possible and are selected uniformly with two 
 #'  exceptions:
 #'    1) The selected node cannot move into adjacent gaps if it originated from 
-#'    a single node partition.
+#'    a single node element.
 #'    2) The selected node cannot move to the immediately higher gap if it 
-#'    originated from a two node partition.
+#'    originated from a two node element.
 #' 
 #' @examples
 #' dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
@@ -40,7 +40,7 @@ NodeMove <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 ProposeNodeMove <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
@@ -55,19 +55,19 @@ ProposeNodeMove <- function(partitioned_nodes) {
   inode <- partitioned_nodes$node == node
   current_element <- partitioned_nodes$partition[inode]
   
-  # Move the node into it's available 
+  # Move the node into it's available options.
   n_element <- sum(partitioned_nodes$partition == current_element)
   if (n_element == 1) {
     # Move node into any non-adjacent partition in the new space with uniform 
-    # probability.
+    # probability. Move is the number of steps for the node to move up, which
+    # will then be wrapped to fit in the number of partitions.
     move <- sample.int(2*m - 2, size = 1) + 1
   } else if (n_element == 2) {
     # Move node into any non-directly greater partition element in the new space
     # with uniform probability.
     move <- sample.int(2*m - 1, size = 1) + 1
   } else {
-    # Move node into another partition in the new space with uniform probability
-    # for each partition element.
+    # Move node into another element in the new space with uniform probability.
     move <- sample.int(2*m, size = 1)
   }
   
@@ -93,7 +93,7 @@ ProposeNodeMove <- function(partitioned_nodes) {
 #' 
 #' @param partitioned_nodes Labelled partition.
 #' 
-#' @export
+#' @noRd
 CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {
   
   m <- GetNumberOfPartitions(partitioned_nodes)
@@ -116,16 +116,16 @@ CalculateNodeMoveNeighbourhood <- function(partitioned_nodes) {
 #' Find nodes to rescore. This works in the relabelled partition + gap space.
 #' 
 #' @noRd
-NodeMoveRescore <- function(partitioned_nodes, node, old_element, new_element) {
+NodeMoveRescore <- function(partitioned_nodes, node, current_element, new_element) {
   
   # Rescore nodes as a function of moved. Rescore based on:
-  if (new_element > old_element) {
-    start_rescore <- old_element + 1
+  if (new_element > current_element) {
+    start_rescore <- current_element + 1
     end_rescore <- new_element + ifelse(new_element %% 2 == 0, 1, 2)
     rescore_nodes <- c(node, GetPartitionNodes(partitioned_nodes, start_rescore:end_rescore))
   } else {
     start_rescore <- new_element + 1
-    end_rescore <- old_element + 2
+    end_rescore <- current_element + 2
     rescore_nodes <- GetPartitionNodes(partitioned_nodes, start_rescore:end_rescore)
   }
   

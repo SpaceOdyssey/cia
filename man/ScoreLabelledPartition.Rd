@@ -21,7 +21,7 @@ Score labelled partition by adding the log scores for each node.
 data <- bnlearn::learning.test
 
 dag <- UniformlySampleDAG(names(data))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 scorer <- list(
   scorer = BNLearnScorer, 

@@ -2,7 +2,7 @@ data <- bnlearn::learning.test
 
 set.seed(1)
 dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 
 scorer <- CreateScorer(data = data)
 
@@ -51,7 +51,7 @@ testthat::test_that('Check SampleChain returns correct scores', {
 blacklist <- GetLowestPairwiseScoringEdges(scorer, n_retain = 2)
 scorer <- CreateScorer(data = data, blacklist = blacklist)
 dag[which(scorer$blacklist)] <- 0
-partitioned_nodes <- GetPartitionedNodesFromAdjacencyMatrix(dag)
+partitioned_nodes <- DAGtoPartition(dag)
 testthat::test_that('SampleChain works for blacklist', {
   testthat::expect_equal(
     length(SampleChain(100, partitioned_nodes, PartitionMCMC(), scorer = scorer)),
