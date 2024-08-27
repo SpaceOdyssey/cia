@@ -14,7 +14,7 @@
 GetMAP <- function(x) UseMethod('GetMAP')
 
 #' @export
-GetMAP.dagmc_collections <- function(x) {
+GetMAP.cia_collections <- function(x) {
   
   n_chains <- length(x)
   maps <- list()
@@ -26,7 +26,7 @@ GetMAP.dagmc_collections <- function(x) {
 }
 
 #' @export
-GetMAP.dagmc_collection <- function(x) {
+GetMAP.cia_collection <- function(x) {
   
   p_maps <- max(x$log_norm_state_score)
   ip_map <- which(x$log_norm_state_score == p_maps)
@@ -40,3 +40,20 @@ GetMAP.dagmc_collection <- function(x) {
   
   return(maps)
 }
+
+#' @export
+GetMAP.cia_chains <- function(x) {
+  
+  collection <- CollectUniqueObjects(x)
+  
+  return(GetMap(collection))
+}
+
+#' @export
+GetMap.cia_chain <- function(x) {
+  
+  collection <- CollectUniqueObjects(x)
+  
+  return(GetMap(collection))
+}
+
