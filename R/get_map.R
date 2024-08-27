@@ -1,6 +1,6 @@
 #' Get the maximum a posteriori state.
 #' 
-#' @param x A collection of unique objects. See CollectUniqueObjects.
+#' @param x A collection of unique objects or chains object.
 #' 
 #' @returns maps A list with the adjacency matrix for the map and it's posterior 
 #' probability. It is possible for it to return multiple DAGs. The list has
@@ -46,14 +46,14 @@ GetMAP.cia_chains <- function(x) {
   
   collection <- CollectUniqueObjects(x)
   
-  return(GetMap(collection))
+  return(GetMAP(collection))
 }
 
 #' @export
-GetMap.cia_chain <- function(x) {
+GetMAP.cia_chain <- function(x) {
   
   collection <- CollectUniqueObjects(x)
   
-  return(GetMap(collection))
+  return(GetMAP(collection))
 }
 

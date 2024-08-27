@@ -7,7 +7,7 @@
 GetMAP(x)
 }
 \arguments{
-\item{x}{A collection of unique objects. See CollectUniqueObjects.}
+\item{x}{A collection of unique objects or chains object.}
 }
 \value{
 maps A list with the adjacency matrix for the map and it's posterior
