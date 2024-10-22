@@ -2,6 +2,7 @@
 
 #' @export
 summary.cia_post_chains <- function(object, ...) {
+  
   n_chains <- length(object)
   n_par <- ncol(object[[1]])
   stat_names <- c('mean', 'sd', 'n_eff')
