@@ -1,3 +1,4 @@
+# Summary function for a cia_chain or cia_chains object.
 
 #' @export
 summary.cia_chains <- function(object, ...) {
@@ -46,6 +47,7 @@ summary.cia_chain <- function(object, ...) {
   object <- object |>
     lapply(function(x) as.matrix(x$log_score))
   stat_names <- c('Mean', 'SD', 'MCSE', 'N_eff')
+  n_par <- 1
   res_mat <- matrix(nrow = n_par, ncol = length(stat_names),
                     dimnames = list(colnames(object), stat_names))
   
