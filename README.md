@@ -15,3 +15,5 @@ devtools::install_github("SpaceOdyssey/cia")
 ## Use
 
 There is function documentation in the root directory along with some simple examples in the vignettes.
+
+[![R-CMD-check](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml)
