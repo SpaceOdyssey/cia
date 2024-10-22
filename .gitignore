@@ -12,3 +12,8 @@ inst/doc
 /inst
 CITATION.cff
 *.pdf
+
+# Incomplete Vignettes #
+########################
+/vignettes/bnlearn_test.Rmd
+/vignettes/bidag_comparison.Rmd
