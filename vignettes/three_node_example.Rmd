@@ -138,7 +138,7 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 1e3
+n_results <- 1000
 n_chains <- 2
 
 init_partitions <- list()
@@ -175,7 +175,7 @@ independent of the starting point.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 n_burnin <- 500
-eq_chains <<- chains[(1 + n_burnin):n_results]
+eq_chains <- chains[(1 + n_burnin):n_results]
 PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
 ```
 

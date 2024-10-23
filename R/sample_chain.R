@@ -30,8 +30,10 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
   cl <- parallel::makeCluster(n_parallel_chains)
   doParallel::registerDoParallel(cl)
   
+  export <- c('SampleChain', 'n_results', 'init_state', 'transition', 
+              'scorer', 'n_thin')
   i <- NULL
-  chains <- foreach::foreach(i = 1:n_parallel_chains) %dopar% {
+  chains <- foreach::foreach(i = 1:n_parallel_chains, .export = export) %dopar% {
     
     if (is.data.frame(init_state)) {
       init_state_each <- init_state
