@@ -138,7 +138,7 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 2e4
+n_results <- 1e3
 n_chains <- 2
 
 init_partitions <- list()
@@ -186,6 +186,7 @@ can be seen by looking at the trace plot as well. However, it's important that
 the chains have converged in both the partition space and the DAG space.
 
 ```{r, error = TRUE}
+eq_chains <- chains[(1 + n_burnin):n_results]
 eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
 ```
 
