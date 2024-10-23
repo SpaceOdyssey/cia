@@ -42,3 +42,4 @@ Suggests:
     dagitty
 Config/testthat/edition: 3
 VignetteBuilder: knitr
+URL: https://spaceodyssey.github.io/cia/
