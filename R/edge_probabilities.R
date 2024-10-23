@@ -1,14 +1,16 @@
 #' Calculate pairwise edge probabilities marginalised over the graph structure.
 #' 
-#' Calculate the probability of a given edge (\eqn{E}) given the data which
-#' is given by, \deqn{p(E|D) = \sum_G p(E|G)p(G|D).}
+#' Calculate pairwise edge probabilities. For a given edge from node 
+#' \eqn{A \rightarrow B}, the posterior probability of that edge given the data 
+#' is given by marginalising out the graph structure \eqn{G}, such that
+#' \deqn{p(E|D) = \sum_{G \in \mathcal{G}} p(E|G)p(G|D).}
 #' 
 #' @param x A chain(s) or collection object where states are DAGs.
 #' @param ... Extra parameters sent to the methods. For a dag collection you can
 #' choose to use method='sampled' for MCMC sampled frequency (which is our 
 #' recommended method) or method='score' which uses the normalised scores.
 #' 
-#' @returns p_edge An adjacency matrix representing the edge probabilities.
+#' @returns p_edge A matrix representing the edge probabilities.
 #' 
 #' @export
 CalculateEdgeProbabilities <- function(x, ...) UseMethod('CalculateEdgeProbabilities')

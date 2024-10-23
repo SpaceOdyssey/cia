@@ -15,6 +15,10 @@ be of the form p_predict(dag, ...) and return either a vector of numeric values.
 
 \item{...}{Parameters to be passed to p_predict.}
 }
+\value{
+A cia_post_chain(s) object.
+}
 \description{
-Sample a feature given a DAG (\eqn{p(f|G}) for each posterior sample.
+Simulate samples from a posterior predictive distribution for a feature \eqn{f}
+a graph \eqn{G}, given by \deqn{p(f|D) = \sum_{G \in \mathcal{G}} p(f|G) p(G|D)}.
 }

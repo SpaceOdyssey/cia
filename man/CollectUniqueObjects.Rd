@@ -32,7 +32,7 @@ frequency to estimate the posterior probability.
 An alternative method to estimate the posterior probability for each state
 uses the state score. This is recorded in the log_norm_state_score
 vector. This approach estimates the log of the normalisation constant assuming
-\eqn{\tilde{Z}_\mathcal{O} = \Sigma_s^S p(\mathcal{O}_s)p(D | \mathcal{O}_s)} where
+\eqn{\tilde{Z}_\mathcal{O} = \Sigma_{s=1}^S p(\mathcal{O}_s)p(D | \mathcal{O}_s)} where
 \eqn{\{\mathcal{O}_1, \mathcal{O}_2, \mathcal{O}_3, ..., \mathcal{O}_S\}} is
 the set of unique objects in the chain. This assumes that you have captured the
 most probable objects, such that \eqn{\tilde{Z}_\mathcal{O}} is approximately equal to
@@ -41,7 +41,8 @@ sum across all possible DAGs (\eqn{\mathcal{G}}). This also makes the
 assumption that the exponential of the score is proportional to the posterior
 probability, such that
 \deqn{p(G|D) \propto p(G)p(D | G) = \prod_i \exp(\text{score}(X_i, \text{Pa}_G(X_i) | D))}
-where \eqn{\text{Pa}_G(X_i)} is the parents set for node \eqn{X_i}.
+where \eqn{\text{Pa}_G(X_i)} is the parents set for node \eqn{X_i} given the
+graph \eqn{G}.
 
 After the normalisation constant has been estimated we then estimate the
 log probability of each object as,

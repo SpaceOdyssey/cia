@@ -2,13 +2,13 @@
 #' 
 #' @description
 #' Calculate the posterior expected value for a feature (\eqn{f}, e.g., 
-#' existence of an edge) whereby \deqn{E(f|D) = \sum_G p(f|G) p(G|D).} This can be 
+#' existence of an edge) whereby \deqn{E(f|D) = \sum_{G \in \mathcal{G}} p(f|G) p(G|D).} This can be 
 #' useful for calculating point estimates of quantities of interests, such as 
 #' the probability that an edge exists.
 #' 
 #' @param x A chain(s) or collection object.
 #' @param p_feature A function that takes an adjacency matrix or collection object 
-#' and returns a scalar corresponding to p(f|G). The function must be of the 
+#' and returns a scalar corresponding to \eqn{p(f|G)}. The function must be of the 
 #' form p_feature(dag).
 #' @param ... Extra parameters sent to the methods. For a dag collection you can
 #' choose to use method='sampled' for MCMC sampled frequency (which is our 
