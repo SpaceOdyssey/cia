@@ -203,9 +203,8 @@ the Split R-hat convergence statistic and the the effective sample size S_eff
 (Gelman et al., 2013; Vehtari et al., 2021). We can do this for the log-score of 
 the partitions:
 
-```{r, errpor = TRUE}
-x <- eq_chains |>
-  lapply(function(x) as.matrix(x$log_score))
+```{r, error = TRUE}
+x <- lapply(eq_chains, function(x) as.matrix(x$log_score))
 class(x) <- 'cia_post_chains'
 
 knitr::kable(summary(x)[[3]]$stats)
