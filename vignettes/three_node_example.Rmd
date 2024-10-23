@@ -29,7 +29,7 @@ library(cia)
 ```
 
 Create conditional probability tables for the true DAG. This draws samples 
-from a dag where $A$ and $C$ have a common cause $B$, given by 
+from a DAG where $A$ and $C$ have a common cause $B$, given by 
 $A \leftarrow B \rightarrow C$.
 
 ```{r, error = TRUE}
@@ -131,14 +131,14 @@ p_summary <- data.frame(
 
 ### Sample from the posterior using MCMC
 
-Then let's sample from the posterior using the cia implementation of partition 
+Let's sample from the posterior using the cia implementation of partition 
 MCMC (Kuipers & Moffa, 2017). Below I sample two chains, so that we can
-compare the between chain convergence of estimated quantities below. Typically,
+compare the between chain convergence of estimated quantities. Typically,
 we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 1000
+n_results <- 20000
 n_chains <- 2
 
 init_partitions <- list()
@@ -170,8 +170,7 @@ PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
 
 The graph suggests that PMCMC spends a number of steps at the start of the chains
 to converge to a stable point. This is called the burnin and should be removed.
-Then let's plot the trace again, so that we can see that the chains are now
-independent of the starting point.
+I remove 500 steps as a burnin and plot the trace again.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 n_burnin <- 500
@@ -181,9 +180,9 @@ PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
 
 ### Qualitatively check the DAG score chains for convergence
 
-After the burnin we then want to make sure that the chains have converged. This 
-can be seen by looking at the trace plot as well. However, it's important that 
-the chains have converged in both the partition space and the DAG space.
+The above suggests that the chains have converged with respect to the partition
+score. However, we want to study DAGs, so let's convert the partitions to DAGs
+and then see if the DAG score has converged.
 
 ```{r, error = TRUE}
 eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
@@ -204,37 +203,35 @@ the Split R-hat convergence statistic and the the effective sample size S_eff
 the partitions:
 
 ```{r, error = TRUE}
-x <- lapply(eq_chains, function(x) as.matrix(x$log_score))
-class(x) <- 'cia_post_chains'
-
-knitr::kable(summary(x)[[3]]$stats)
+knitr::kable(summary(eq_chains)[[3]]$stats)
 ```
 
 This can also be performed for the log DAG scores.
 ```{r, error = TRUE}
-x <- eq_dag_chains |>
-  lapply(function(x) as.matrix(x$log_score))
-class(x) <- 'cia_post_chains'
-
-knitr::kable(summary(x)[[3]]$stats)
+knitr::kable(summary(eq_dag_chains)[[3]]$stats)
 ```
 
-The r_hat statistic provides a measure of the convergence of the chains. We 
-use the Split R-hat calculation (Gelman et al., 2013). R-hat values closer to 1 
+The Split R-hat statistic provides a measure of the convergence of the chains
+(Gelman et al., 2013). R-hat values closer to 1 
 are considered to have greater evidence for convergence, with the latest 
 recommendations suggesting to aim for R-hat < 1.01 (Vehtari et al., 2021). The 
-R_hat should only be relied be considered reliable when the total effective 
-sample size across the chains is S_eff > 400 and the effective sample size per 
+R_hat should only be relied upon when the total effective 
+sample size across the chains is S_eff > 400 and the average effective sample size per 
 chain is N_eff > 100.
 
 You can think of the effective sample size as the approximate number of 
-independent samples from the posterior predictive distribution that you have
-a set of dependent chains. If you're just reporting the mean and/or the standard 
-deviation of a parameter, then Vehtari et al. (2021) suggest that that the total 
-effective sample size should be greater than 400. If you want to report quantiles 
-(e.g., 95% credible intervals) the effective sample size may need to be on the 
+independent samples from the posterior predictive distribution. If you're just 
+reporting the mean and/or the standard deviation of a parameter, then 
+Vehtari et al. (2021) suggest that that the total effective sample size should 
+be greater than 400. If you want to report quantiles (e.g., 95% credible 
+intervals) the effective sample size may need to be on the 
 order of thousands of samples to constrain the tail of the distribution 
-(e.g., Kruschke, 2021).
+(e.g., Kruschke, 2021). 
+
+As a caveat to the above, note that these recommendations are adapted from 
+other applications of MCMCs, typically for estimating parameters that are 
+continuous variables. Further research needs to be undertaken to be sure that
+this applies to sampling of DAGs and derived quantities.
 
 ### Analysing acceptance rates
 
@@ -317,8 +314,9 @@ qgraph::qgraph(p_edge, theme = 'colorblind')
 It is always good practice to check the convergence for all reported values. This
 can be done using the convergence and effective sample statistics mentioned above.
 In this case, I will also highlight the other reported value is the 
-Monte Carlo Standard Error (MCSE). This is an estimate of the MCMC standard 
-deviation of the estimated mean. This value should be reduced to a standard that 
+Monte Carlo Standard Error (MCSE). This is an estimate of the MCMC contribution
+to the uncertainty around the estimated mean. Running the MCMC for longer will
+reduce this value. This value should be reduced to a standard that 
 you are comfortable reporting. As we're considering edge probabilities, a natural 
 target is to reduce the error of the mean to below 1% corresponding to MCSE < 0.01.
 
@@ -344,9 +342,9 @@ posterior predictive chain, which in involves sampling whether there is an edge
 per sampling iteration. The cumulative mean can then be calculated from this chain.
 Eventually the two chains for the cumulative mean should stabilise to approximately 
 the same value. Note that in Suter et al. (2021) they show the within chain cumulative
-mean trace, however, it's important that the between chain convergence is also 
-checked. As such, the cumulative mean trace is plotted per pairwise edge 
-probability for multiple chains below.
+mean trace, instead we show the the cumulative mean trace per pairwise edge 
+probability for multiple chains, to check both the within and across chain 
+convergence.
 
 ```{r, error = TRUE, fig.dim = c(7.0, 5.0)}
 pedge_sample <- SampleEdgeProbabilities(eq_dag_chains)
@@ -394,10 +392,11 @@ flat_eq_dag_chains |>
 Or, we can estimate the probability distribution given some intervention. Let's say
 the expectation of $A = yes$ given that we intervene to set $B = yes$,
 which is given by,
-$$E(A = yes | do(B = yes), D) = \Sigma_{G} E(A = yes | do(B = yes), G) p(G|D).$$
+$$E(A = yes | do(B = yes), D) \approx \Sigma_{G} E(A = yes | do(B = yes), G) p(G|D).$$
 This can be done using the do-calculus (Pearl, 2000) which can be performed by 1) mutilating the graph such that all edges into $B$ have been removed, 2) setting 
 $B=yes$, and 3) calculating the expectation of $A=yes$ given this interventional 
-network.
+network. Note that the above approximation doesn't pass through the errors in the parameters
+for a given graph, instead just using the expectation $$E(A = yes | do(B = yes), G)$$.
 
 ```{r, error = TRUE}
 p_AdoB <- function(dag, data) {
@@ -414,11 +413,11 @@ post_AdoB_chains <- SamplePosteriorPredictiveChains(eq_dag_chains, p_AdoB, data 
 ```
 
 Once again, it's good practice to check the convergence of the chains. Let's do this 
-by using the summary function again.  This estimated value can be compared
+by using the summary function. This estimated value can be compared
 to the true value of 0.5, where the true value should be within the 
 Mean $\pm$ 2 $\times$ SD 95% of the time.
 
-```{r, error = TRUE, fig.dim = c(5.0, 5.0)}
+```{r, error = TRUE}
 post_AdoB_summ <- summary(post_AdoB_chains)
 knitr::kable(post_AdoB_summ[[3]]$stats)
 ```
@@ -427,7 +426,7 @@ Let's also look at the convergence using the cumulative mean trace plots again.
 Eventually the two chains for the cumulative mean should stabilise to 
 approximately the same value.
 
-```{r, error = TRUE, fig.dim = c(8.0, 5.0)}
+```{r, error = TRUE, fig.dim = c(7.0, 5.0)}
 PlotCumulativeMeanTrace(post_AdoB_chains)
 ```
 
