@@ -1,0 +1,9 @@
+pandoc: 3.1.11
+pkgdown: 2.1.1
+pkgdown_sha: ~
+articles:
+  three_node_example: three_node_example.html
+last_built: 2024-10-23T06:54Z
+urls:
+  reference: https://spaceodyssey.github.io/cia/reference
+  article: https://spaceodyssey.github.io/cia/articles
