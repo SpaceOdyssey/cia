@@ -14,7 +14,7 @@ devtools::install_github("SpaceOdyssey/cia")
 
 ## Use
 
-There is function documentation along with an example in the vignettes.
+We provide a simple [example](https://spaceodyssey.github.io/cia/articles/three_node_example.html) and function [documentation](https://spaceodyssey.github.io/cia/reference/index.html).
 
 [![R-CMD-check](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml)
 [![codecov](https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT)](https://codecov.io/github/SpaceOdyssey/cia)
