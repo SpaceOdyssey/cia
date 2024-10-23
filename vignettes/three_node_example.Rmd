@@ -175,7 +175,7 @@ independent of the starting point.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 n_burnin <- 500
-eq_chains <- chains[(1 + n_burnin):n_results]
+eq_chains <<- chains[(1 + n_burnin):n_results]
 PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
 ```
 
@@ -186,7 +186,6 @@ can be seen by looking at the trace plot as well. However, it's important that
 the chains have converged in both the partition space and the DAG space.
 
 ```{r, error = TRUE}
-eq_chains <- chains[(1 + n_burnin):n_results]
 eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
 ```
 
