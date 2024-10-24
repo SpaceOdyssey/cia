@@ -6,6 +6,8 @@ template:
     mathjax_config: |
       window.MathJax = {
         tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          displayMath: [['$$', '$$'], ['\\[', '\\]']],
           packages: ['base', 'ams'],
           options: { font: 'STIX1' }
         }
