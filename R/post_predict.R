@@ -10,6 +10,23 @@
 #' be of the form p_predict(dag, ...) and return either a vector of numeric values.
 #' @param ... Parameters to be passed to p_predict.
 #' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' 
+#' # Sample the edge probability.
+#' SamplePosteriorPredictiveChains(dag_chains, function(dag) { return(dag) })
+#' 
 #' @returns A cia_post_chain(s) object.
 #' 
 #' @export

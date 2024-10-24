@@ -26,6 +26,6 @@ scorer <- list(
   )
 
 results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
-FlattenChains(results)
+FlattenChains(results)[1:3]
 
 }

@@ -28,3 +28,26 @@ vertical.}
 \description{
 Plot cumulative mean trace plot.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(1000, partitioned_nodes, PartitionMCMC(), scorer)
+dag_chains <- PartitiontoDAG(results, scorer)
+
+# Sample the edge probability.
+p_edge <- function(dag) { return(as.vector(dag)) }
+pedge_sample <- SamplePosteriorPredictiveChains(dag_chains, p_edge)
+
+PlotCumulativeMeanTrace(pedge_sample,
+                        nrow = length(data), 
+                        ncol = length(data))
+
+}

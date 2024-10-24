@@ -41,6 +41,6 @@ cache only works for problems where the scorer only varies as a function of
 Scorer constructor
 }
 \examples{
-CreateScorer(data = bnlearn::asia)
+scorer <- CreateScorer(data = bnlearn::asia)
 
 }

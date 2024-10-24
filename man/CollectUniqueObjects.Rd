@@ -53,3 +53,19 @@ consistent across chains when estimating marginalised edge probabilities,
 and therefore is our preferred method. However, more work needs to be done
 here.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+collection <- CollectUniqueObjects(results)
+
+
+}

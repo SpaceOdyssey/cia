@@ -15,3 +15,20 @@ p_edge A posterior sample for the marginalised edge probabilities.
 \description{
 Sample edge probabilities using chains object.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+dag_chains <- PartitiontoDAG(results, scorer)
+
+pedge_sample <- SampleEdgeProbabilities(dag_chains)
+
+}

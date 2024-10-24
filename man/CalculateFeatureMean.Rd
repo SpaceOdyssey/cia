@@ -31,3 +31,24 @@ useful for calculating point estimates of quantities of interests, such as
 the probability that an edge exists or the probability of one node being
 an ancestor of another.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+dag_chains <- PartitiontoDAG(results, scorer)
+
+# Calculate the mean edge probability per chain.
+CalculateFeatureMean(dag_chains, function(x) { return(x) })
+
+# Calculate the mean edge probability across chains.
+CalculateFeatureMean(FlattenChains(dag_chains), function(x) { return(x) })
+
+}

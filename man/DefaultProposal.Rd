@@ -12,6 +12,27 @@ swap_node, swap_adjacent, stay_still).}
 
 \item{verbose}{Boolean flag to record proposal used.}
 }
+\value{
+proposal A function corresponding to the default proposal.
+}
 \description{
 Default proposal constructor.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, 
+                        PartitionMCMC(
+                          proposal = DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0))
+                          ), 
+                        scorer)
+
 }

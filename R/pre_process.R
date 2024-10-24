@@ -3,7 +3,7 @@
 #' Get the lowest pairwise scoring edges.
 #' 
 #' @description
-#' Get the lowest c pairwise scoring edges represented as a blacklist matrix. 
+#' Get the lowest pairwise scoring edges represented as a blacklist matrix. 
 #' This blacklisting procedure is motivated by Koller & Friedman (2003). This
 #' is rarely used now as we found that it blacklists edges that have significant
 #' dependencies but are not in the top \eqn{n} edges. We prefer 
@@ -13,6 +13,26 @@
 #' @param n_retain An integer representing the number of edges to retain.
 #' 
 #' @returns A boolean matrix of (parent, child) pairs for blacklisting.
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#'   
+#' blacklist <- GetLowestPairwiseScoringEdges(scorer, 3)
+#' 
+#' blacklist_scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
 #' 
 #' @references 
 #' 1. Koller D, Friedman N. Being Bayesian about network structure. A Bayesian 
@@ -36,7 +56,7 @@ GetLowestPairwiseScoringEdges <- function(scorer, n_retain) {
 #' 
 #' @param scorer Scorer object.
 #' 
-#' @returns A matrix of (parent, child) scores. The diagonal represents the 
+#' @returns A matrix of (parent, child) scores.
 #' 
 #' @noRd
 CalculatePairwiseScores <- function(scorer) {
@@ -69,12 +89,34 @@ CalculatePairwiseScores <- function(scorer) {
   return(scores)
 }
 
-#' Get the score of the empty DAG
+#' Get incremental edges
+#' 
+#' Get edges that incrementally improve the score over an empty DAG.
 #' 
 #' @param scorer A scorer object.
 #' @param cutoff A score cutoff.
 #' 
-#'@returns A Boolean matrix of (parent, child) pairs for blacklisting..
+#' @returns A Boolean matrix of (parent, child) pairs for blacklisting.
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#'   
+#' blacklist <- GetIncrementalScoringEdges(scorer, cutoff = -10.0)
+#' 
+#' blacklist_scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
 #'
 #'@export
 GetIncrementalScoringEdges <- function(scorer, cutoff = 0.0){
@@ -124,7 +166,7 @@ CalculateIncrementalPairwiseScores <- function(scorer) {
 
 
 
-#' Get partially incremental scoring edges.
+#' Get partially incremental scoring edges. This is an unused function.
 #' 
 #' @description Get the positive incremental scoring edges after conditioning
 #' on all other variables.
@@ -133,7 +175,7 @@ CalculateIncrementalPairwiseScores <- function(scorer) {
 #' @param cutoff A cutoff value for the blacklist. Less than this value is 
 #' blacklisted.
 #' 
-#' @export
+#' @noRd
 GetPartiallyIncrementalEdges <- function(scorer, cutoff = 0.0) {
   
   part_score <- CalculatePartiallyIncrementalScores(scorer)

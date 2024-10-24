@@ -21,6 +21,26 @@
 #' @returns p_post_feature A numeric value representing the posterior probability
 #' of the feature.
 #' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' 
+#' # Calculate the mean edge probability per chain.
+#' CalculateFeatureMean(dag_chains, function(x) { return(x) })
+#' 
+#' # Calculate the mean edge probability across chains.
+#' CalculateFeatureMean(FlattenChains(dag_chains), function(x) { return(x) })
+#' 
 #' @export
 CalculateFeatureMean <- function(x, p_feature, ...) UseMethod('CalculateFeatureMean')
 
@@ -46,7 +66,7 @@ CalculateFeatureMean.cia_chains <- function(x, p_feature, ...) {
   
   i <- NULL
   p <- foreach::foreach(i = 1:n) %dopar% {
-    p[[i]] <- CalculateFeatureMean(x[[i]], p_feature, ...)
+    CalculateFeatureMean(x[[i]], p_feature, ...)
   }
   
   parallel::stopCluster(cl)

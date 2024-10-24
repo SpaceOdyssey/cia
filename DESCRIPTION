@@ -1,13 +1,21 @@
 Package: cia
-Title: Causal inference assistant (CIA)
+Title: Learn and Apply Directed Acyclic Graphs for Causal Inference
 Version: 1.0.0
-Authors@R: 
+Authors@R: c(
     person(given = "Mathew",
            family = "Varidel",
-           role = c("aut", "cre"),
+           role = c("aut", "cre", "cph"),
            email = "mathew.varidel@sydney.edu.au",
-           comment = c(ORCID = "0000-0002-1648-8317"))
-Description: A library for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference.
+           comment = c(ORCID = "0000-0002-1648-8317")),
+    person(given = "Victor",
+           family = "An",
+           role = c("ctb"),
+           email = "victor.an@sydney.edu.au")
+    )
+Description: Causal Inference Assistance ('CIA') for performing causal 
+    inference within the structural causal modelling framework. Structure
+    learning is performed using partition MCMC (Kuipers & Moffa, 2017) and
+    several additional functions have been added to help with causal inference.
 References: Kuipers and Moffa (2017) <doi:10.1080/01621459.2015.1133426>.
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -31,7 +39,7 @@ Imports:
     gRain,
     patchwork,
     tidyr
-Suggests: 
+Suggests:
     rmarkdown,
     knitr,
     testthat (>= 3.0.0),
@@ -43,3 +51,4 @@ Suggests:
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 URL: https://spaceodyssey.github.io/cia/
+BugReports: https://github.com/SpaceOdyssey/cia/issues

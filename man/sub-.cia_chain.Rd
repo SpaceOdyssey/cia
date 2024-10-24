@@ -19,3 +19,18 @@ chain A cia_chain.
 \description{
 Index a cia_chain object.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+results[[1]][5]
+
+}

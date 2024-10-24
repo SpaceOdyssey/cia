@@ -22,11 +22,11 @@
 #' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
 #' 
 #' # Plot partition score trace.
-#' PlotScoreTrace(results)
+#' PlotScoreTrace(results, type = 'l')
 #' 
 #' # Plot DAG score trace.
 #' dag_chains <- PartitiontoDAG(results, scorer)
-#' PlotScoreTrace(dag_chains)
+#' PlotScoreTrace(dag_chains, type = 'l')
 #' 
 #' @export
 PlotScoreTrace <- function(chains, attribute = 'log_score', n_burnin = 0, 

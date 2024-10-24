@@ -7,6 +7,20 @@
 #' @param n_burnin Number of steps to remove at the start as a burnin. Default is 0.
 #' @param n_thin Number of steps between retained states. Default is 1.
 #' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' thinned_results <- PostProcessChains(results, n_thin = 2)
+#' 
 #' @export
 PostProcessChains <- function(chains, n_burnin = 0, n_thin = 1) {
   

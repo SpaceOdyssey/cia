@@ -13,6 +13,10 @@ BNLearnScorer(node, parents, ...)
 
 \item{...}{The ellipsis is used to pass other parameters to the scorer.}
 }
+\value{
+A numeric value representing the log score of the node given the
+parents.
+}
 \description{
 A thin wrapper on the bnlearn::score function.
 }

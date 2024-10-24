@@ -2,7 +2,7 @@
 % Please edit documentation in R/pre_process.R
 \name{GetIncrementalScoringEdges}
 \alias{GetIncrementalScoringEdges}
-\title{Get the score of the empty DAG}
+\title{Get incremental edges}
 \usage{
 GetIncrementalScoringEdges(scorer, cutoff = 0)
 }
@@ -12,8 +12,29 @@ GetIncrementalScoringEdges(scorer, cutoff = 0)
 \item{cutoff}{A score cutoff.}
 }
 \value{
-A Boolean matrix of (parent, child) pairs for blacklisting..
+A Boolean matrix of (parent, child) pairs for blacklisting.
 }
 \description{
-Get the score of the empty DAG
+Get edges that incrementally improve the score over an empty DAG.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+  
+blacklist <- GetIncrementalScoringEdges(scorer, cutoff = -10.0)
+
+blacklist_scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
+
 }

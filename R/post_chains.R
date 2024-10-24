@@ -20,6 +20,23 @@ new_cia_post_chain <- function(x) {
 #'
 #' @returns chain A cia_post_chain.
 #' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' 
+#' pedge_sample <- SampleEdgeProbabilities(dag_chains)
+#' pedge_sample[5, ]
+#' 
 #' @export
 `[.cia_post_chain` <- function(x = list(), i, ...) {
   
@@ -53,6 +70,23 @@ new_cia_post_chains <- function(x = list()) {
 #'
 #' @returns chain A cia_post_chains object. 
 #'
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' 
+#' pedge_sample <- SampleEdgeProbabilities(dag_chains)
+#' head(pedge_sample[[1]])
+#' 
 #' @export
 `[[.cia_post_chains` <- function(x, i, ...) {
   
@@ -67,6 +101,23 @@ new_cia_post_chains <- function(x = list()) {
 #' @param ... ellipsis for extra indexing parameters.
 #'
 #' @returns chain A cia_post_chains object. 
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' 
+#' pedge_sample <- SampleEdgeProbabilities(dag_chains)
+#' pedge_sample[5, ]
 #' 
 #' @export
 `[.cia_post_chains` <- function(x = list(), i, ...) {

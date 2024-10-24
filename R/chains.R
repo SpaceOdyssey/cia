@@ -21,6 +21,20 @@ new_cia_chain <- function(x = list()) {
 #' @param ... ellipsis for extra indexing parameters.
 #'
 #' @returns chain A cia_chain.
+#'
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' results[[1]][5]
 #' 
 #' @export
 `[.cia_chain` <- function(x = list(), i, ...) {
@@ -60,6 +74,20 @@ new_cia_chains <- function(x = list()) {
 #'
 #' @returns chain A cia_chains object. 
 #'
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' results[[1]][1:3]
+#' 
 #' @export
 `[[.cia_chains` <- function(x, i, ...) {
   
@@ -74,6 +102,20 @@ new_cia_chains <- function(x = list()) {
 #' @param ... ellipsis for extra indexing parameters.
 #'
 #' @returns chain A cia_chains object. 
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' results[5]
 #' 
 #' @export
 `[.cia_chains` <- function(x = list(), i, ...) {

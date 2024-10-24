@@ -44,6 +44,21 @@
 #'  state estimated using the MCMC sampling frequency.
 #' }
 #' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' collection <- CollectUniqueObjects(results)
+#' 
+#' 
 #' @export
 CollectUniqueObjects <- function(x) UseMethod('CollectUniqueObjects')
 

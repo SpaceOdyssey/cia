@@ -4,19 +4,25 @@
 \name{cia-package}
 \alias{cia}
 \alias{cia-package}
-\title{cia: Causal inference assistant (CIA)}
+\title{cia: Learn and Apply Directed Acyclic Graphs for Causal Inference}
 \description{
-A library for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference.
+Causal Inference Assistance ('CIA') for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://spaceodyssey.github.io/cia/}
+  \item Report bugs at \url{https://github.com/SpaceOdyssey/cia/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Mathew Varidel \email{mathew.varidel@sydney.edu.au} (\href{https://orcid.org/0000-0002-1648-8317}{ORCID})
+\strong{Maintainer}: Mathew Varidel \email{mathew.varidel@sydney.edu.au} (\href{https://orcid.org/0000-0002-1648-8317}{ORCID}) [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Victor An \email{victor.an@sydney.edu.au} [contributor]
+}
 
 }
 \keyword{internal}

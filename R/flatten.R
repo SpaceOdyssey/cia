@@ -19,7 +19,7 @@
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
-#' FlattenChains(results)
+#' FlattenChains(results)[1:3]
 #' 
 #' @export
 FlattenChains <- function(chains) UseMethod('FlattenChains')

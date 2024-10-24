@@ -1,5 +1,15 @@
 #' Sample chains
 #' 
+#' @param n_results Number of saved states per chain.
+#' @param init_state An initial state that can be passed to transition. This can
+#' be a single state or a list of states for each parallel chain.
+#' @param transition A transition function.
+#' @param scorer A scorer object.
+#' @param n_thin Number of steps between saved states.
+#' @param n_parallel_chains Number of chains to run in parallel. Default is 2.
+#' 
+#' @returns chains A cia_chains object.
+#' 
 #' @examples
 #' data <- bnlearn::learning.test
 #' 
@@ -12,16 +22,6 @@
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
-#' 
-#' @param n_results Number of saved states per chain.
-#' @param init_state An initial state that can be passed to transition. This can
-#' be a single state or a list of states for each parallel chain.
-#' @param transition A transition function.
-#' @param scorer A scorer object.
-#' @param n_thin Number of steps between saved states.
-#' @param n_parallel_chains Number of chains to run in parallel. Default is 2.
-#' 
-#' @returns chains A cia_chains object.
 #' 
 #' @export
 SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1, 

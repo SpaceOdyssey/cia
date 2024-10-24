@@ -17,6 +17,6 @@ Convert to bnlearn object.
 }
 \examples{
 adj <- UniformlySampleDAG(c('A', 'B', 'C'))
-bn_obj <- toBNLearn(adj)
+toBNLearn(adj)
 
 }

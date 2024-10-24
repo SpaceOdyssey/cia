@@ -16,11 +16,32 @@ GetLowestPairwiseScoringEdges(scorer, n_retain)
 A boolean matrix of (parent, child) pairs for blacklisting.
 }
 \description{
-Get the lowest c pairwise scoring edges represented as a blacklist matrix.
+Get the lowest pairwise scoring edges represented as a blacklist matrix.
 This blacklisting procedure is motivated by Koller & Friedman (2003). This
 is rarely used now as we found that it blacklists edges that have significant
 dependencies but are not in the top \eqn{n} edges. We prefer
 the GetIncrementalScoringEdges method.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+  
+blacklist <- GetLowestPairwiseScoringEdges(scorer, 3)
+
+blacklist_scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
+
 }
 \references{
 \enumerate{

@@ -25,7 +25,7 @@
 #' @param nthreads Number of threads used to construct cache.
 #' 
 #' @examples
-#' CreateScorer(data = bnlearn::asia)
+#' scorer <- CreateScorer(data = bnlearn::asia)
 #' 
 #' @export
 CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf, 
@@ -53,6 +53,9 @@ CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf,
 #' @param parents The parents of node.
 #' @param ... The ellipsis is used to pass other parameters to the scorer.
 #' 
+#' @returns A numeric value representing the log score of the node given the
+#' parents.
+#'
 #' @examples
 #' data <- bnlearn::learning.test
 #' BNLearnScorer('A', c('B', 'C'), data = data)

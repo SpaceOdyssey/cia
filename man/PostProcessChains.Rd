@@ -17,3 +17,18 @@ PostProcessChains(chains, n_burnin = 0, n_thin = 1)
 This allows you to remove a burnin and thin the chains after processing. This
 is mostly redundant as you can now index the cia_chain(s) objects directly.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+thinned_results <- PostProcessChains(results, n_thin = 2)
+
+}

@@ -8,7 +8,31 @@
 #' \itemize{
 #'  \item state: List of MAP DAGs.
 #'  \item log_p: Numeric vector with the log posterior probability for each state.
+#'  \item log_state_score Numeric vector representing the log score for each state.
+#'  \item log_norm_state_score Numeric vector representing the log of the normalised score for each state.
 #' }
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' 
+#' # Get the MAP per chain. Can be helpful to compare chains.
+#' GetMAP(results)
+#' 
+#' # Get MAP across all chains.
+#' results |>
+#'   FlattenChains() |>
+#'   GetMAP()
+#' 
 #' 
 #' @export
 GetMAP <- function(x) UseMethod('GetMAP')

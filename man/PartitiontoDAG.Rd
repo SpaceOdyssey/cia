@@ -7,10 +7,29 @@
 PartitiontoDAG(partitions, scorer)
 }
 \arguments{
-\item{partitions}{A cia_chains, cia_chain, or adjacency matrix.}
+\item{partitions}{A cia_chain(s) object or adjacency matrix.}
 
 \item{scorer}{A scorer object.}
 }
 \description{
 Sample DAGs from labelled partitions.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partition <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+# Used to sample from a single partition.  
+PartitiontoDAG(partition, scorer)
+
+# Used to convert a chain of partitions to DAGs.
+results <- SampleChains(3, partition, PartitionMCMC(), scorer)
+PartitiontoDAG(results, scorer)
+
 }
