@@ -197,7 +197,7 @@ Plot trace of DAG scores for equilibrium states.
 PlotScoreTrace(eq_dag_chains, attribute = 'log_score', ylab = 'log(DAG score)', type = 'l')
 ```
 
-### Convergence of the score trace
+### Quantitatively check the convergence of the score trace
 
 On inspection the score trace for both partitions and DAGs appears to have 
 converged across chains. We can also use quantitative measures, such as the 
@@ -223,11 +223,11 @@ sample size across the chains is S_eff > 400 and the average effective sample si
 chain is N_eff > 100.
 
 You can think of the effective sample size as the approximate number of 
-independent samples from the posterior predictive distribution. If you're just 
-reporting the mean and/or the standard deviation of a parameter, then 
-Vehtari et al. (2021) suggest that that the total effective sample size should 
-be greater than 400. If you want to report quantiles (e.g., 95% credible 
-intervals) the effective sample size may need to be on the 
+independent samples from the posterior distribution you have for the quantity of
+interest. If you're just reporting the mean and/or the standard deviation of a 
+parameter, then Vehtari et al. (2021) suggest that that the total effective 
+sample size should be greater than 400. If you want to report quantiles 
+(e.g., 95% credible intervals) the effective sample size may need to be on the 
 order of thousands of samples to constrain the tail of the distribution 
 (e.g., Kruschke, 2021). 
 
@@ -322,7 +322,7 @@ to the uncertainty of the mean. Running the MCMC for longer will
 reduce this value. This value should be reduced to a standard that 
 you are comfortable reporting. As we're considering edge probabilities, a natural 
 target is to reduce the error of the mean to below 1% corresponding to 
-MCSE$\lesssim$0.01.
+MCSE<0.01.
 
 ```{r, error = TRUE}
 pedge_sample <- SampleEdgeProbabilities(eq_dag_chains)
@@ -397,7 +397,8 @@ Or, we can estimate the probability distribution given some intervention. Let's 
 the expectation of $A = yes$ given that we intervene to set $B = yes$,
 which is given by,
 $$E(A = yes | do(B = yes), D) \approx \sum_{g \in G} E(A = yes | do(B = yes), g) p(g|D).$$
-This can be done using the do-calculus (Pearl, 2000) which can be performed by 1) mutilating the graph such that all edges into $B$ have been removed, 2) setting 
+This can be done using a do-operation (Pearl, 2000) which can be performed by; 
+1) mutilating the graph such that all edges into $B$ have been removed, 2) setting 
 $B=yes$, and 3) calculating the expectation of $A=yes$ given this interventional 
 network. Note that the above approximation doesn't pass through the errors in the parameters
 for a given graph, instead just using the expectation $E(A = yes | do(B = yes), g).$
