@@ -1,13 +1,4 @@
 url: https://spaceodyssey.github.io/cia/
 template:
   bootstrap: 5
-  params:
-    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    mathjax_config: |
-      window.MathJax = {
-        tex: {
-          inlineMath: [['$', '$'], ['\\(', '\\)']],
-          displayMath: [['$$', '$$'], ['\\[', '\\]']],
-          packages: ['base', 'ams'],
-        }
-      };
+  math-rendering: mathjax
