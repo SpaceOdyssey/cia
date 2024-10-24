@@ -19,7 +19,7 @@
 #'   parameters = list(data = data)
 #'   )
 #' 
-#' results <- SampleChains(1000, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
 #' dag_chains <- PartitiontoDAG(results, scorer)
 #' 
 #' # Sample the edge probability.
