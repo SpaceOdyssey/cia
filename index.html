@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Causal inference assistant (CIA) • cia</title>
+<title>Learn and Apply Directed Acyclic Graphs for Causal Inference • cia</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><script src="deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Causal inference assistant (CIA)">
-<meta name="description" content="A library for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers &amp; Moffa, 2017) and several additional functions have been added to help with causal inference.">
-<meta property="og:description" content="A library for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers &amp; Moffa, 2017) and several additional functions have been added to help with causal inference.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><script src="deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Learn and Apply Directed Acyclic Graphs for Causal Inference">
+<meta name="description" content="Causal Inference Assistance (CIA) for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers &amp; Moffa, 2017) and several additional functions have been added to help with causal inference.">
+<meta property="og:description" content="Causal Inference Assistance (CIA) for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition MCMC (Kuipers &amp; Moffa, 2017) and several additional functions have been added to help with causal inference.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -38,11 +38,13 @@
 <li><a class="dropdown-item" href="articles/three_node_example.html">An Example of using the Causal Inference Assistant (CIA)</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/SpaceOdyssey/cia/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -53,18 +55,32 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="causal-inference-assistant-cia">Causal Inference Assistant (cia)<a class="anchor" aria-label="anchor" href="#causal-inference-assistant-cia"></a>
 </h1></div>
+<!-- badges: start -->
+
 <p>This package is for performing causal structure learning and inference assuming the causal process follows a directed acyclic graph. It includes functionality to learn the structure using partition MCMC along with building Bayesian networks and performing probabilistic queries (using gRain).</p>
 <p>The bulk of this package is an implementation of partition Markov Chain Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG implementation but the scoring function defaults to using bnlearn which allows for a range of scoring assumptions and priors for pairwise edge probabilities. There is also more exposure of the sampling procedure itself, whereby the algorithm can return both partitions and DAGs while providing acceptance rates per proposal to understand how well we are sampling in the partition space.</p>
 <p>We provide a simple <a href="https://spaceodyssey.github.io/cia/articles/three_node_example.html">example</a> and function <a href="https://spaceodyssey.github.io/cia/reference/index.html">documentation</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You should be able to install directly from GitHub using the following:</p>
-<p>devtools::install_github(“SpaceOdyssey/cia”)</p>
-<p><a href="https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a> <a href="https://codecov.io/github/SpaceOdyssey/cia" class="external-link"><img src="https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT" alt="codecov"></a></p>
+<p>Install the released version of cia from CRAN:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"cia"</span><span class="op">)</span></span></code></pre></div>
+<p>Or, install the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"SpaceOdyssey/cia"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-  </main><aside class="col-md-3"><div class="license">
+  </main><aside class="col-md-3"><div class="links">
+<h2 data-toc-skip>Links</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/SpaceOdyssey/cia/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/SpaceOdyssey/cia/issues" class="external-link">Report a bug</a></li>
+</ul>
+</div>
+
+<div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
@@ -83,11 +99,18 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Mathew Varidel <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-1648-8317" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Mathew Varidel <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-1648-8317" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/github/SpaceOdyssey/cia" class="external-link"><img src="https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT" alt="codecov"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

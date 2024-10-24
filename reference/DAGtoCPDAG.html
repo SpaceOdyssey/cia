@@ -22,8 +22,10 @@ corresponding to a completed partially directed acyclic graph (CPDAG)."></head><
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/three_node_example.html">An Example of using the Causal Inference Assistant (CIA)</a></li>
   </ul></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/SpaceOdyssey/cia/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -33,7 +35,7 @@ corresponding to a completed partially directed acyclic graph (CPDAG)."></head><
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Convert DAG to CPDAG</h1>
-
+      <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/main/R/dag_to_cpdag.R" class="external-link"><code>R/dag_to_cpdag.R</code></a></small>
       <div class="d-none name"><code>DAGtoCPDAG.Rd</code></div>
     </div>
 
@@ -66,9 +68,9 @@ object the state must be an adjacency matrix.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="UniformlySampleDAG.html">UniformlySampleDAG</a></span><span class="op">(</span><span class="va">LETTERS</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">DAGtoCPDAG</span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0 0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 1 0 0</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

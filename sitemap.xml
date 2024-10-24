@@ -6,6 +6,7 @@
 <url><loc>https://spaceodyssey.github.io/cia/articles/three_node_example.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/authors.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/index.html</loc></url>
+<url><loc>https://spaceodyssey.github.io/cia/news/index.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/BNLearnScorer.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/CalculateAcceptanceRates.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/CalculateEdgeProbabilities.html</loc></url>
@@ -20,7 +21,6 @@
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetIncrementalScoringEdges.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetLowestPairwiseScoringEdges.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetMAP.html</loc></url>
-<url><loc>https://spaceodyssey.github.io/cia/reference/GetPartiallyIncrementalEdges.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/MutilateGraph.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/PartitionMCMC.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/PartitiontoDAG.html</loc></url>
