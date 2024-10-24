@@ -2,7 +2,7 @@
 % Please edit documentation in R/scorers.R
 \name{CreateScorer}
 \alias{CreateScorer}
-\title{Scorer constructor.}
+\title{Scorer constructor}
 \usage{
 CreateScorer(
   scorer = BNLearnScorer,
@@ -38,9 +38,9 @@ cache only works for problems where the scorer only varies as a function of
 \item{nthreads}{Number of threads used to construct cache.}
 }
 \description{
-Scorer constructor.
+Scorer constructor
 }
 \examples{
-scorer <- CreateScorer(data = bnlearn::asia)
+CreateScorer(data = bnlearn::asia)
 
 }

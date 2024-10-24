@@ -6,7 +6,7 @@
 #   parameters: A list of parameter (name, value) pairs to pass to the scorer
 #     callable.
 
-#' Scorer constructor.
+#' Scorer constructor
 #' 
 #' @param scorer A scorer function that takes (node, parents) as parameters. 
 #' Default is BNLearnScorer.
@@ -25,7 +25,7 @@
 #' @param nthreads Number of threads used to construct cache.
 #' 
 #' @examples
-#' scorer <- CreateScorer(data = bnlearn::asia)
+#' CreateScorer(data = bnlearn::asia)
 #' 
 #' @export
 CreateScorer <- function(scorer = BNLearnScorer, ..., max_parents = Inf, 

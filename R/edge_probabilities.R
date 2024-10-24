@@ -1,4 +1,4 @@
-#' Calculate pairwise edge probabilities marginalised over the graph structure.
+#' Calculate pairwise edge probabilities.
 #' 
 #' Calculate pairwise edge probabilities. The posterior probability of an edge 
 #' \eqn{E} given the data \eqn{D} is given by marginalising out 
@@ -15,6 +15,21 @@
 #' recommended method) or method='score' which uses the normalised scores.
 #' 
 #' @returns p_edge A matrix of edge probabilities.
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' dag_chains <- PartitiontoDAG(results, scorer)
+#' CalculateEdgeProbabilities(dag_chains)
 #' 
 #' @export
 CalculateEdgeProbabilities <- function(x, ...) UseMethod('CalculateEdgeProbabilities')

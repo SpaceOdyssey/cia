@@ -1,6 +1,25 @@
-#' Flatten list of chains.
+#' Flatten chains
 #' 
-#' @param chains MCMC chains.
+#' @description
+#' Flatten a cia_chains object into a single cia_chain object. This is helpful
+#' for when you want to calculate a feature across using all samples across
+#' the cia_chains.
+#' 
+#' @param chains A cia_chains object.
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' FlattenChains(results)
 #' 
 #' @export
 FlattenChains <- function(chains) UseMethod('FlattenChains')

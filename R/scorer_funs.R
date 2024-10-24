@@ -284,6 +284,11 @@ CheckBlacklistObeyed <- function(partitioned_nodes, blacklist = NULL,
 #' @param scorer Scorer object.
 #' 
 #' @returns Log of DAG score.
+#' 
+#' @examples
+#' dag <- UniformlySampleDAG(names(bnlearn::asia))
+#' scorer <- CreateScorer(data = bnlearn::asia)
+#' ScoreDAG(dag, scorer)
 #'
 #' @export
 ScoreDAG <- function(dag, scorer) {

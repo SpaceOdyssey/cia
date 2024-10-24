@@ -2,7 +2,7 @@
 % Please edit documentation in R/feature_mean.R
 \name{CalculateFeatureMean}
 \alias{CalculateFeatureMean}
-\title{Calculate arithmetic mean for a DAG feature marginalised over DAGs.}
+\title{Calculate arithmetic mean for a DAG feature}
 \usage{
 CalculateFeatureMean(x, p_feature, ...)
 }

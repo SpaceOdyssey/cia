@@ -138,7 +138,7 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 20000
+n_results <- 30000
 n_chains <- 2
 
 init_partitions <- list()
@@ -146,9 +146,12 @@ for (i in 1:n_chains) {
   init_dag <- UniformlySampleDAG(nodes)
   init_partitions[[i]] <- DAGtoPartition(init_dag)
 }
+```
 
-# Only use the move-node proposal. There are some minor issues with following 
-# detailed balance by using the others.
+For the sampling below I will only use the move-node proposal. There are some 
+minor issues with following detailed balance by using the others. The details
+of this will be ignored for now.
+```{r, error = TRUE}
 chains <- SampleChains(n_results,
                        init_partitions,
                        transition = PartitionMCMC(
@@ -315,10 +318,11 @@ It is always good practice to check the convergence for all reported values. Thi
 can be done using the convergence and effective sample statistics mentioned above.
 In this case, I will also highlight the other reported value is the 
 Monte Carlo Standard Error (MCSE). This is an estimate of the MCMC contribution
-to the uncertainty around the estimated mean. Running the MCMC for longer will
+to the uncertainty of the mean. Running the MCMC for longer will
 reduce this value. This value should be reduced to a standard that 
 you are comfortable reporting. As we're considering edge probabilities, a natural 
-target is to reduce the error of the mean to below 1% corresponding to MCSE < 0.01.
+target is to reduce the error of the mean to below 1% corresponding to 
+MCSE$\lesssim$0.01.
 
 ```{r, error = TRUE}
 pedge_sample <- SampleEdgeProbabilities(eq_dag_chains)
@@ -392,11 +396,11 @@ flat_eq_dag_chains |>
 Or, we can estimate the probability distribution given some intervention. Let's say
 the expectation of $A = yes$ given that we intervene to set $B = yes$,
 which is given by,
-$$E(A = yes | do(B = yes), D) \approx \Sigma_{G} E(A = yes | do(B = yes), G) p(G|D).$$
+$$E(A = yes | do(B = yes), D) \approx \sum_{g \in G} E(A = yes | do(B = yes), g) p(g|D).$$
 This can be done using the do-calculus (Pearl, 2000) which can be performed by 1) mutilating the graph such that all edges into $B$ have been removed, 2) setting 
 $B=yes$, and 3) calculating the expectation of $A=yes$ given this interventional 
 network. Note that the above approximation doesn't pass through the errors in the parameters
-for a given graph, instead just using the expectation $$E(A = yes | do(B = yes), G)$$.
+for a given graph, instead just using the expectation $E(A = yes | do(B = yes), g).$
 
 ```{r, error = TRUE}
 p_AdoB <- function(dag, data) {
@@ -415,7 +419,7 @@ post_AdoB_chains <- SamplePosteriorPredictiveChains(eq_dag_chains, p_AdoB, data 
 Once again, it's good practice to check the convergence of the chains. Let's do this 
 by using the summary function. This estimated value can be compared
 to the true value of 0.5, where the true value should be within the 
-Mean $\pm$ 2 $\times$ SD 95% of the time.
+Mean$\pm 2 \times$SD 95% of the time.
 
 ```{r, error = TRUE}
 post_AdoB_summ <- summary(post_AdoB_chains)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dag_to_cpdag.R
 \name{DAGtoCPDAG}
 \alias{DAGtoCPDAG}
-\title{Convert DAG to CPDAG.}
+\title{Convert DAG to CPDAG}
 \usage{
 DAGtoCPDAG(x)
 }
@@ -14,5 +14,11 @@ object the state must be an adjacency matrix.}
 x Returns same object type converted to a CPDAG.
 }
 \description{
-Convert DAG to CPDAG.
+Converts a directed acyclic graph (DAG) into it's equivalence class
+corresponding to a completed partially directed acyclic graph (CPDAG).
+}
+\examples{
+dag <- UniformlySampleDAG(LETTERS[1:3])
+DAGtoCPDAG(dag)
+
 }

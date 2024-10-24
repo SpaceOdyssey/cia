@@ -9,6 +9,5 @@ template:
           inlineMath: [['$', '$'], ['\\(', '\\)']],
           displayMath: [['$$', '$$'], ['\\[', '\\]']],
           packages: ['base', 'ams'],
-          options: { font: 'STIX1' }
         }
       };

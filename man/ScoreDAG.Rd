@@ -18,3 +18,9 @@ Log of DAG score.
 \description{
 Score DAG.
 }
+\examples{
+dag <- UniformlySampleDAG(names(bnlearn::asia))
+scorer <- CreateScorer(data = bnlearn::asia)
+ScoreDAG(dag, scorer)
+
+}

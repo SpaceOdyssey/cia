@@ -1,4 +1,4 @@
-#' Calculate arithmetic mean for a DAG feature marginalised over DAGs.
+#' Calculate arithmetic mean for a DAG feature
 #' 
 #' @description
 #' Calculate the posterior expected value for a feature (\eqn{f(g)}, e.g., 

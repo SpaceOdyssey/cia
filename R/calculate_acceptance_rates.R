@@ -9,6 +9,21 @@
 #' chains and the proposal used.
 #' 
 #' @returns Summary of acceptance rates per grouping.
+#' 
+#' @examples
+#' data <- bnlearn::learning.test
+#' 
+#' dag <- UniformlySampleDAG(colnames(data))
+#' partitioned_nodes <- DAGtoPartition(dag)
+#' 
+#' scorer <- list(
+#'   scorer = BNLearnScorer, 
+#'   parameters = list(data = data)
+#'   )
+#' 
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' CalculateAcceptanceRates(results)
+#' 
 #'
 #' @export
 CalculateAcceptanceRates <- function(chains, group_by = NULL) UseMethod('CalculateAcceptanceRates')

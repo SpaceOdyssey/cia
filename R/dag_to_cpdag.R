@@ -1,8 +1,16 @@
-#' Convert DAG to CPDAG.
+#' Convert DAG to CPDAG
+#' 
+#' @description
+#' Converts a directed acyclic graph (DAG) into it's equivalence class 
+#' corresponding to a completed partially directed acyclic graph (CPDAG).
 #' 
 #' @param x A matrix, cia_chain, or cia_chains object. When it is a chain(s)
 #' object the state must be an adjacency matrix.
 #' @returns x Returns same object type converted to a CPDAG.
+#' 
+#' @examples
+#' dag <- UniformlySampleDAG(LETTERS[1:3])
+#' DAGtoCPDAG(dag)
 #' 
 #' @export
 DAGtoCPDAG <- function(x) UseMethod('DAGtoCPDAG')

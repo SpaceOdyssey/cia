@@ -2,13 +2,30 @@
 % Please edit documentation in R/flatten.R
 \name{FlattenChains}
 \alias{FlattenChains}
-\title{Flatten list of chains.}
+\title{Flatten chains}
 \usage{
 FlattenChains(chains)
 }
 \arguments{
-\item{chains}{MCMC chains.}
+\item{chains}{A cia_chains object.}
 }
 \description{
-Flatten list of chains.
+Flatten a cia_chains object into a single cia_chain object. This is helpful
+for when you want to calculate a feature across using all samples across
+the cia_chains.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+FlattenChains(results)
+
 }

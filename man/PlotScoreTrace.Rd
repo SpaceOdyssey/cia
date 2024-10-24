@@ -30,3 +30,24 @@ strings to cycle through for multiple chains.}
 \description{
 Plot the score trace.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+
+# Plot partition score trace.
+PlotScoreTrace(results)
+
+# Plot DAG score trace.
+dag_chains <- PartitiontoDAG(results, scorer)
+PlotScoreTrace(dag_chains)
+
+}

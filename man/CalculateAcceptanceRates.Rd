@@ -20,3 +20,19 @@ Summary of acceptance rates per grouping.
 This makes the assumption that the proposal has saved a variable "proposal_used"
 and mcmc has saved a variable 'accept'.
 }
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+CalculateAcceptanceRates(results)
+
+
+}

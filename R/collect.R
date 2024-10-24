@@ -1,4 +1,4 @@
-#' Collect unique objects.
+#' Collect unique objects
 #' 
 #' @description
 #' Get the unique set of states along with their log score.

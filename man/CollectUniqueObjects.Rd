@@ -2,7 +2,7 @@
 % Please edit documentation in R/collect.R
 \name{CollectUniqueObjects}
 \alias{CollectUniqueObjects}
-\title{Collect unique objects.}
+\title{Collect unique objects}
 \usage{
 CollectUniqueObjects(x)
 }

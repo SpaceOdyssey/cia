@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge_probabilities.R
 \name{CalculateEdgeProbabilities}
 \alias{CalculateEdgeProbabilities}
-\title{Calculate pairwise edge probabilities marginalised over the graph structure.}
+\title{Calculate pairwise edge probabilities.}
 \usage{
 CalculateEdgeProbabilities(x, ...)
 }
@@ -26,4 +26,20 @@ the graph structure \eqn{g} over the graph space \eqn{G}, such that
 \details{
 The posterior probability for a given graph p(g|D) is estimated in two
 ways which can be specified using the 'method' parameter.
+}
+\examples{
+data <- bnlearn::learning.test
+
+dag <- UniformlySampleDAG(colnames(data))
+partitioned_nodes <- DAGtoPartition(dag)
+
+scorer <- list(
+  scorer = BNLearnScorer, 
+  parameters = list(data = data)
+  )
+
+results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+dag_chains <- PartitiontoDAG(results, scorer)
+CalculateEdgeProbabilities(dag_chains)
+
 }
