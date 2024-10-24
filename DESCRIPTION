@@ -1,6 +1,6 @@
 Package: cia
 Title: Causal inference assistant (CIA)
-Version: 0.3.1
+Version: 1.0.0
 Authors@R: 
     person(given = "Mathew",
            family = "Varidel",
