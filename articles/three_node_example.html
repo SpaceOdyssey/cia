@@ -299,7 +299,7 @@ partitions to DAGs and then see if the DAG score has converged.</p>
 <p><img src="three_node_example_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
 </div>
 <div class="section level3">
-<h3 id="convergence-of-the-score-trace">Convergence of the score trace<a class="anchor" aria-label="anchor" href="#convergence-of-the-score-trace"></a>
+<h3 id="quantitatively-check-the-convergence-of-the-score-trace">Quantitatively check the convergence of the score trace<a class="anchor" aria-label="anchor" href="#quantitatively-check-the-convergence-of-the-score-trace"></a>
 </h3>
 <p>On inspection the score trace for both partitions and DAGs appears to
 have converged across chains. We can also use quantitative measures,
@@ -317,11 +317,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5317</td>
-<td align="right">0.5280811</td>
-<td align="right">0.0051856</td>
-<td align="right">10370.48</td>
-<td align="right">1.000195</td>
+<td align="right">-175.5272</td>
+<td align="right">0.5090082</td>
+<td align="right">0.0050683</td>
+<td align="right">10086.21</td>
+<td align="right">1</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -336,11 +336,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5694</td>
-<td align="right">0.6506106</td>
-<td align="right">0.0054564</td>
-<td align="right">14217.56</td>
-<td align="right">1.000058</td>
+<td align="right">-175.563</td>
+<td align="right">0.6294817</td>
+<td align="right">0.0052984</td>
+<td align="right">14114.76</td>
+<td align="right">1.000015</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -351,13 +351,14 @@ recommendations suggesting to aim for R-hat &lt; 1.01 (Vehtari et al.,
 sample size across the chains is S_eff &gt; 400 and the average
 effective sample size per chain is N_eff &gt; 100.</p>
 <p>You can think of the effective sample size as the approximate number
-of independent samples from the posterior predictive distribution. If
-you’re just reporting the mean and/or the standard deviation of a
-parameter, then Vehtari et al. (2021) suggest that that the total
-effective sample size should be greater than 400. If you want to report
-quantiles (e.g., 95% credible intervals) the effective sample size may
-need to be on the order of thousands of samples to constrain the tail of
-the distribution (e.g., Kruschke, 2021).</p>
+of independent samples from the posterior distribution you have for the
+quantity of interest. If you’re just reporting the mean and/or the
+standard deviation of a parameter, then Vehtari et al. (2021) suggest
+that that the total effective sample size should be greater than 400. If
+you want to report quantiles (e.g., 95% credible intervals) the
+effective sample size may need to be on the order of thousands of
+samples to constrain the tail of the distribution (e.g., Kruschke,
+2021).</p>
 <p>As a caveat to the above, note that these recommendations are adapted
 from other applications of MCMCs, typically for estimating parameters
 that are continuous variables. Further research needs to be undertaken
@@ -400,18 +401,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1177966</td>
+<td align="right">0.1150508</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3475</td>
+<td align="right">3394</td>
 <td align="right">29500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1171525</td>
+<td align="right">0.1139661</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3456</td>
+<td align="right">3362</td>
 <td align="right">29500</td>
 </tr>
 </tbody>
@@ -481,19 +482,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3223898</td>
-<td align="right">0.0094237</td>
+<td align="right">0.3164746</td>
+<td align="right">0.0079661</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6773898</td>
+<td align="right">0.6832373</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6681864</td>
+<td align="right">0.6747119</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0094407</td>
-<td align="right">0.3318136</td>
+<td align="right">0.0095085</td>
+<td align="right">0.3252881</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -512,7 +513,7 @@ an estimate of the MCMC contribution to the uncertainty of the mean.
 Running the MCMC for longer will reduce this value. This value should be
 reduced to a standard that you are comfortable reporting. As we’re
 considering edge probabilities, a natural target is to reduce the error
-of the mean to below 1% corresponding to MCSE$$0.01.</p>
+of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pedge_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SampleEdgeProbabilities.html">SampleEdgeProbabilities</a></span><span class="op">(</span><span class="va">eq_dag_chains</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pedge_sample</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
@@ -535,25 +536,25 @@ of the mean to below 1% corresponding to MCSE$$0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6773898</td>
-<td align="right">0.4674789</td>
-<td align="right">0.0079535</td>
-<td align="right">3454.673</td>
-<td align="right">1.000817</td>
+<td align="right">0.6832373</td>
+<td align="right">0.4652180</td>
+<td align="right">0.0079286</td>
+<td align="right">3442.825</td>
+<td align="right">1.000188</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0094407</td>
-<td align="right">0.0967042</td>
-<td align="right">0.0006840</td>
-<td align="right">19988.018</td>
-<td align="right">1.000050</td>
+<td align="right">0.0095085</td>
+<td align="right">0.0970475</td>
+<td align="right">0.0007148</td>
+<td align="right">18430.892</td>
+<td align="right">1.000000</td>
 </tr>
 <tr class="even">
-<td align="right">0.3223898</td>
-<td align="right">0.4673953</td>
-<td align="right">0.0079501</td>
-<td align="right">3456.366</td>
-<td align="right">1.000804</td>
+<td align="right">0.3164746</td>
+<td align="right">0.4651044</td>
+<td align="right">0.0079311</td>
+<td align="right">3438.985</td>
+<td align="right">1.000184</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -563,25 +564,25 @@ of the mean to below 1% corresponding to MCSE$$0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3318136</td>
-<td align="right">0.4708684</td>
-<td align="right">0.0081279</td>
-<td align="right">3356.141</td>
-<td align="right">1.001397</td>
+<td align="right">0.3252881</td>
+<td align="right">0.4684864</td>
+<td align="right">0.0080241</td>
+<td align="right">3408.796</td>
+<td align="right">1.000322</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0094237</td>
-<td align="right">0.0966182</td>
-<td align="right">0.0006767</td>
-<td align="right">20383.763</td>
-<td align="right">1.000035</td>
+<td align="right">0.0079661</td>
+<td align="right">0.0888976</td>
+<td align="right">0.0006099</td>
+<td align="right">21242.461</td>
+<td align="right">1.000076</td>
 </tr>
 <tr class="even">
-<td align="right">0.6681864</td>
-<td align="right">0.4708684</td>
-<td align="right">0.0081279</td>
-<td align="right">3356.141</td>
-<td align="right">1.001397</td>
+<td align="right">0.6747119</td>
+<td align="right">0.4684864</td>
+<td align="right">0.0080241</td>
+<td align="right">3408.796</td>
+<td align="right">1.000322</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -664,19 +665,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3224746</td>
-<td align="right">0.3215085</td>
+<td align="right">0.3165424</td>
+<td align="right">0.3156441</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6774407</td>
+<td align="right">0.6833220</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6681864</td>
+<td align="right">0.6747119</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3308475</td>
-<td align="right">0.3318136</td>
+<td align="right">0.3254237</td>
+<td align="right">0.3252881</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -688,9 +689,10 @@ performed for these values for a complete analysis.</p>
 <p>Or, we can estimate the probability distribution given some
 intervention. Let’s say the expectation of <span class="math inline">\(A
 = yes\)</span> given that we intervene to set <span class="math inline">\(B = yes\)</span>, which is given by, <span class="math display">\[E(A = yes | do(B = yes), D) \approx \sum_{g \in
-G} E(A = yes | do(B = yes), g) p(g|D).\]</span> This can be done using
-the do-calculus (Pearl, 2000) which can be performed by 1) mutilating
-the graph such that all edges into <span class="math inline">\(B\)</span> have been removed, 2) setting <span class="math inline">\(B=yes\)</span>, and 3) calculating the expectation
+G} E(A = yes | do(B = yes), g) p(g|D).\]</span> This can be done using a
+do-operation (Pearl, 2000) which can be performed by; 1) mutilating the
+graph such that all edges into <span class="math inline">\(B\)</span>
+have been removed, 2) setting <span class="math inline">\(B=yes\)</span>, and 3) calculating the expectation
 of <span class="math inline">\(A=yes\)</span> given this interventional
 network. Note that the above approximation doesn’t pass through the
 errors in the parameters for a given graph, instead just using the
@@ -725,11 +727,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6630332</td>
-<td align="right">0.1263247</td>
-<td align="right">0.0021501</td>
-<td align="right">3451.909</td>
-<td align="right">1.000817</td>
+<td align="right">0.6646169</td>
+<td align="right">0.1257095</td>
+<td align="right">0.0021435</td>
+<td align="right">3439.484</td>
+<td align="right">1.000188</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
