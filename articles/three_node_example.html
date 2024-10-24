@@ -10,7 +10,7 @@
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="An Example of using the Causal Inference Assistant (CIA)">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="An Example of using the Causal Inference Assistant (CIA)">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -79,14 +79,9 @@ probabilities of each DAG analytically.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://spaceodyssey.github.io/cia/">cia</a></span><span class="op">)</span></span></code></pre></div>
 <p>Create conditional probability tables for the true DAG. This draws
-samples from a DAG where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
-and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
-have a common cause
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>,
-given by
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>←</mo><mi>B</mi><mo>→</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \leftarrow B \rightarrow C</annotation></semantics></math>.</p>
+samples from a DAG where <span class="math inline">\(A\)</span> and
+<span class="math inline">\(C\)</span> have a common cause <span class="math inline">\(B\)</span>, given by <span class="math inline">\(A
+\leftarrow B \rightarrow C\)</span>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span></span>
@@ -148,12 +143,8 @@ given by
 </tbody>
 </table>
 <p>Let’s calculate the correlation matrix to get an idea of the marginal
-dependencies in the data. This suggests that
-(<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>)
-are marginally dependent which is what you would expect for the DAG that
-we are studying.</p>
+dependencies in the data. This suggests that (<span class="math inline">\(A\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(C\)</span>) are marginally dependent which is what
+you would expect for the DAG that we are studying.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">dat</span> <span class="op">==</span> <span class="st">'yes'</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
@@ -326,11 +317,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5275</td>
-<td align="right">0.5029708</td>
-<td align="right">0.0046671</td>
-<td align="right">11614.05</td>
-<td align="right">1.000144</td>
+<td align="right">-175.5197</td>
+<td align="right">0.4717956</td>
+<td align="right">0.003957</td>
+<td align="right">14215.67</td>
+<td align="right">0.9999954</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -345,11 +336,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5642</td>
-<td align="right">0.6271098</td>
-<td align="right">0.0049626</td>
-<td align="right">15968.64</td>
-<td align="right">1.000144</td>
+<td align="right">-175.5531</td>
+<td align="right">0.5886472</td>
+<td align="right">0.0042258</td>
+<td align="right">19403.74</td>
+<td align="right">0.9999841</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -409,18 +400,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1155254</td>
+<td align="right">0.1162373</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3408</td>
+<td align="right">3429</td>
 <td align="right">29500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1167797</td>
+<td align="right">0.1154915</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">3445</td>
+<td align="right">3407</td>
 <td align="right">29500</td>
 </tr>
 </tbody>
@@ -490,19 +481,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3048305</td>
-<td align="right">0.0085593</td>
+<td align="right">0.3162034</td>
+<td align="right">0.0074237</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6949831</td>
+<td align="right">0.6836271</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6663898</td>
+<td align="right">0.6736949</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0095593</td>
-<td align="right">0.3336102</td>
+<td align="right">0.0081356</td>
+<td align="right">0.3263051</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -544,25 +535,25 @@ of the mean to below 1% corresponding to MCSE$$0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6949831</td>
-<td align="right">0.4604185</td>
-<td align="right">0.0076938</td>
-<td align="right">3581.122</td>
-<td align="right">1.000531</td>
+<td align="right">0.6836271</td>
+<td align="right">0.4650642</td>
+<td align="right">0.0080580</td>
+<td align="right">3330.994</td>
+<td align="right">1.000789</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0095593</td>
-<td align="right">0.0973042</td>
-<td align="right">0.0006824</td>
-<td align="right">20330.244</td>
-<td align="right">1.000011</td>
+<td align="right">0.0081356</td>
+<td align="right">0.0898306</td>
+<td align="right">0.0005939</td>
+<td align="right">22875.065</td>
+<td align="right">1.000063</td>
 </tr>
 <tr class="even">
-<td align="right">0.3048305</td>
-<td align="right">0.4603395</td>
-<td align="right">0.0076928</td>
-<td align="right">3580.829</td>
-<td align="right">1.000523</td>
+<td align="right">0.3162034</td>
+<td align="right">0.4649973</td>
+<td align="right">0.0080575</td>
+<td align="right">3330.395</td>
+<td align="right">1.000791</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -572,25 +563,25 @@ of the mean to below 1% corresponding to MCSE$$0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3336102</td>
-<td align="right">0.4715063</td>
-<td align="right">0.0081257</td>
-<td align="right">3367.061</td>
-<td align="right">1.000549</td>
+<td align="right">0.3263051</td>
+<td align="right">0.4688644</td>
+<td align="right">0.0081231</td>
+<td align="right">3331.545</td>
+<td align="right">1.000931</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0085593</td>
-<td align="right">0.0921206</td>
-<td align="right">0.0005942</td>
-<td align="right">24035.318</td>
-<td align="right">1.000115</td>
+<td align="right">0.0074237</td>
+<td align="right">0.0858414</td>
+<td align="right">0.0005113</td>
+<td align="right">28190.008</td>
+<td align="right">1.000006</td>
 </tr>
 <tr class="even">
-<td align="right">0.6663898</td>
-<td align="right">0.4715063</td>
-<td align="right">0.0081257</td>
-<td align="right">3367.061</td>
-<td align="right">1.000549</td>
+<td align="right">0.6736949</td>
+<td align="right">0.4688644</td>
+<td align="right">0.0081231</td>
+<td align="right">3331.545</td>
+<td align="right">1.000931</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -673,19 +664,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3049322</td>
-<td align="right">0.3037458</td>
+<td align="right">0.3162203</td>
+<td align="right">0.3157797</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6950339</td>
+<td align="right">0.6836610</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6663898</td>
+<td align="right">0.6736949</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3331695</td>
-<td align="right">0.3336102</td>
+<td align="right">0.3264068</td>
+<td align="right">0.3263051</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -695,23 +686,16 @@ performed for these values for a complete analysis.</p>
 <h3 id="estimating-interventional-distributions">Estimating interventional distributions<a class="anchor" aria-label="anchor" href="#estimating-interventional-distributions"></a>
 </h3>
 <p>Or, we can estimate the probability distribution given some
-intervention. Let’s say the expectation of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">A = yes</annotation></semantics></math>
-given that we intervene to set
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">B = yes</annotation></semantics></math>,
-which is given by,
-<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>B</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>≈</mo><munder><mo>∑</mo><mrow><mi>g</mi><mo>∈</mo><mi>G</mi></mrow></munder><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>B</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>p</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>g</mi><mo stretchy="false" form="prefix">|</mo><mi>D</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">E(A = yes | do(B = yes), D) \approx \sum_{g \in G} E(A = yes | do(B = yes), g) p(g|D).</annotation></semantics></math>
-This can be done using the do-calculus (Pearl, 2000) which can be
-performed by 1) mutilating the graph such that all edges into
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
-have been removed, 2) setting
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">B=yes</annotation></semantics></math>,
-and 3) calculating the expectation of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">A=yes</annotation></semantics></math>
-given this interventional network. Note that the above approximation
-doesn’t pass through the errors in the parameters for a given graph,
-instead just using the expectation
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>A</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="false" form="prefix">|</mo><mi>d</mi><mi>o</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>B</mi><mo>=</mo><mi>y</mi><mi>e</mi><mi>s</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>,</mo><mi>g</mi><mo stretchy="true" form="postfix">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">E(A = yes | do(B = yes), g).</annotation></semantics></math></p>
+intervention. Let’s say the expectation of <span class="math inline">\(A
+= yes\)</span> given that we intervene to set <span class="math inline">\(B = yes\)</span>, which is given by, <span class="math display">\[E(A = yes | do(B = yes), D) \approx \sum_{g \in
+G} E(A = yes | do(B = yes), g) p(g|D).\]</span> This can be done using
+the do-calculus (Pearl, 2000) which can be performed by 1) mutilating
+the graph such that all edges into <span class="math inline">\(B\)</span> have been removed, 2) setting <span class="math inline">\(B=yes\)</span>, and 3) calculating the expectation
+of <span class="math inline">\(A=yes\)</span> given this interventional
+network. Note that the above approximation doesn’t pass through the
+errors in the parameters for a given graph, instead just using the
+expectation <span class="math inline">\(E(A = yes | do(B = yes),
+g).\)</span></p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p_AdoB</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">dag</span>, <span class="va">data</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
@@ -727,9 +711,8 @@ instead just using the expectation
 <p>Once again, it’s good practice to check the convergence of the
 chains. Let’s do this by using the summary function. This estimated
 value can be compared to the true value of 0.5, where the true value
-should be within the
-Mean<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo><mn>2</mn><mo>×</mo></mrow><annotation encoding="application/x-tex">\pm 2 \times</annotation></semantics></math>SD
-95% of the time.</p>
+should be within the Mean<span class="math inline">\(\pm 2
+\times\)</span>SD 95% of the time.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">post_AdoB_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">post_AdoB_chains</span><span class="op">)</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">post_AdoB_summ</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span></code></pre></div>
@@ -742,11 +725,11 @@ Mean<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6677854</td>
-<td align="right">0.1244164</td>
-<td align="right">0.00208</td>
-<td align="right">3577.961</td>
-<td align="right">1.000531</td>
+<td align="right">0.6647009</td>
+<td align="right">0.1256616</td>
+<td align="right">0.0021782</td>
+<td align="right">3328.299</td>
+<td align="right">1.000794</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
