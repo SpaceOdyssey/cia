@@ -64,26 +64,26 @@ state estimated using the MCMC sampling frequency.</p></li>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This gets the unique set of states in a cia_object
-referred to as objects (\(\mathcal{O}\)). Then it estimates the probability
+referred to as objects (\(o\)). Then it estimates the probability
 for each state using two methods. The log_sampling_prob uses the MCMC sampled
 frequency to estimate the posterior probability.</p>
 <p>An alternative method to estimate the posterior probability for each state
 uses the state score. This is recorded in the log_norm_state_score
 vector. This approach estimates the log of the normalisation constant assuming
-\(\tilde{Z}_\mathcal{O} = \Sigma_{s=1}^S p(\mathcal{O}_s)p(D | \mathcal{O}_s)\) where
-\(\{\mathcal{O}_1, \mathcal{O}_2, \mathcal{O}_3, ..., \mathcal{O}_S\}\) is
+\(\tilde{Z}_O = \Sigma_{s=1}^S p(o_s)p(D | o_s)\) where
+\(O = \{o_1, o_2, o_3, ..., o_S\}\) is
 the set of unique objects in the chain. This assumes that you have captured the
-most probable objects, such that \(\tilde{Z}_\mathcal{O}\) is approximately equal to
-the true evidence \(Z = \Sigma_{G \in \mathcal{G}} p(G)p(D | G)\) where the
-sum across all possible DAGs (\(\mathcal{G}\)). This also makes the
+most probable objects, such that \(\tilde{Z}_O\) is approximately equal to
+the true evidence \(Z = \Sigma_{g \in G} p(g)p(D | g)\) where the
+sum across all possible DAGs (\(G\)). This also makes the
 assumption that the exponential of the score is proportional to the posterior
 probability, such that
-$$p(G|D) \propto p(G)p(D | G) = \prod_i \exp(\text{score}(X_i, \text{Pa}_G(X_i) | D))$$
-where \(\text{Pa}_G(X_i)\) is the parents set for node \(X_i\) given the
-graph \(G\).</p>
+$$p(g|D) \propto p(g)p(D | g) = \prod_i \exp(\text{score}(X_i, \text{Pa}_g(X_i) | D))$$
+where \(\text{Pa}_g(X_i)\) is the parents set for node \(X_i\) given the
+graph \(g\).</p>
 <p>After the normalisation constant has been estimated we then estimate the
 log probability of each object as,
-$$\log(p(\mathcal{O}|D)) = \log(p(\mathcal{O})p(D|\mathcal{O})) - \log(\tilde{Z}_\mathcal{O}).$$</p>
+$$\log(p(o | D)) = \log(p(o)p(D|o)) - \log(\tilde{Z}_o).$$</p>
 <p>Preliminary analysis suggests that the sampling frequency approach is more
 consistent across chains when estimating marginalised edge probabilities,
 and therefore is our preferred method. However, more work needs to be done

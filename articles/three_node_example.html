@@ -58,7 +58,7 @@
                         <h4 data-toc-skip class="author">Mathew
 Varidel</h4>
             
-            <h4 data-toc-skip class="date">23 October, 2024</h4>
+            <h4 data-toc-skip class="date">24 October, 2024</h4>
       
 
       <div class="d-none name"><code>three_node_example.Rmd</code></div>
@@ -271,9 +271,7 @@ quantities. Typically, we would suggest running four chains by default
 <span>                         proposal <span class="op">=</span> <span class="fu"><a href="../reference/DefaultProposal.html">DefaultProposal</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.0</span>, <span class="fl">1.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span>, <span class="fl">0.0</span><span class="op">)</span><span class="op">)</span></span>
 <span>                         <span class="op">)</span>,</span>
 <span>                       scorer <span class="op">=</span> <span class="va">scorer</span>,</span>
-<span>                       n_parallel_chains <span class="op">=</span> <span class="va">n_chains</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in e$fun(obj, substitute(ex), parent.frame(), e$data): already</span></span>
-<span><span class="co">#&gt; exporting variable(s): n_results, init_state, transition, scorer, n_thin</span></span></code></pre></div>
+<span>                       n_parallel_chains <span class="op">=</span> <span class="va">n_chains</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="analysing-the-mcmc-chains-">Analysing the MCMC chains.<a class="anchor" aria-label="anchor" href="#analysing-the-mcmc-chains-"></a>
@@ -327,11 +325,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5279</td>
-<td align="right">0.5125344</td>
-<td align="right">0.0059911</td>
-<td align="right">7318.617</td>
-<td align="right">0.9999823</td>
+<td align="right">-175.5331</td>
+<td align="right">0.5243969</td>
+<td align="right">0.0064819</td>
+<td align="right">6545.149</td>
+<td align="right">1.000197</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -346,11 +344,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5645</td>
-<td align="right">0.6341376</td>
-<td align="right">0.0063221</td>
-<td align="right">10061.13</td>
-<td align="right">0.9999691</td>
+<td align="right">-175.5685</td>
+<td align="right">0.6395288</td>
+<td align="right">0.0067716</td>
+<td align="right">8919.428</td>
+<td align="right">1.000096</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -410,18 +408,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1224103</td>
+<td align="right">0.1167692</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2387</td>
+<td align="right">2277</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1170256</td>
+<td align="right">0.1145128</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2282</td>
+<td align="right">2233</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -491,19 +489,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3331026</td>
-<td align="right">0.0094872</td>
+<td align="right">0.3314359</td>
+<td align="right">0.0098974</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6666410</td>
+<td align="right">0.6684103</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6831282</td>
+<td align="right">0.6837692</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0083077</td>
-<td align="right">0.3168718</td>
+<td align="right">0.0093846</td>
+<td align="right">0.3162308</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -546,25 +544,25 @@ to reduce the error of the mean to below 1% corresponding to MCSE &lt;
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6666410</td>
-<td align="right">0.4714196</td>
-<td align="right">0.0101889</td>
-<td align="right">2140.741</td>
-<td align="right">1.0001405</td>
+<td align="right">0.6684103</td>
+<td align="right">0.4707905</td>
+<td align="right">0.0098903</td>
+<td align="right">2265.892</td>
+<td align="right">1.001178</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0083077</td>
-<td align="right">0.0907683</td>
-<td align="right">0.0007416</td>
-<td align="right">14980.338</td>
-<td align="right">0.9999866</td>
+<td align="right">0.0093846</td>
+<td align="right">0.0964198</td>
+<td align="right">0.0008098</td>
+<td align="right">14175.770</td>
+<td align="right">1.000048</td>
 </tr>
 <tr class="even">
-<td align="right">0.3331026</td>
-<td align="right">0.4713289</td>
-<td align="right">0.0101842</td>
-<td align="right">2141.886</td>
-<td align="right">1.0001416</td>
+<td align="right">0.3314359</td>
+<td align="right">0.4707354</td>
+<td align="right">0.0098853</td>
+<td align="right">2267.653</td>
+<td align="right">1.001191</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -574,25 +572,25 @@ to reduce the error of the mean to below 1% corresponding to MCSE &lt;
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3168718</td>
-<td align="right">0.4652629</td>
-<td align="right">0.0098660</td>
-<td align="right">2223.887</td>
-<td align="right">1.0005826</td>
+<td align="right">0.3162308</td>
+<td align="right">0.4650101</td>
+<td align="right">0.0100142</td>
+<td align="right">2156.215</td>
+<td align="right">1.001747</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0094872</td>
-<td align="right">0.0969403</td>
-<td align="right">0.0007946</td>
-<td align="right">14881.964</td>
-<td align="right">0.9999571</td>
+<td align="right">0.0098974</td>
+<td align="right">0.0989936</td>
+<td align="right">0.0009332</td>
+<td align="right">11253.472</td>
+<td align="right">1.000014</td>
 </tr>
 <tr class="even">
-<td align="right">0.6831282</td>
-<td align="right">0.4652629</td>
-<td align="right">0.0098660</td>
-<td align="right">2223.887</td>
-<td align="right">1.0005826</td>
+<td align="right">0.6837692</td>
+<td align="right">0.4650101</td>
+<td align="right">0.0100142</td>
+<td align="right">2156.215</td>
+<td align="right">1.001747</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -675,19 +673,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3332308</td>
-<td align="right">0.3329487</td>
+<td align="right">0.3315128</td>
+<td align="right">0.3316154</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6666667</td>
+<td align="right">0.6684872</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6831282</td>
+<td align="right">0.6837692</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3154359</td>
-<td align="right">0.3168718</td>
+<td align="right">0.3160256</td>
+<td align="right">0.3162308</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -746,11 +744,11 @@ SD 95% of the time.</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6601224</td>
-<td align="right">0.1273893</td>
-<td align="right">0.0027542</td>
-<td align="right">2139.279</td>
-<td align="right">1.00014</td>
+<td align="right">0.6605994</td>
+<td align="right">0.1272069</td>
+<td align="right">0.0026731</td>
+<td align="right">2264.526</td>
+<td align="right">1.001186</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
