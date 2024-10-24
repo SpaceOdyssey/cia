@@ -14,7 +14,7 @@ new_cia_chain <- function(x = list()) {
   return(cia_chain)
 }
 
-#' Indexing with respect to iterations.
+#' Index a cia_chain object.
 #' 
 #' @param x A cia_chain object.
 #' @param i An index.
@@ -40,7 +40,7 @@ new_cia_chain <- function(x = list()) {
 
 #' Constructor for more than one chain.
 #' 
-#' @param x A list corresponding to more than one mcmc chain.
+#' @param x A list corresponding to more than one cia_chain.
 #' @returns cia_chains A cia_chains object.
 #' 
 #' @noRd
@@ -67,7 +67,7 @@ new_cia_chains <- function(x = list()) {
   return(new_cia_chain(x[[i, ...]]))
 }
 
-#' Index a cia_chains object with respect to iterations.
+#' Index a cia_chains object
 #' 
 #' @param x A cia_chain object.
 #' @param i An index to get the cia_chain iterations.

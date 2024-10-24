@@ -1,8 +1,8 @@
-#' Draw from a posterior predictive distribution.
+#' Draw from a posterior predictive distribution
 #'
 #' @description
-#' Simulate samples from a posterior predictive distribution for a feature \eqn{f}
-#' a graph \eqn{G}, given by \deqn{p(f|D) = \sum_{G \in \mathcal{G}} p(f|G) p(G|D)}.
+#' Simulate samples from a posterior predictive distribution for a feature \eqn{f(g)}
+#' a graph \eqn{g}.
 #' 
 #' @param x A cia_chain(s) object.
 #' @param p_predict A function that draws from the posterior predictive distribution

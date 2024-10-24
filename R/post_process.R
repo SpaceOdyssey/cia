@@ -1,8 +1,7 @@
-#' Analysis of chains.
-
-#' Equilibrium states.
+#' Index chains for further analysis.
 #' 
-#' This allows you to remove a burnin and thin the chains after processing.
+#' This allows you to remove a burnin and thin the chains after processing. This
+#' is mostly redundant as you can now index the cia_chain(s) objects directly.
 #' 
 #' @param chains MCMC chains.
 #' @param n_burnin Number of steps to remove at the start as a burnin. Default is 0.

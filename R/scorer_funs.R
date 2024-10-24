@@ -75,7 +75,12 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
   return(log_node_score)
 }
 
-#' Score labelled partition by adding the log scores for each node.
+#' Score labelled partition
+#' 
+#' @param partitioned_nodes Labelled partition.
+#' @param scorer Scorer object.
+#' 
+#' @return Log of the node score.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test
@@ -89,11 +94,6 @@ ScoreNode <- function(partitioned_nodes, node, scorer) {
 #'   )
 #' 
 #' ScoreLabelledPartition(partitioned_nodes, scorer)
-#' 
-#' @param partitioned_nodes Labelled partition.
-#' @param scorer Scorer object.
-#' 
-#' @return Log of the node score.
 #' 
 #' @export
 ScoreLabelledPartition <- function(partitioned_nodes, scorer) {

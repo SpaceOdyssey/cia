@@ -2,8 +2,7 @@
 % Please edit documentation in R/post_process.R
 \name{PostProcessChains}
 \alias{PostProcessChains}
-\title{Analysis of chains.
-Equilibrium states.}
+\title{Index chains for further analysis.}
 \usage{
 PostProcessChains(chains, n_burnin = 0, n_thin = 1)
 }
@@ -15,5 +14,6 @@ PostProcessChains(chains, n_burnin = 0, n_thin = 1)
 \item{n_thin}{Number of steps between retained states. Default is 1.}
 }
 \description{
-This allows you to remove a burnin and thin the chains after processing.
+This allows you to remove a burnin and thin the chains after processing. This
+is mostly redundant as you can now index the cia_chain(s) objects directly.
 }

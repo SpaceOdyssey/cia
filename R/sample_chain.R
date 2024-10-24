@@ -1,4 +1,4 @@
-#' Sample multiple chains in parallel.
+#' Sample chains
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

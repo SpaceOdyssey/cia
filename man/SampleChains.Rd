@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_chain.R
 \name{SampleChains}
 \alias{SampleChains}
-\title{Sample multiple chains in parallel.}
+\title{Sample chains}
 \usage{
 SampleChains(
   n_results,
@@ -31,7 +31,7 @@ be a single state or a list of states for each parallel chain.}
 chains A cia_chains object.
 }
 \description{
-Sample multiple chains in parallel.
+Sample chains
 }
 \examples{
 data <- bnlearn::learning.test

@@ -2,7 +2,7 @@
 % Please edit documentation in R/chains.R
 \name{[.cia_chains}
 \alias{[.cia_chains}
-\title{Index a cia_chains object with respect to iterations.}
+\title{Index a cia_chains object}
 \usage{
 \method{[}{cia_chains}(x = list(), i, ...)
 }
@@ -17,5 +17,5 @@
 chain A cia_chains object.
 }
 \description{
-Index a cia_chains object with respect to iterations.
+Index a cia_chains object
 }

@@ -1,4 +1,4 @@
-# Posterior prediction chains.
+# Posterior prediction chains
 
 #' Constructor for a single posterior predictive chain.
 #' 

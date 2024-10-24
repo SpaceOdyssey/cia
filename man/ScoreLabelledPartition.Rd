@@ -2,7 +2,7 @@
 % Please edit documentation in R/scorer_funs.R
 \name{ScoreLabelledPartition}
 \alias{ScoreLabelledPartition}
-\title{Score labelled partition by adding the log scores for each node.}
+\title{Score labelled partition}
 \usage{
 ScoreLabelledPartition(partitioned_nodes, scorer)
 }
@@ -15,7 +15,7 @@ ScoreLabelledPartition(partitioned_nodes, scorer)
 Log of the node score.
 }
 \description{
-Score labelled partition by adding the log scores for each node.
+Score labelled partition
 }
 \examples{
 data <- bnlearn::learning.test

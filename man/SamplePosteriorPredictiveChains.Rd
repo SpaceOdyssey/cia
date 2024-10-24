@@ -2,7 +2,7 @@
 % Please edit documentation in R/post_predict.R
 \name{SamplePosteriorPredictiveChains}
 \alias{SamplePosteriorPredictiveChains}
-\title{Draw from a posterior predictive distribution.}
+\title{Draw from a posterior predictive distribution}
 \usage{
 SamplePosteriorPredictiveChains(x, p_predict, ...)
 }
@@ -19,6 +19,6 @@ be of the form p_predict(dag, ...) and return either a vector of numeric values.
 A cia_post_chain(s) object.
 }
 \description{
-Simulate samples from a posterior predictive distribution for a feature \eqn{f}
-a graph \eqn{G}, given by \deqn{p(f|D) = \sum_{G \in \mathcal{G}} p(f|G) p(G|D)}.
+Simulate samples from a posterior predictive distribution for a feature \eqn{f(g)}
+a graph \eqn{g}.
 }
