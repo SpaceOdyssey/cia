@@ -446,7 +446,7 @@ reliably, so that you can have confidence reporting these estimated values.
 
 ## References
 
-Gelman, A., Carlin, J.B., Stern, H.S., Dunson, D.B., Vehtari, A., & Rubin, D.B. (2013). Bayesian Data Analysis (3rd ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b16018
+Gelman, A., Carlin, J.B., Stern, H.S., Dunson, D.B., Vehtari, A., & Rubin, D.B. (2013). Bayesian Data Analysis (3rd ed.). Chapman and Hall/CRC.
 
 Kruschke, J. K. (2021). Bayesian analysis reporting guidelines. Nature human behaviour, 5(10), 1282-1291.
 
@@ -456,7 +456,7 @@ Kuipers, J., Moffa, G., Kuipers, E., Freeman, D., & Bebbington, P. (2019). Links
 
 Moffa, G., Kuipers, J., Kuipers, E., McManus, S., & Bebbington, P. (2023). Sexual abuse and psychotic phenomena: a directed acyclic graph analysis of affective symptoms using English national psychiatric survey data. Psychological medicine, 53(16), 7817-7826.
 
-Pearl, J. (2000). Causality: Models, Reasoning, and Inference. Cambridge University Press. https://doi.org/10.1093/bjps/52.3.613
+Pearl, J. (2000). Causality: Models, Reasoning, and Inference. Cambridge University Press.
 
 Suter, P., Kuipers, J., Moffa, G., & Beerenwinkel, N. (2023). Bayesian Structure Learning and Sampling of Bayesian Networks with the R Package BiDAG. Journal of Statistical Software, 105(9), 1–31. https://doi.org/10.18637/jss.v105.i09
 

@@ -4,7 +4,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT)](https://codecov.io/github/SpaceOdyssey/cia)
+[![codecov](https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT)](https://app.codecov.io/github/SpaceOdyssey/cia)
 <!-- badges: end -->
 
 This package is for performing causal structure learning and inference
