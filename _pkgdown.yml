@@ -1,4 +1,12 @@
 url: https://spaceodyssey.github.io/cia/
 template:
   bootstrap: 5
-  mathjax: true
+  params:
+    mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    mathjax_config: |
+      window.MathJax = {
+        tex: {
+          packages: ['base', 'ams'],
+          options: { font: 'STIX1' }
+        }
+      };

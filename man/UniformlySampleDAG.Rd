@@ -15,3 +15,7 @@ Adjacency matrix with elements designated as (parent, child).
 \description{
 Uniformly sample DAG given a set of nodes.
 }
+\examples{
+UniformlySampleDAG(LETTERS[1:3])
+
+}

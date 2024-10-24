@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutilate.R
 \name{MutilateGraph}
 \alias{MutilateGraph}
-\title{This creates a mutilated graph in accordance with an intervention.}
+\title{Mutilate graph in accordance with an intervention.}
 \usage{
 MutilateGraph(grain_object, intervention)
 }
@@ -17,7 +17,7 @@ A grain object. Please note that any evidence set within the grain
 object will not be passed to the new object.
 }
 \description{
-This creates a mutilated graph in accordance with an intervention.
+Mutilate graph in accordance with an intervention.
 }
 \examples{
 # This creates a mutilated graph in accordance with turning the sprinkler 

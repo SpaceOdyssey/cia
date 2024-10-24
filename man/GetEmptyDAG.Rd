@@ -15,3 +15,7 @@ An adjacency matrix with elements designated as (parent, child).
 \description{
 Get an empty DAG given a set of nodes.
 }
+\examples{
+GetEmptyDAG(LETTERS[1:3])
+
+}

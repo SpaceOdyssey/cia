@@ -1,7 +1,11 @@
 #' Uniformly sample DAG given a set of nodes.
 #' 
 #' @param nodes A vector of node names.
-#' @return Adjacency matrix with elements designated as (parent, child).
+#' 
+#' @returns Adjacency matrix with elements designated as (parent, child).
+#' 
+#' @examples
+#' UniformlySampleDAG(LETTERS[1:3])
 #' 
 #' @export
 UniformlySampleDAG <- function(nodes) {
@@ -15,8 +19,12 @@ UniformlySampleDAG <- function(nodes) {
 
 #' Get an empty DAG given a set of nodes.
 #'
-#' @param nodes A vector of node names.
-#' @return An adjacency matrix with elements designated as (parent, child).
+#' @inheritParams UniformlySampleDAG
+#' 
+#' @returns An adjacency matrix with elements designated as (parent, child).
+#' 
+#' @examples
+#' GetEmptyDAG(LETTERS[1:3])
 #' 
 #' @export
 GetEmptyDAG <- function(nodes) {

@@ -10,11 +10,12 @@ CalculateFeatureMean(x, p_feature, ...)
 \item{x}{A chain(s) or collection object.}
 
 \item{p_feature}{A function that takes an adjacency matrix or collection object
-and returns a scalar corresponding to \eqn{p(f|G)}. The function must be of the
+and returns a scalar corresponding to \eqn{f(g)}. The function must be of the
 form p_feature(dag).}
 
 \item{...}{Extra parameters sent to the methods. For a dag collection you can
-choose to use method='sampled' for MCMC sampled frequency (which is our
+choose to use estimated p(g|D) in two ways which can be specified using the
+'method' parameter.method='sampled' for MCMC sampled frequency (which is our
 recommended method) or method='score' which uses the normalised scores.}
 }
 \value{
@@ -22,8 +23,11 @@ p_post_feature A numeric value representing the posterior probability
 of the feature.
 }
 \description{
-Calculate the posterior expected value for a feature (\eqn{f}, e.g.,
-existence of an edge) whereby \deqn{E(f|D) = \sum_{G \in \mathcal{G}} p(f|G) p(G|D).} This can be
+Calculate the posterior expected value for a feature (\eqn{f(g)}, e.g.,
+existence of an edge in graph \eqn{g}) by marginalising out the graph
+structure \eqn{q} over the graph space \eqn{G}, thus
+\deqn{E(f|D) = \sum_{g \in G} f(g) p(g|D).} This can be
 useful for calculating point estimates of quantities of interests, such as
-the probability that an edge exists.
+the probability that an edge exists or the probability of one node being
+an ancestor of another.
 }

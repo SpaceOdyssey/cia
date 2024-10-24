@@ -1,4 +1,4 @@
-#' This creates a mutilated graph in accordance with an intervention.
+#' Mutilate graph in accordance with an intervention.
 #' 
 #' @param grain_object A grain object.
 #' @param intervention A list of nodes and their corresponding intervention

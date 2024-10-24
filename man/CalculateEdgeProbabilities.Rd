@@ -7,18 +7,23 @@
 CalculateEdgeProbabilities(x, ...)
 }
 \arguments{
-\item{x}{A chain(s) or collection object where states are DAGs.}
+\item{x}{A cia_chain(s) or collection object where states are DAGs.}
 
 \item{...}{Extra parameters sent to the methods. For a dag collection you can
-choose to use method='sampled' for MCMC sampled frequency (which is our
+choose to use estimated p(g|D) in two ways which can be specified using the
+'method' parameter.method='sampled' for MCMC sampled frequency (which is our
 recommended method) or method='score' which uses the normalised scores.}
 }
 \value{
-p_edge A matrix representing the edge probabilities.
+p_edge A matrix of edge probabilities.
 }
 \description{
-Calculate pairwise edge probabilities. For a given edge from node
-\eqn{A \rightarrow B}, the posterior probability of that edge given the data
-is given by marginalising out the graph structure \eqn{G}, such that
-\deqn{p(E|D) = \sum_{G \in \mathcal{G}} p(E|G)p(G|D).}
+Calculate pairwise edge probabilities. The posterior probability of an edge
+\eqn{E} given the data \eqn{D} is given by marginalising out
+the graph structure \eqn{g} over the graph space \eqn{G}, such that
+\deqn{p(E|D) = \sum_{g \in G} p(E|g)p(g|D).}
+}
+\details{
+The posterior probability for a given graph p(g|D) is estimated in two
+ways which can be specified using the 'method' parameter.
 }
