@@ -140,7 +140,7 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 30000
+n_results <- 20000
 n_chains <- 2
 
 init_partitions <- list()
@@ -153,7 +153,7 @@ for (i in 1:n_chains) {
 For the sampling below I will only use the move-node proposal. There are some 
 minor issues with following detailed balance by using the others. The details
 of this will be ignored for now.
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 chains <- SampleChains(n_results,
                        init_partitions,
                        transition = PartitionMCMC(
@@ -189,7 +189,7 @@ The above suggests that the chains have converged with respect to the partition
 score. However, we want to study DAGs, so let's convert the partitions to DAGs
 and then see if the DAG score has converged.
 
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
 ```
 
@@ -366,7 +366,7 @@ calculate a point estimate for the ancestor probability for all node pairs.
 Convergence and effective sample size checks should be performed for these
 values for a complete analysis.
 
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 p_feature <- function(dag) {
   
   dagitty_obj <- dag |>
@@ -405,7 +405,7 @@ $B=yes$, and 3) calculating the expectation of $A=yes$ given this interventional
 network. Note that the above approximation doesn't pass through the errors in the parameters
 for a given graph, instead just using the expectation $E(A = yes | do(B = yes), g).$
 
-```{r, error = TRUE}
+```{r, error = TRUE, cache = TRUE}
 p_AdoB <- function(dag, data) {
   
   grain_obj <- togRain(dag, data = data)

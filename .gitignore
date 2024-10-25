@@ -4,13 +4,13 @@
 .Rapp.history
 /doc/
 /Meta/
+/docs/
 .Rproj.user
 *.Rproj
 .Rhistory
 inst/doc
 *.csv
-/inst
-CITATION.cff
 *.pdf
-
-docs
+vignettes/*cache/
+vignettes/*files/
+vignettes/*.html
