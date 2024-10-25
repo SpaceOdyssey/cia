@@ -272,8 +272,8 @@ others. The details of this will be ignored for now.</p>
 </h3>
 <p>A good way to start your analysis on the chains is to understand it’s
 dependency on the initial starting value. This can be done graphically
-by plotting the score across the chains often referred to as the score
-trace.</p>
+by plotting the score of both chains. This plot is often referred to as
+the score trace.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">chains</span>, ylab <span class="op">=</span> <span class="st">'log(partition score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
 <p><img src="three_node_example_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
@@ -319,11 +319,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5351</td>
-<td align="right">0.5421609</td>
-<td align="right">0.0061265</td>
-<td align="right">7831.376</td>
-<td align="right">1.000194</td>
+<td align="right">-175.5206</td>
+<td align="right">0.4771091</td>
+<td align="right">0.0049695</td>
+<td align="right">9217.591</td>
+<td align="right">0.9999609</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -338,11 +338,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5686</td>
-<td align="right">0.6450103</td>
-<td align="right">0.0064609</td>
-<td align="right">9966.459</td>
-<td align="right">1.000135</td>
+<td align="right">-175.5546</td>
+<td align="right">0.594225</td>
+<td align="right">0.0053483</td>
+<td align="right">12344.45</td>
+<td align="right">0.9999633</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -403,18 +403,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1180513</td>
+<td align="right">0.1157949</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2302</td>
+<td align="right">2258</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1210769</td>
+<td align="right">0.1146667</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2361</td>
+<td align="right">2236</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -484,19 +484,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3140000</td>
-<td align="right">0.0090000</td>
+<td align="right">0.3110513</td>
+<td align="right">0.0079744</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6858462</td>
+<td align="right">0.6887179</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6762051</td>
+<td align="right">0.6709231</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0098205</td>
-<td align="right">0.3237949</td>
+<td align="right">0.0079487</td>
+<td align="right">0.3290769</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -538,25 +538,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6858462</td>
-<td align="right">0.4641839</td>
-<td align="right">0.0093626</td>
-<td align="right">2458.041</td>
-<td align="right">1.0043711</td>
+<td align="right">0.6887179</td>
+<td align="right">0.4630238</td>
+<td align="right">0.0099430</td>
+<td align="right">2168.571</td>
+<td align="right">1.0001976</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0098205</td>
-<td align="right">0.0986120</td>
-<td align="right">0.0007825</td>
-<td align="right">15882.724</td>
-<td align="right">0.9999921</td>
+<td align="right">0.0079487</td>
+<td align="right">0.0888017</td>
+<td align="right">0.0006807</td>
+<td align="right">17017.255</td>
+<td align="right">0.9999854</td>
 </tr>
 <tr class="even">
-<td align="right">0.3140000</td>
-<td align="right">0.4641223</td>
-<td align="right">0.0093560</td>
-<td align="right">2460.842</td>
-<td align="right">1.0044116</td>
+<td align="right">0.3110513</td>
+<td align="right">0.4629297</td>
+<td align="right">0.0099428</td>
+<td align="right">2167.782</td>
+<td align="right">1.0001952</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -566,25 +566,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3237949</td>
-<td align="right">0.4679288</td>
-<td align="right">0.0095358</td>
-<td align="right">2407.944</td>
-<td align="right">1.0020612</td>
+<td align="right">0.3290769</td>
+<td align="right">0.4698840</td>
+<td align="right">0.0098600</td>
+<td align="right">2271.057</td>
+<td align="right">1.0006843</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0090000</td>
-<td align="right">0.0944417</td>
-<td align="right">0.0007881</td>
-<td align="right">14361.833</td>
-<td align="right">1.0002033</td>
+<td align="right">0.0079744</td>
+<td align="right">0.0889436</td>
+<td align="right">0.0006983</td>
+<td align="right">16225.096</td>
+<td align="right">1.0000464</td>
 </tr>
 <tr class="even">
-<td align="right">0.6762051</td>
-<td align="right">0.4679288</td>
-<td align="right">0.0095358</td>
-<td align="right">2407.944</td>
-<td align="right">1.0020612</td>
+<td align="right">0.6709231</td>
+<td align="right">0.4698840</td>
+<td align="right">0.0098600</td>
+<td align="right">2271.057</td>
+<td align="right">1.0006843</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -609,14 +609,14 @@ et al., 2023).</p>
 <p><img src="three_node_example_files/figure-html/unnamed-chunk-20-1.png" width="480"></p>
 <p>Another way to check the convergence is to look at the cumulative
 mean over the chains (Suter et al., 2021). This can be performed by
-first drawing from the posterior predictive chain, which in involves
+first drawing from the posterior predictive chain, which involves
 sampling whether there is an edge per sampling iteration. The cumulative
 mean can then be calculated from this chain. Eventually the two chains
 for the cumulative mean should stabilise to approximately the same
 value. Note that in Suter et al. (2021) they show the within chain
 cumulative mean trace, instead we show the the cumulative mean trace per
 pairwise edge probability for multiple chains, to check both the within
-and across chain convergence.</p>
+and between chain convergence.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pedge_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SampleEdgeProbabilities.html">SampleEdgeProbabilities</a></span><span class="op">(</span><span class="va">eq_dag_chains</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/PlotCumulativeMeanTrace.html">PlotCumulativeMeanTrace</a></span><span class="op">(</span><span class="va">pedge_sample</span>, nrow <span class="op">=</span> <span class="fl">3</span>, ncol <span class="op">=</span> <span class="fl">3</span>, dir <span class="op">=</span> <span class="st">'v'</span><span class="op">)</span></span></code></pre></div>
@@ -667,19 +667,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3140256</td>
-<td align="right">0.3127949</td>
+<td align="right">0.3111026</td>
+<td align="right">0.3113333</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6858462</td>
+<td align="right">0.6887179</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6762051</td>
+<td align="right">0.6709231</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3228205</td>
-<td align="right">0.3237949</td>
+<td align="right">0.3293590</td>
+<td align="right">0.3290769</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -729,11 +729,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6653046</td>
-<td align="right">0.1254351</td>
-<td align="right">0.0025292</td>
-<td align="right">2459.574</td>
-<td align="right">1.004369</td>
+<td align="right">0.6660677</td>
+<td align="right">0.1251111</td>
+<td align="right">0.0026875</td>
+<td align="right">2167.226</td>
+<td align="right">1.000201</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
