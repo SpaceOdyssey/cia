@@ -109,33 +109,33 @@ of the feature.</p>
 <span class="r-in"><span><span class="co"># Calculate the mean edge probability per chain.</span></span></span>
 <span class="r-in"><span><span class="fu">CalculateFeatureMean</span><span class="op">(</span><span class="va">dag_chains</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     A   B   C   D   E F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.0 0.9 0.9 0.0 0.0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.0 0.0 0.0 0.0 0.0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.1 0.1 0.0 0.0 0.0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 1.0 0.1 1.0 0.0 0.4 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> E 1.0 1.0 0.0 0.2 0.0 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.0 0.0 0.0 0.0 0.0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A   B   C D   E   F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.0 0.0 0.0 1 0.0 0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.7 0.0 0.0 0 0.7 0.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.6 0.3 0.0 1 0.0 0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.0 0.0 0.0 0 0.0 0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> E 0.7 0.3 0.8 0 0.0 0.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.0 0.3 0.2 0 0.3 0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     A   B   C   D   E   F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.0 0.7 0.0 0.7 0.0 0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.3 0.0 0.0 0.8 0.7 0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.6 0.1 0.0 1.0 0.2 0.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.3 0.0 0.0 0.0 0.1 0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> E 0.0 0.3 0.0 0.2 0.0 0.0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.4 0.3 0.1 0.0 0.7 0.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     A B C D E F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.0 0 0 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.9 0 0 0 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.0 0 0 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.0 0 0 0 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> E 0.1 1 0 0 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.1 1 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Calculate the mean edge probability across chains.</span></span></span>
 <span class="r-in"><span><span class="fu">CalculateFeatureMean</span><span class="op">(</span><span class="fu"><a href="FlattenChains.html">FlattenChains</a></span><span class="op">(</span><span class="va">dag_chains</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">}</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      A    B    C    D    E    F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.00 0.80 0.45 0.35 0.00 0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.15 0.00 0.00 0.40 0.35 0.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.35 0.10 0.00 0.50 0.10 0.45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.65 0.05 0.50 0.00 0.25 0.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> E 0.50 0.65 0.00 0.20 0.00 0.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.20 0.15 0.05 0.00 0.35 0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      A    B   C D    E    F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0.00 0.00 0.0 1 0.00 0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0.80 0.00 0.0 0 0.35 0.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0.30 0.15 0.0 1 0.00 0.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> D 0.00 0.00 0.0 0 0.00 0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> E 0.40 0.65 0.4 0 0.00 0.85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F 0.05 0.65 0.1 0 0.15 0.00</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
