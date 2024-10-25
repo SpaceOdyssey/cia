@@ -14,8 +14,9 @@ Authors@R: c(
     )
 Description: Causal Inference Assistance ('CIA') for performing causal 
     inference within the structural causal modelling framework. Structure
-    learning is performed using partition MCMC (Kuipers & Moffa, 2017) and
-    several additional functions have been added to help with causal inference.
+    learning is performed using partition Markov chain Monte Carlo 
+    (Kuipers & Moffa, 2017) and several additional functions have been 
+    added to help with causal inference. 
     Kuipers and Moffa (2017) <doi:10.1080/01621459.2015.1133426>.
 License: MIT + file LICENSE
 Encoding: UTF-8

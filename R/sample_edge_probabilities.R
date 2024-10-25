@@ -15,7 +15,7 @@
 #'   parameters = list(data = data)
 #'   )
 #' 
-#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
 #' dag_chains <- PartitiontoDAG(results, scorer)
 #' 
 #' pedge_sample <- SampleEdgeProbabilities(dag_chains)

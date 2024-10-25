@@ -19,7 +19,7 @@
 #'   parameters = list(data = data)
 #'   )
 #' 
-#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
 #' 
 #' # Plot partition score trace.
 #' PlotScoreTrace(results, type = 'l')

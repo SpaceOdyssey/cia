@@ -2,7 +2,9 @@
 title: "An Example of using the Causal Inference Assistant (CIA)"
 author: "Mathew Varidel"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    self_contained: true
 vignette: >
   %\VignetteIndexEntry{three_node_example}
   %\VignetteEngine{knitr::rmarkdown}
