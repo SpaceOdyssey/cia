@@ -59,8 +59,8 @@ knitr::kable(head(dat))
 
 
 Let's calculate the correlation matrix to get an idea of the marginal 
-dependencies in the data. This suggests that ($A$, $B$, $C$) are marginally dependent 
-which is what you would expect for the DAG that we are studying.
+dependencies in the data. This suggests that ($A$, $B$, $C$) are marginally 
+dependent which is what you would expect for the DAG that we are studying.
 ```{r, error = TRUE}
 knitr::kable(cor(dat == 'yes'))
 ```
@@ -345,12 +345,12 @@ PlotConcordance(p_edge)
 Another way to check the convergence is to look at the cumulative mean over the 
 chains (Suter et al., 2021). This can be performed by first drawing from the
 posterior predictive chain, which involves sampling whether there is an edge
-per sampling iteration. The cumulative mean can then be calculated from this chain.
-Eventually the two chains for the cumulative mean should stabilise to approximately 
-the same value. Note that in Suter et al. (2021) they show the within chain cumulative
-mean trace, instead we show the the cumulative mean trace per pairwise edge 
-probability for multiple chains, to check both the within and between chain 
-convergence.
+per sampling iteration. The cumulative mean can then be calculated from this 
+chain. Eventually the two chains for the cumulative mean should stabilise to 
+approximately the same value. Note that in Suter et al. (2021) they show the 
+within chain cumulative mean trace, instead we show the the cumulative mean 
+trace per pairwise edge probability for multiple chains, to check both the 
+within and between chain convergence.
 
 ```{r, error = TRUE, fig.dim = c(7.0, 5.0)}
 pedge_sample <- SampleEdgeProbabilities(eq_dag_chains)
@@ -395,15 +395,16 @@ flat_eq_dag_chains |>
 
 ### Estimating interventional distributions
 
-Or, we can estimate the probability distribution given some intervention. Let's say
-the expectation of $A = yes$ given that we intervene to set $B = yes$,
-which is given by,
+Or, we can estimate the probability distribution given some intervention. Let's 
+say the expectation of $A = yes$ given that we intervene to set $B = yes$, which 
+is given by,
 $$E(A = yes | do(B = yes), D) \approx \sum_{g \in G} E(A = yes | do(B = yes), g) p(g|D).$$
 This can be done using a do-operation (Pearl, 2000) which can be performed by; 
-1) mutilating the graph such that all edges into $B$ have been removed, 2) setting 
-$B=yes$, and 3) calculating the expectation of $A=yes$ given this interventional 
-network. Note that the above approximation doesn't pass through the errors in the parameters
-for a given graph, instead just using the expectation $E(A = yes | do(B = yes), g).$
+1) mutilating the graph such that all edges into $B$ have been removed, 2) 
+setting $B=yes$, and 3) calculating the expectation of $A=yes$ given this 
+interventional network. Note that the above approximation doesn't pass through 
+the errors in the parameters for a given graph, instead just using the 
+expectation $E(A = yes | do(B = yes), g).$
 
 ```{r, error = TRUE, cache = TRUE}
 p_AdoB <- function(dag, data) {
@@ -419,8 +420,8 @@ p_AdoB <- function(dag, data) {
 post_AdoB_chains <- SamplePosteriorPredictiveChains(eq_dag_chains, p_AdoB, data = dat)
 ```
 
-Once again, it's good practice to check the convergence of the chains. Let's do this 
-by using the summary function. This estimated value can be compared
+Once again, it's good practice to check the convergence of the chains. Let's do 
+this by using the summary function. This estimated value can be compared
 to the true value of 0.5, where the true value should be within the 
 Mean$\pm 2 \times$SD 95% of the time.
 
@@ -448,18 +449,31 @@ reliably, so that you can have confidence reporting these estimated values.
 
 ## References
 
-Gelman, A., Carlin, J.B., Stern, H.S., Dunson, D.B., Vehtari, A., & Rubin, D.B. (2013). Bayesian Data Analysis (3rd ed.). Chapman and Hall/CRC.
+Gelman, A., Carlin, J.B., Stern, H.S., Dunson, D.B., Vehtari, A., & Rubin, D.B. 
+(2013). Bayesian Data Analysis (3rd ed.). Chapman and Hall/CRC.
 
-Kruschke, J. K. (2021). Bayesian analysis reporting guidelines. Nature human behaviour, 5(10), 1282-1291.
+Kruschke, J. K. (2021). Bayesian analysis reporting guidelines. Nature human 
+behaviour, 5(10), 1282-1291.
 
-Kuipers, J., & Moffa, G. (2017). Partition MCMC for inference on acyclic digraphs. Journal of the American Statistical Association, 112(517), 282-299.
+Kuipers, J., & Moffa, G. (2017). Partition MCMC for inference on acyclic 
+digraphs. Journal of the American Statistical Association, 112(517), 282-299.
 
-Kuipers, J., Moffa, G., Kuipers, E., Freeman, D., & Bebbington, P. (2019). Links between psychotic and neurotic symptoms in the general population: an analysis of longitudinal British National Survey data using Directed Acyclic Graphs. Psychological Medicine, 49(3), 388-395.
+Kuipers, J., Moffa, G., Kuipers, E., Freeman, D., & Bebbington, P. (2019). Links 
+between psychotic and neurotic symptoms in the general population: an analysis 
+of longitudinal British National Survey data using Directed Acyclic Graphs. 
+Psychological Medicine, 49(3), 388-395.
 
-Moffa, G., Kuipers, J., Kuipers, E., McManus, S., & Bebbington, P. (2023). Sexual abuse and psychotic phenomena: a directed acyclic graph analysis of affective symptoms using English national psychiatric survey data. Psychological medicine, 53(16), 7817-7826.
+Moffa, G., Kuipers, J., Kuipers, E., McManus, S., & Bebbington, P. (2023). 
+Sexual abuse and psychotic phenomena: a directed acyclic graph analysis of 
+affective symptoms using English national psychiatric survey data. Psychological 
+medicine, 53(16), 7817-7826.
 
-Pearl, J. (2000). Causality: Models, Reasoning, and Inference. Cambridge University Press.
+Pearl, J. (2000). Causality: Models, Reasoning, and Inference. Cambridge 
+University Press.
 
-Suter, P., Kuipers, J., Moffa, G., & Beerenwinkel, N. (2023). Bayesian Structure Learning and Sampling of Bayesian Networks with the R Package BiDAG. Journal of Statistical Software, 105(9), 1–31. https://doi.org/10.18637/jss.v105.i09
+Suter, P., Kuipers, J., Moffa, G., & Beerenwinkel, N. (2023). Bayesian Structure 
+Learning and Sampling of Bayesian Networks with the R Package BiDAG. Journal of 
+Statistical Software, 105(9), 1–31. https://doi.org/10.18637/jss.v105.i09
 
-Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., & Bürkner, P. C. (2021). Rank-normalization, folding, and localization: An improved R-hat for assessing convergence of MCMC (with discussion). Bayesian analysis, 16(2), 667-718.
+Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., & Bürkner, P. C. (2021). Rank-normalization, folding, and localization: An improved R-hat for assessing 
+convergence of MCMC (with discussion). Bayesian analysis, 16(2), 667-718.
