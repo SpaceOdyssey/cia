@@ -50,6 +50,5 @@ Suggests:
     qgraph,
     dagitty
 Config/testthat/edition: 3
-VignetteBuilder: knitr
 URL: https://spaceodyssey.github.io/cia/
 BugReports: https://github.com/SpaceOdyssey/cia/issues
