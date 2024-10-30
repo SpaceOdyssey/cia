@@ -67,6 +67,7 @@ PlotCumulativeMeanTrace.cia_post_chains <- function(x, ncol = NULL, nrow = NULL,
                         dir = dir) +
     ggplot2::geom_line() +
     ggplot2::ylab('Cumulative Mean') +
+    ggplot2::xlab('Iteration') +
     ggplot2::theme_classic() +
     ggplot2::theme(legend.position = 'none')
   
