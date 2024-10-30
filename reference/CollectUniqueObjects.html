@@ -56,7 +56,7 @@
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>dag_collection: A list with entries:</p><ul><li><p>state: List of unique states.</p></li>
+    <p>A list with entries:</p><ul><li><p>state: List of unique states.</p></li>
 <li><p>log_evidence_state: Numeric value representing the evidence calculated
 from the states.</p></li>
 <li><p>log_state_score: Vector with the log scores for each state.</p></li>
@@ -65,13 +65,13 @@ state estimated using the MCMC sampling frequency.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This gets the unique set of states in a cia_object
-referred to as objects (\(o\)). Then it estimates the probability
-for each state using two methods. The log_sampling_prob uses the MCMC sampled
-frequency to estimate the posterior probability.</p>
+    <p>This gets the unique set of states in cia_chain(s) referred to as
+objects (\(o\)). Then it estimates the probability for each state using two
+methods. The <code>log_sampling_prob</code> is the MCMC sampled frequency estimate for
+the posterior probability.</p>
 <p>An alternative method to estimate the posterior probability for each state
-uses the state score. This is recorded in the log_norm_state_score
-vector. This approach estimates the log of the normalisation constant assuming
+uses the state score. This is recorded in the <code>log_norm_state_score</code>. This
+approach estimates the log of the normalisation constant assuming
 \(\tilde{Z}_O = \Sigma_{s=1}^S p(o_s)p(D | o_s)\) where
 \(O = \{o_1, o_2, o_3, ..., o_S\}\) is
 the set of unique objects in the chain. This assumes that you have captured the

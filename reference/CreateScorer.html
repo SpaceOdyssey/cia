@@ -94,6 +94,19 @@ cache only works for problems where the scorer only varies as a function of
 <dd><p>Number of threads used to construct cache.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>A list with entries:</p><ul><li><p>scorer: Function that takes (node, parents) as parameters and returns
+the score.</p></li>
+<li><p>parameters: List of extra parameters passed to the scorer.</p></li>
+<li><p>max_parents: Integer representing the maximum number of possible
+possible parents that any child can have.</p></li>
+<li><p>blacklist: Matrix where each cell represents the (parent, child) pairs
+that must not be present when equal to 1.</p></li>
+<li><p>whitelist: Matrix where each cell represents the (parent, child) pairs
+that must be present when equal to 1.
+state estimated using the MCMC sampling frequency.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
