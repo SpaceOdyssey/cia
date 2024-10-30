@@ -234,9 +234,9 @@ order of thousands of samples to constrain the tail of the distribution
 (e.g., Kruschke, 2021). 
 
 As a caveat to the above, note that these recommendations are adapted from 
-other applications of MCMCs, typically for estimating parameters that are 
-continuous variables. Further research needs to be undertaken to be sure that
-this applies to sampling of DAGs and derived quantities.
+other applications of MCMCs, typically for estimating  continuous variables. 
+Further research needs to be undertaken to be sure that this applies to sampling 
+of DAGs and derived quantities.
 
 ### Analysing acceptance rates
 
