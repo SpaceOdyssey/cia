@@ -1,8 +1,9 @@
-#' Convert an adjacency matrix or igraph object to a gRain object.
+#' Convert to a gRain object.
 #' 
-#' @param x An adjacency matrix or an igraph object
-#' @param ... extra parameters to gRain compile
-#' @returns gRain_obj A gRain object.
+#' @param x An adjacency matrix or igraph object.
+#' @param ... extra parameters to gRain compile.
+#' 
+#' @returns A gRain object.
 #' 
 #' @examples
 #' dag <- bnlearn::model2network("[A][C][F][B|A][D|A:C][E|B:F]")

@@ -1,4 +1,4 @@
-#' Calculate acceptance rates.
+#' Calculate acceptance rates
 #' 
 #' This makes the assumption that the proposal has saved a variable "proposal_used"
 #' and mcmc has saved a variable 'accept'.

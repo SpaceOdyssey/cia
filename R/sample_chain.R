@@ -8,7 +8,7 @@
 #' @param n_thin Number of steps between saved states.
 #' @param n_parallel_chains Number of chains to run in parallel. Default is 2.
 #' 
-#' @returns chains A cia_chains object.
+#' @returns A cia_chains object.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

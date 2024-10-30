@@ -1,3 +1,5 @@
+#' Create score cache
+#' 
 #' This builds the score cache. It can be used for problems where the score only
 #' changes as a function of (node, parents). 
 #' 

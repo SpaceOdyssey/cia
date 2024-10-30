@@ -2,7 +2,7 @@
 % Please edit documentation in R/chains.R
 \name{[.cia_chain}
 \alias{[.cia_chain}
-\title{Index a cia_chain object.}
+\title{Index a cia_chain object}
 \usage{
 \method{[}{cia_chain}(x = list(), i, ...)
 }
@@ -14,10 +14,10 @@
 \item{...}{ellipsis for extra indexing parameters.}
 }
 \value{
-chain A cia_chain.
+A cia_chain.
 }
 \description{
-Index a cia_chain object.
+Index a cia_chain object
 }
 \examples{
 data <- bnlearn::learning.test

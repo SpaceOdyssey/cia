@@ -1,11 +1,14 @@
-#' Index chains for further analysis.
+#' Index chains for further analysis
 #' 
 #' This allows you to remove a burnin and thin the chains after processing. This
 #' is mostly redundant as you can now index the cia_chain(s) objects directly.
 #' 
-#' @param chains MCMC chains.
-#' @param n_burnin Number of steps to remove at the start as a burnin. Default is 0.
+#' @param chains cia_chain(s) object.
+#' @param n_burnin Number of steps to remove at the start as a burnin. Default 
+#' is 0.
 #' @param n_thin Number of steps between retained states. Default is 1.
+#' 
+#' @returns A cia_chain(s) object.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

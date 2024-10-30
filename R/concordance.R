@@ -1,4 +1,7 @@
-#' Concordance plot.
+#' Concordance plot
+#' 
+#' Plot a concordance plot to compare point-estimates for quantities of interest
+#' between chains.
 #' 
 #' @param x A list of adjacency matrices representing edge probabilities, a 
 #' chains object, or a collections object with states as DAGs.
@@ -6,6 +9,8 @@
 #' 'highlight' (defauled to 0.3) which sets the cutoff difference that is used to
 #' highlight the points, and the probability edge estimation 'method' for a 
 #' cia_collections object.
+#' 
+#' @returns A ggplot object or patchwork of ggplot objects.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

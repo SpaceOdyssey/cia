@@ -6,7 +6,7 @@
 \alias{cia-package}
 \title{cia: Learn and Apply Directed Acyclic Graphs for Causal Inference}
 \description{
-Causal Inference Assistance ('CIA') for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition Markov chain Monte Carlo (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference. Kuipers and Moffa (2017) \doi{10.1080/01621459.2015.1133426}.
+Causal Inference Assistance (CIA) for performing causal inference within the structural causal modelling framework. Structure learning is performed using partition Markov chain Monte Carlo (Kuipers & Moffa, 2017) and several additional functions have been added to help with causal inference. Kuipers and Moffa (2017) \doi{10.1080/01621459.2015.1133426}.
 }
 \seealso{
 Useful links:

@@ -24,6 +24,20 @@
 #' (node, parents). Default is FALSE.
 #' @param nthreads Number of threads used to construct cache.
 #' 
+#' @returns A list with entries:
+#' \itemize{
+#'  \item scorer: Function that takes (node, parents) as parameters and returns
+#'  the score.
+#'  \item parameters: List of extra parameters passed to the scorer.
+#'  \item max_parents: Integer representing the maximum number of possible
+#'  possible parents that any child can have.
+#'  \item blacklist: Matrix where each cell represents the (parent, child) pairs
+#'  that must not be present when equal to 1.
+#'  \item whitelist: Matrix where each cell represents the (parent, child) pairs
+#'  that must be present when equal to 1.
+#'  state estimated using the MCMC sampling frequency.
+#' }
+#' 
 #' @examples
 #' scorer <- CreateScorer(data = bnlearn::asia)
 #' 

@@ -1,10 +1,12 @@
-#' Default proposal constructor.
+#' Default proposal constructor
+#' 
+#' This constructs a proposal function for PartitionMCMC.
 #' 
 #' @param p Probability for each proposal in the order (split_join, node_move, 
 #' swap_node, swap_adjacent, stay_still).
 #' @param verbose Boolean flag to record proposal used.
 #' 
-#' @returns proposal A function corresponding to the default proposal.
+#' @returns A function corresponding to the default proposal.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

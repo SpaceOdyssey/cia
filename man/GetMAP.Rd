@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_map.R
 \name{GetMAP}
 \alias{GetMAP}
-\title{Get the maximum a posteriori state.}
+\title{Get the maximum a posteriori state}
 \usage{
 GetMAP(x)
 }
@@ -10,18 +10,19 @@ GetMAP(x)
 \item{x}{A collection of unique objects or chains object.}
 }
 \value{
-maps A list with the adjacency matrix for the map and it's posterior
+A list with the adjacency matrix for the map and it's posterior
 probability. It is possible for it to return multiple DAGs. The list has
 elements;
 \itemize{
 \item state: List of MAP DAGs.
 \item log_p: Numeric vector with the log posterior probability for each state.
-\item log_state_score Numeric vector representing the log score for each state.
-\item log_norm_state_score Numeric vector representing the log of the normalised score for each state.
+\item log_state_score: Numeric vector representing the log score for each state.
+\item log_norm_state_score: Numeric vector representing the log of the
+normalised score for each state.
 }
 }
 \description{
-Get the maximum a posteriori state.
+Get the maximum a posteriori state
 }
 \examples{
 data <- bnlearn::learning.test

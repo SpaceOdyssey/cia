@@ -18,8 +18,8 @@
 #' 'method' parameter.method='sampled' for MCMC sampled frequency (which is our 
 #' recommended method) or method='score' which uses the normalised scores.
 #' 
-#' @returns p_post_feature A numeric value representing the posterior probability
-#' of the feature.
+#' @returns A numeric value representing the posterior probability of the 
+#' feature.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

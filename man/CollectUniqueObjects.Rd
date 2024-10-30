@@ -10,7 +10,7 @@ CollectUniqueObjects(x)
 \item{x}{A cia_chains or cia_chain object.}
 }
 \value{
-dag_collection: A list with entries:
+A list with entries:
 \itemize{
 \item state: List of unique states.
 \item log_evidence_state: Numeric value representing the evidence calculated
@@ -24,14 +24,14 @@ state estimated using the MCMC sampling frequency.
 Get the unique set of states along with their log score.
 }
 \details{
-This gets the unique set of states in a cia_object
-referred to as objects (\eqn{o}). Then it estimates the probability
-for each state using two methods. The log_sampling_prob uses the MCMC sampled
-frequency to estimate the posterior probability.
+This gets the unique set of states in cia_chain(s) referred to as
+objects (\eqn{o}). Then it estimates the probability for each state using two
+methods. The \code{log_sampling_prob} is the MCMC sampled frequency estimate for
+the posterior probability.
 
 An alternative method to estimate the posterior probability for each state
-uses the state score. This is recorded in the log_norm_state_score
-vector. This approach estimates the log of the normalisation constant assuming
+uses the state score. This is recorded in the \code{log_norm_state_score}. This
+approach estimates the log of the normalisation constant assuming
 \eqn{\tilde{Z}_O = \Sigma_{s=1}^S p(o_s)p(D | o_s)} where
 \eqn{O = \{o_1, o_2, o_3, ..., o_S\}} is
 the set of unique objects in the chain. This assumes that you have captured the

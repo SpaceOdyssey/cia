@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_dags.R
 \name{UniformlySampleDAG}
 \alias{UniformlySampleDAG}
-\title{Uniformly sample DAG given a set of nodes.}
+\title{Uniformly sample DAG}
 \usage{
 UniformlySampleDAG(nodes)
 }
@@ -13,7 +13,7 @@ UniformlySampleDAG(nodes)
 Adjacency matrix with elements designated as (parent, child).
 }
 \description{
-Uniformly sample DAG given a set of nodes.
+Uniformly sample DAG
 }
 \examples{
 UniformlySampleDAG(LETTERS[1:3])

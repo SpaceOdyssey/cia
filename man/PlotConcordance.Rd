@@ -2,7 +2,7 @@
 % Please edit documentation in R/concordance.R
 \name{PlotConcordance}
 \alias{PlotConcordance}
-\title{Concordance plot.}
+\title{Concordance plot}
 \usage{
 PlotConcordance(x, ...)
 }
@@ -15,8 +15,12 @@ chains object, or a collections object with states as DAGs.}
 highlight the points, and the probability edge estimation 'method' for a
 cia_collections object.}
 }
+\value{
+A ggplot object or patchwork of ggplot objects.
+}
 \description{
-Concordance plot.
+Plot a concordance plot to compare point-estimates for quantities of interest
+between chains.
 }
 \examples{
 data <- bnlearn::learning.test

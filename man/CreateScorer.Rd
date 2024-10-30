@@ -37,6 +37,21 @@ cache only works for problems where the scorer only varies as a function of
 
 \item{nthreads}{Number of threads used to construct cache.}
 }
+\value{
+A list with entries:
+\itemize{
+\item scorer: Function that takes (node, parents) as parameters and returns
+the score.
+\item parameters: List of extra parameters passed to the scorer.
+\item max_parents: Integer representing the maximum number of possible
+possible parents that any child can have.
+\item blacklist: Matrix where each cell represents the (parent, child) pairs
+that must not be present when equal to 1.
+\item whitelist: Matrix where each cell represents the (parent, child) pairs
+that must be present when equal to 1.
+state estimated using the MCMC sampling frequency.
+}
+}
 \description{
 Scorer constructor
 }

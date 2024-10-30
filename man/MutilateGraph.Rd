@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutilate.R
 \name{MutilateGraph}
 \alias{MutilateGraph}
-\title{Mutilate graph in accordance with an intervention.}
+\title{Mutilate graph}
 \usage{
 MutilateGraph(grain_object, intervention)
 }
@@ -13,11 +13,12 @@ MutilateGraph(grain_object, intervention)
 distribution represented as a vector of unconditional probabilities.}
 }
 \value{
-A grain object. Please note that any evidence set within the grain
-object will not be passed to the new object.
+A grain object.
 }
 \description{
-Mutilate graph in accordance with an intervention.
+Mutilate a graph in accordance with an intervention. This is typically used
+to perform a do-operation on a given graph. Please note that any evidence
+set within the original grain object will not be passed to the new object.
 }
 \examples{
 # This creates a mutilated graph in accordance with turning the sprinkler 

@@ -14,7 +14,7 @@
 \item{...}{ellipsis for extra indexing parameters.}
 }
 \value{
-chain A cia_chains object.
+A cia_chains object.
 }
 \description{
 Index a cia_chains object

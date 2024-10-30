@@ -2,17 +2,23 @@
 % Please edit documentation in R/partition_to_dag.R
 \name{PartitiontoDAG}
 \alias{PartitiontoDAG}
-\title{Sample DAGs from labelled partitions.}
+\title{Sample DAG from partition}
 \usage{
 PartitiontoDAG(partitions, scorer)
 }
 \arguments{
-\item{partitions}{A cia_chain(s) object or adjacency matrix.}
+\item{partitions}{A cia_chain(s) object or data.frame representing the
+partition.}
 
 \item{scorer}{A scorer object.}
 }
+\value{
+A cia_chain(s) object or adjacency matrix. For a cia_chain(s) object
+each state will be an adjacency matrix.
+}
 \description{
-Sample DAGs from labelled partitions.
+Samples a DAG in accordance with it's posterior probability conditional
+on it being consistent with a partition.
 }
 \examples{
 data <- bnlearn::learning.test

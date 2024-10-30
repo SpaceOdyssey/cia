@@ -1,9 +1,9 @@
 # Chain objects.
 
-#' Constructor for a single chain.
+#' Constructor for a single chain
 #' 
 #' @param x A list corresponding to a single mcmc chain.
-#' @returns cia_chain A cia_chain object.
+#' @returns A cia_chain object.
 #' 
 #' @noRd
 new_cia_chain <- function(x = list()) {
@@ -14,13 +14,13 @@ new_cia_chain <- function(x = list()) {
   return(cia_chain)
 }
 
-#' Index a cia_chain object.
+#' Index a cia_chain object
 #' 
 #' @param x A cia_chain object.
 #' @param i An index.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A cia_chain.
+#' @returns A cia_chain.
 #'
 #' @examples
 #' data <- bnlearn::learning.test
@@ -52,7 +52,7 @@ new_cia_chain <- function(x = list()) {
   return(chain)
 }
 
-#' Constructor for more than one chain.
+#' Constructor for more than one chain
 #' 
 #' @param x A list corresponding to more than one cia_chain.
 #' @returns cia_chains A cia_chains object.
@@ -66,13 +66,13 @@ new_cia_chains <- function(x = list()) {
   return(cia_chains)
 }
 
-#' Index a cia_chains object.
+#' Index a cia_chains object
 #' 
 #' @param x A cia_chains object.
 #' @param i An index to get the cia_chain.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A cia_chains object. 
+#' @returns A cia_chains object. 
 #'
 #' @examples
 #' data <- bnlearn::learning.test
@@ -101,7 +101,7 @@ new_cia_chains <- function(x = list()) {
 #' @param i An index to get the cia_chain iterations.
 #' @param ... ellipsis for extra indexing parameters.
 #'
-#' @returns chain A cia_chains object. 
+#' @returns A cia_chains object. 
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

@@ -1,3 +1,5 @@
+#' Convert to adjacency matrix.
+#' 
 #' Convert a DAG object from other libraries to an adjacency matrix. 
 #' 
 #' @param network A bnlearn or igraph object.
@@ -6,7 +8,6 @@
 #' toMatrix(bnlearn::empty.graph(LETTERS[1:6]))
 #' toMatrix(igraph::sample_k_regular(10, 2))
 #' 
-#' @param network A network object from bnlearn or igraph. 
 #' @returns An adjacency matrix representation of network.
 #' 
 #' @export

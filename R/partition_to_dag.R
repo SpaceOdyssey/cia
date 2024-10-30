@@ -1,7 +1,14 @@
-#' Sample DAGs from labelled partitions.
+#' Sample DAG from partition
 #' 
-#' @param partitions A cia_chain(s) object or adjacency matrix.
+#' Samples a DAG in accordance with it's posterior probability conditional
+#' on it being consistent with a partition.
+#' 
+#' @param partitions A cia_chain(s) object or data.frame representing the 
+#' partition.
 #' @param scorer A scorer object.
+#' 
+#' @returns A cia_chain(s) object or adjacency matrix. For a cia_chain(s) object
+#' each state will be an adjacency matrix.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

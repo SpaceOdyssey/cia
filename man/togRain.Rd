@@ -2,20 +2,20 @@
 % Please edit documentation in R/to_grain.R
 \name{togRain}
 \alias{togRain}
-\title{Convert an adjacency matrix or igraph object to a gRain object.}
+\title{Convert to a gRain object.}
 \usage{
 togRain(x, ...)
 }
 \arguments{
-\item{x}{An adjacency matrix or an igraph object}
+\item{x}{An adjacency matrix or igraph object.}
 
-\item{...}{extra parameters to gRain compile}
+\item{...}{extra parameters to gRain compile.}
 }
 \value{
-gRain_obj A gRain object.
+A gRain object.
 }
 \description{
-Convert an adjacency matrix or igraph object to a gRain object.
+Convert to a gRain object.
 }
 \examples{
 dag <- bnlearn::model2network("[A][C][F][B|A][D|A:C][E|B:F]")

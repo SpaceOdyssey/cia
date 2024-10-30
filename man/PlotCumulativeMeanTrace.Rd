@@ -25,6 +25,9 @@ free ('free') or free in one dimension ('free_x', 'free_y')?}
 \item{dir}{Direction to fill facets. Either 'h' for horizontal or 'v' for
 vertical.}
 }
+\value{
+A ggplot object.
+}
 \description{
 Plot cumulative mean trace plot.
 }

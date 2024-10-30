@@ -8,6 +8,8 @@
 #' @param dir Direction to fill facets. Either 'h' for horizontal or 'v' for
 #' vertical.
 #' 
+#' @returns A ggplot object.
+#' 
 #' @examples
 #' data <- bnlearn::learning.test
 #' 

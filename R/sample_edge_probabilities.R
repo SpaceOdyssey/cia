@@ -1,4 +1,4 @@
-#' Sample edge probabilities using chains object.
+#' Sample edge probabilities
 #' 
 #' @param x A chain(s) or collection object where states are DAGs.
 #' 

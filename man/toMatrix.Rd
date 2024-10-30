@@ -2,12 +2,12 @@
 % Please edit documentation in R/to_matrix.R
 \name{toMatrix}
 \alias{toMatrix}
-\title{Convert a DAG object from other libraries to an adjacency matrix.}
+\title{Convert to adjacency matrix.}
 \usage{
 toMatrix(network)
 }
 \arguments{
-\item{network}{A network object from bnlearn or igraph.}
+\item{network}{A bnlearn or igraph object.}
 }
 \value{
 An adjacency matrix representation of network.

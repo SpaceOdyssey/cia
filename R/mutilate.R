@@ -1,11 +1,14 @@
-#' Mutilate graph in accordance with an intervention.
+#' Mutilate graph
+#' 
+#' Mutilate a graph in accordance with an intervention. This is typically used 
+#' to perform a do-operation on a given graph. Please note that any evidence 
+#' set within the original grain object will not be passed to the new object.
 #' 
 #' @param grain_object A grain object.
 #' @param intervention A list of nodes and their corresponding intervention
 #' distribution represented as a vector of unconditional probabilities.
 #' 
-#' @return A grain object. Please note that any evidence set within the grain 
-#' object will not be passed to the new object.
+#' @return A grain object.
 #' 
 #' @examples
 #' # This creates a mutilated graph in accordance with turning the sprinkler 

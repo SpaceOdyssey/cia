@@ -2,7 +2,7 @@
 % Please edit documentation in R/score_trace.R
 \name{PlotScoreTrace}
 \alias{PlotScoreTrace}
-\title{Plot the score trace.}
+\title{Plot the score trace}
 \usage{
 PlotScoreTrace(
   chains,
@@ -27,8 +27,11 @@ strings to cycle through for multiple chains.}
 
 \item{...}{Extra parameters to pass to the plot and graphics::line functions.}
 }
+\value{
+No return value. Called to produce a base R trace plot.
+}
 \description{
-Plot the score trace.
+Plot the score trace
 }
 \examples{
 data <- bnlearn::learning.test

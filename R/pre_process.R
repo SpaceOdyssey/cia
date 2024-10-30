@@ -1,4 +1,4 @@
-#' Preprocessing for blacklisting.
+#' Preprocessing for blacklisting
 
 #' Get the lowest pairwise scoring edges.
 #' 

@@ -1,4 +1,4 @@
-#' Plot the score trace.
+#' Plot the score trace
 #' 
 #' @param chains MCMC chains.
 #' @param attribute Name of attribute to plot. Default is "log_score".
@@ -7,6 +7,8 @@
 #' @param col A string representing a color for a single chain or a vector of 
 #' strings to cycle through for multiple chains.
 #' @param ... Extra parameters to pass to the plot and graphics::line functions.
+#' 
+#' @returns No return value. Called to produce a base R trace plot.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

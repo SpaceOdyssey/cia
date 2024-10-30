@@ -2,7 +2,7 @@
 % Please edit documentation in R/pre_process.R
 \name{GetLowestPairwiseScoringEdges}
 \alias{GetLowestPairwiseScoringEdges}
-\title{Preprocessing for blacklisting.
+\title{Preprocessing for blacklisting
 Get the lowest pairwise scoring edges.}
 \usage{
 GetLowestPairwiseScoringEdges(scorer, n_retain)

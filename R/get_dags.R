@@ -1,4 +1,4 @@
-#' Uniformly sample DAG given a set of nodes.
+#' Uniformly sample DAG
 #' 
 #' @param nodes A vector of node names.
 #' 

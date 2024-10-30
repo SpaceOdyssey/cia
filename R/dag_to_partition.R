@@ -1,4 +1,4 @@
-#' Convert DAG to partition.
+#' Convert DAG to partition
 #'
 #' @description
 #' This converts a DAG to it's partition by iteratively constructing sets of

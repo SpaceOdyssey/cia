@@ -2,7 +2,7 @@
 % Please edit documentation in R/sample_edge_probabilities.R
 \name{SampleEdgeProbabilities}
 \alias{SampleEdgeProbabilities}
-\title{Sample edge probabilities using chains object.}
+\title{Sample edge probabilities}
 \usage{
 SampleEdgeProbabilities(x)
 }
@@ -13,7 +13,7 @@ SampleEdgeProbabilities(x)
 p_edge A posterior sample for the marginalised edge probabilities.
 }
 \description{
-Sample edge probabilities using chains object.
+Sample edge probabilities
 }
 \examples{
 data <- bnlearn::learning.test

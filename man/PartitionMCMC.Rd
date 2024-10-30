@@ -3,7 +3,7 @@
 \name{PartitionMCMC}
 \alias{PartitionMCMC}
 \title{Transition objects.
-One step implementation of the tempered partition MCMC.}
+Partition MCMC}
 \usage{
 PartitionMCMC(
   proposal = DefaultProposal(),
@@ -36,6 +36,9 @@ constructs an environment with the proposal, inverse temperature, and verbose
 flag. It then returns a function that takes the current_state and a scorer
 object. This only allows the scores to be raised to a constant temperature
 for every step.
+}
+\details{
+One step implementation of the tempered partition MCMC.
 }
 \examples{
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))

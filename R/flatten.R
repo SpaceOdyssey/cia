@@ -7,6 +7,8 @@
 #' 
 #' @param chains A cia_chains object.
 #' 
+#' @returns A cia_chain object of flattened samples.
+#' 
 #' @examples
 #' data <- bnlearn::learning.test
 #' 

@@ -1,15 +1,16 @@
-#' Get the maximum a posteriori state.
+#' Get the maximum a posteriori state
 #' 
 #' @param x A collection of unique objects or chains object.
 #' 
-#' @returns maps A list with the adjacency matrix for the map and it's posterior 
+#' @returns A list with the adjacency matrix for the map and it's posterior 
 #' probability. It is possible for it to return multiple DAGs. The list has
 #' elements;
 #' \itemize{
 #'  \item state: List of MAP DAGs.
 #'  \item log_p: Numeric vector with the log posterior probability for each state.
-#'  \item log_state_score Numeric vector representing the log score for each state.
-#'  \item log_norm_state_score Numeric vector representing the log of the normalised score for each state.
+#'  \item log_state_score: Numeric vector representing the log score for each state.
+#'  \item log_norm_state_score: Numeric vector representing the log of the 
+#'  normalised score for each state.
 #' }
 #' 
 #' @examples

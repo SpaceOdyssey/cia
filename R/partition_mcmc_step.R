@@ -1,5 +1,7 @@
 #' Transition objects.
 
+#' Partition MCMC
+#' 
 #' One step implementation of the tempered partition MCMC.
 #' 
 #' @description 

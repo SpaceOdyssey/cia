@@ -1,4 +1,4 @@
-#' Calculate pairwise edge probabilities.
+#' Calculate pairwise edge probabilities
 #' 
 #' Calculate pairwise edge probabilities. The posterior probability of an edge 
 #' \eqn{E} given the data \eqn{D} is given by marginalising out 
@@ -14,7 +14,7 @@
 #' 'method' parameter.method='sampled' for MCMC sampled frequency (which is our 
 #' recommended method) or method='score' which uses the normalised scores.
 #' 
-#' @returns p_edge A matrix of edge probabilities.
+#' @returns Matrix of edge probabilities.
 #' 
 #' @examples
 #' data <- bnlearn::learning.test

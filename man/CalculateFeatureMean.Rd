@@ -19,8 +19,8 @@ choose to use estimated p(g|D) in two ways which can be specified using the
 recommended method) or method='score' which uses the normalised scores.}
 }
 \value{
-p_post_feature A numeric value representing the posterior probability
-of the feature.
+A numeric value representing the posterior probability of the
+feature.
 }
 \description{
 Calculate the posterior expected value for a feature (\eqn{f(g)}, e.g.,

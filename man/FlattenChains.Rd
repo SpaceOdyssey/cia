@@ -9,6 +9,9 @@ FlattenChains(chains)
 \arguments{
 \item{chains}{A cia_chains object.}
 }
+\value{
+A cia_chain object of flattened samples.
+}
 \description{
 Flatten a cia_chains object into a single cia_chain object. This is helpful
 for when you want to calculate a feature across using all samples across

@@ -2,7 +2,7 @@
 % Please edit documentation in R/edge_probabilities.R
 \name{CalculateEdgeProbabilities}
 \alias{CalculateEdgeProbabilities}
-\title{Calculate pairwise edge probabilities.}
+\title{Calculate pairwise edge probabilities}
 \usage{
 CalculateEdgeProbabilities(x, ...)
 }
@@ -15,7 +15,7 @@ choose to use estimated p(g|D) in two ways which can be specified using the
 recommended method) or method='score' which uses the normalised scores.}
 }
 \value{
-p_edge A matrix of edge probabilities.
+Matrix of edge probabilities.
 }
 \description{
 Calculate pairwise edge probabilities. The posterior probability of an edge
