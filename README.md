@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 This package is for performing causal structure learning and inference
-assuming the causal process follows a directed acyclic graph. It
+assuming the causal process follows a directed acyclic graph (DAG). It
 includes functionality to learn the structure using partition MCMC along
 with building Bayesian networks and performing probabilistic queries
 (using gRain).
@@ -20,8 +20,8 @@ implementation but the scoring function defaults to using
 [bnlearn](https://www.bnlearn.com/) which allows for a range of scoring
 assumptions and priors for pairwise edge probabilities. There is also more
 exposure of the sampling procedure itself, whereby the algorithm can return
-both partitions and DAGs while providing acceptance rates per proposal to
-understand how well we are sampling in the partition space.
+both partitions and DAGs while providing convergence diagnostics to
+understand how well we are sampling in both partition and DAG space.
 
 We provide a simple
 [example](https://spaceodyssey.github.io/cia/articles/three_node_example.html)
