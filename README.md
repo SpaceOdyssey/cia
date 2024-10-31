@@ -14,13 +14,14 @@ with building Bayesian networks and performing probabilistic queries
 (using gRain).
 
 The bulk of this package is an implementation of partition Markov Chain
-Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the BiDAG
-implementation but the scoring function defaults to using bnlearn which
-allows for a range of scoring assumptions and priors for pairwise edge
-probabilities. There is also more exposure of the sampling procedure
-itself, whereby the algorithm can return both partitions and DAGs while
-providing acceptance rates per proposal to understand how well we are
-sampling in the partition space.
+Monte Carlo (PMCMC) algorithm in R. Our PMCMC is similar to the
+[BiDAG](https://cran.r-project.org/web/packages/BiDAG/index.html)
+implementation but the scoring function defaults to using
+[bnlearn](https://www.bnlearn.com/) which allows for a range of scoring
+assumptions and priors for pairwise edge probabilities. There is also more
+exposure of the sampling procedure itself, whereby the algorithm can return
+both partitions and DAGs while providing acceptance rates per proposal to
+understand how well we are sampling in the partition space.
 
 We provide a simple
 [example](https://spaceodyssey.github.io/cia/articles/three_node_example.html)

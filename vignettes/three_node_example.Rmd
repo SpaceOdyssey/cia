@@ -1,5 +1,5 @@
 ---
-title: "An Example of using the Causal Inference Assistant (CIA)"
+title: "Simple Application of the Causal Inference Assistant (CIA)"
 author: "Mathew Varidel"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output: 
@@ -475,5 +475,6 @@ Suter, P., Kuipers, J., Moffa, G., & Beerenwinkel, N. (2023). Bayesian Structure
 Learning and Sampling of Bayesian Networks with the R Package BiDAG. Journal of 
 Statistical Software, 105(9), 1–31. https://doi.org/10.18637/jss.v105.i09
 
-Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., & Bürkner, P. C. (2021). Rank-normalization, folding, and localization: An improved R-hat for assessing 
+Vehtari, A., Gelman, A., Simpson, D., Carpenter, B., & Bürkner, P. C. (2021).
+Rank-normalization, folding, and localization: An improved R-hat for assessing 
 convergence of MCMC (with discussion). Bayesian analysis, 16(2), 667-718.
