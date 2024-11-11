@@ -14,9 +14,9 @@
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, 

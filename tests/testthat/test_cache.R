@@ -16,10 +16,3 @@ testthat::test_that('Cached scorer looks up correct score', {
   testthat::expect_equal(cached_scorer('A', c()),
                          BNLearnScorer('A', c(), data = data))  
 })
-
-# testthat::test_that('GetParentsKey constructs correct key.', {
-#   testthat::expect_identical(GetParentsKey(NULL, c('A', 'B', 'C', 'D')), '0000')
-#   testthat::expect_identical(GetParentsKey(c(), c('A', 'B', 'C', 'D')), '0000')
-#   testthat::expect_identical(GetParentsKey(c('A', 'C'), c('A', 'B', 'C', 'D')), '1010')
-#   testthat::expect_identical(GetParentsKey(c('B', 'D'), c('A', 'B', 'C', 'D')), '0101')
-# })

@@ -25,20 +25,24 @@ the GetIncrementalScoringEdges method.
 \examples{
 data <- bnlearn::learning.test
 
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
-scorer <- list(
+scorer <- CreateScorer(
   scorer = BNLearnScorer, 
-  parameters = list(data = data)
+  data = data
   )
   
 blacklist <- GetLowestPairwiseScoringEdges(scorer, 3)
 
-blacklist_scorer <- list(
+blacklist_scorer <- CreateScorer(
   scorer = BNLearnScorer, 
-  parameters = list(data = data)
+  data = data,
+  blacklist = blacklist,
+  cache = TRUE
   )
+
+# Randomly sample a starting DAG consistent with the blacklist. Then
+# convert to a partition.
+dag <- UniformlySampleDAG(colnames(data)) * !blacklist
+partitioned_nodes <- DAGtoPartition(dag)
 
 results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
 

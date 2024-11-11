@@ -23,9 +23,9 @@ data <- bnlearn::learning.test
 dag <- UniformlySampleDAG(names(data))
 partitioned_nodes <- DAGtoPartition(dag)
 
-scorer <- list(
+scorer <- CreateScorer(
   scorer = BNLearnScorer, 
-  parameters = list(data = data)
+  data = data
   )
 
 ScoreLabelledPartition(partitioned_nodes, scorer)

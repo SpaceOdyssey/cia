@@ -44,9 +44,9 @@ One step implementation of the tempered partition MCMC.
 dag <- UniformlySampleDAG(c('A', 'B', 'C', 'D', 'E', 'F'))
 partitioned_nodes <- DAGtoPartition(dag)
 
-scorer <- list(
+scorer <- CreateScorer(
   scorer = BNLearnScorer,
-  parameters = list(data = bnlearn::learning.test)
+  data = bnlearn::learning.test
   )
 
 current_state <- list(

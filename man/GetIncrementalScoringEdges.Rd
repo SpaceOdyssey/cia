@@ -9,31 +9,40 @@ GetIncrementalScoringEdges(scorer, cutoff = 0)
 \arguments{
 \item{scorer}{A scorer object.}
 
-\item{cutoff}{A score cutoff.}
+\item{cutoff}{A score cutoff. The score cutoff is equal to the log
+of the Bayes Factor between the two models.}
 }
 \value{
 A Boolean matrix of (parent, child) pairs for blacklisting.
 }
 \description{
-Get edges that incrementally improve the score over an empty DAG.
+Get edges that do not incrementally improve the score over an empty DAG
+greater than a cutoff. In detail, this returns the edges where a graph
+with the edge \eqn{E} given by \eqn{g_E} such that
+Score(g_E) - Score(g_empty) < cutoff. Assuming that the scorer returns the
+log of the marginalised posterior, then the cutoff corresponds to the log of
+the Bayes Factor. The output can be used as a blacklist.
 }
 \examples{
 data <- bnlearn::learning.test
 
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
-scorer <- list(
+scorer <- CreateScorer(
   scorer = BNLearnScorer, 
-  parameters = list(data = data)
+  data = data
   )
   
 blacklist <- GetIncrementalScoringEdges(scorer, cutoff = -10.0)
 
-blacklist_scorer <- list(
+blacklist_scorer <- CreateScorer(
   scorer = BNLearnScorer, 
-  parameters = list(data = data)
+  data = data,
+  cache = TRUE
   )
+
+# Randomly sample a starting DAG consistent with the blacklist. Then
+# convert to a partition.
+dag <- UniformlySampleDAG(colnames(data)) * !blacklist
+partitioned_nodes <- DAGtoPartition(dag)
 
 results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
 

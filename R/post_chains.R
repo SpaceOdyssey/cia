@@ -26,9 +26,9 @@ new_cia_post_chain <- function(x) {
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
@@ -76,9 +76,9 @@ new_cia_post_chains <- function(x = list()) {
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
@@ -108,9 +108,9 @@ new_cia_post_chains <- function(x = list()) {
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)

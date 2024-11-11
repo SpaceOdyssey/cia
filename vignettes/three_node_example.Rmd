@@ -203,7 +203,7 @@ PlotScoreTrace(eq_dag_chains, attribute = 'log_score', ylab = 'log(DAG score)', 
 
 On inspection the score trace for both partitions and DAGs appears to have 
 converged across chains. We can also use quantitative measures, such as the 
-the Split R-hat convergence statistic and the the effective sample size S_eff 
+the Split R-hat convergence statistic and the effective sample size S_eff 
 (Gelman et al., 2013; Vehtari et al., 2021). We can do this for the log-score of 
 the partitions:
 

@@ -16,9 +16,9 @@
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partition <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' # Used to sample from a single partition.  

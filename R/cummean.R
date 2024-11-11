@@ -16,9 +16,9 @@
 #' dag <- UniformlySampleDAG(colnames(data))
 #' partitioned_nodes <- DAGtoPartition(dag)
 #' 
-#' scorer <- list(
+#' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
-#'   parameters = list(data = data)
+#'   data = data
 #'   )
 #' 
 #' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
@@ -33,10 +33,13 @@
 #'                         ncol = length(data))
 #' 
 #' @export
-PlotCumulativeMeanTrace <- function(x, ncol = NULL, nrow = NULL, scales = 'fixed', dir = 'v') UseMethod('PlotCumulativeMeanTrace')
+PlotCumulativeMeanTrace <- function(x, ncol = NULL, nrow = NULL, 
+                                    scales = 'fixed', dir = 'v') 
+  UseMethod('PlotCumulativeMeanTrace')
 
 #' @export
-PlotCumulativeMeanTrace.cia_post_chains <- function(x, ncol = NULL, nrow = NULL, scales = 'fixed', dir = 'v') {
+PlotCumulativeMeanTrace.cia_post_chains <- function(x, ncol = NULL, nrow = NULL, 
+                                                    scales = 'fixed', dir = 'v') {
   
   cummean <- x |>
     lapply(function(x) {
