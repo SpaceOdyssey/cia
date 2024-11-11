@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Mathew
 Varidel</h4>
             
-            <h4 data-toc-skip class="date">31 October, 2024</h4>
+            <h4 data-toc-skip class="date">11 November, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/main/vignettes/three_node_example.Rmd" class="external-link"><code>vignettes/three_node_example.Rmd</code></a></small>
       <div class="d-none name"><code>three_node_example.Rmd</code></div>
@@ -305,7 +305,7 @@ partitions to DAGs and then see if the DAG score has converged.</p>
 </h3>
 <p>On inspection the score trace for both partitions and DAGs appears to
 have converged across chains. We can also use quantitative measures,
-such as the the Split R-hat convergence statistic and the the effective
+such as the the Split R-hat convergence statistic and the effective
 sample size S_eff (Gelman et al., 2013; Vehtari et al., 2021). We can do
 this for the log-score of the partitions:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -319,11 +319,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5305</td>
-<td align="right">0.5215699</td>
-<td align="right">0.0060983</td>
-<td align="right">7314.814</td>
-<td align="right">0.9999881</td>
+<td align="right">-175.5246</td>
+<td align="right">0.4905349</td>
+<td align="right">0.0055318</td>
+<td align="right">7863.413</td>
+<td align="right">1.000039</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -338,11 +338,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5697</td>
-<td align="right">0.6497477</td>
-<td align="right">0.006387</td>
-<td align="right">10349.02</td>
-<td align="right">0.9999686</td>
+<td align="right">-175.5605</td>
+<td align="right">0.6162833</td>
+<td align="right">0.0059484</td>
+<td align="right">10734.04</td>
+<td align="right">1.000063</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -402,18 +402,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1164615</td>
+<td align="right">0.1155385</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2271</td>
+<td align="right">2253</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1142564</td>
+<td align="right">0.1158974</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2228</td>
+<td align="right">2260</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -483,19 +483,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3341795</td>
-<td align="right">0.0094359</td>
+<td align="right">0.3057436</td>
+<td align="right">0.0086410</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6655641</td>
+<td align="right">0.6939744</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6878974</td>
+<td align="right">0.6624359</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0096667</td>
-<td align="right">0.3121026</td>
+<td align="right">0.0086154</td>
+<td align="right">0.3375641</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -537,25 +537,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6655641</td>
-<td align="right">0.4717989</td>
-<td align="right">0.0102559</td>
-<td align="right">2116.241</td>
-<td align="right">1.0019731</td>
+<td align="right">0.6939744</td>
+<td align="right">0.4608464</td>
+<td align="right">0.0100383</td>
+<td align="right">2107.608</td>
+<td align="right">1.0003669</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0096667</td>
-<td align="right">0.0978441</td>
-<td align="right">0.0008374</td>
-<td align="right">13651.008</td>
-<td align="right">1.0000404</td>
+<td align="right">0.0086154</td>
+<td align="right">0.0924196</td>
+<td align="right">0.0007335</td>
+<td align="right">15874.216</td>
+<td align="right">0.9999614</td>
 </tr>
 <tr class="even">
-<td align="right">0.3341795</td>
-<td align="right">0.4717089</td>
-<td align="right">0.0102592</td>
-<td align="right">2114.087</td>
-<td align="right">1.0019736</td>
+<td align="right">0.3057436</td>
+<td align="right">0.4607276</td>
+<td align="right">0.0100378</td>
+<td align="right">2106.739</td>
+<td align="right">1.0003719</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -565,25 +565,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3121026</td>
-<td align="right">0.4633574</td>
-<td align="right">0.0099807</td>
-<td align="right">2155.293</td>
-<td align="right">1.0013498</td>
+<td align="right">0.3375641</td>
+<td align="right">0.4728851</td>
+<td align="right">0.0103204</td>
+<td align="right">2099.497</td>
+<td align="right">1.0008521</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0094359</td>
-<td align="right">0.0966804</td>
-<td align="right">0.0007975</td>
-<td align="right">14695.516</td>
-<td align="right">0.9999874</td>
+<td align="right">0.0086410</td>
+<td align="right">0.0925558</td>
+<td align="right">0.0007702</td>
+<td align="right">14441.664</td>
+<td align="right">1.0000962</td>
 </tr>
 <tr class="even">
-<td align="right">0.6878974</td>
-<td align="right">0.4633574</td>
-<td align="right">0.0099807</td>
-<td align="right">2155.293</td>
-<td align="right">1.0013498</td>
+<td align="right">0.6624359</td>
+<td align="right">0.4728851</td>
+<td align="right">0.0103204</td>
+<td align="right">2099.497</td>
+<td align="right">1.0008521</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -666,19 +666,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3342051</td>
-<td align="right">0.3342051</td>
+<td align="right">0.3058974</td>
+<td align="right">0.3058974</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6656667</td>
+<td align="right">0.6940513</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6878974</td>
+<td align="right">0.6624359</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3123333</td>
-<td align="right">0.3121026</td>
+<td align="right">0.3366154</td>
+<td align="right">0.3375641</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -728,11 +728,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6598526</td>
-<td align="right">0.1274928</td>
-<td align="right">0.0027723</td>
-<td align="right">2114.935</td>
-<td align="right">1.001988</td>
+<td align="right">0.6675243</td>
+<td align="right">0.1245355</td>
+<td align="right">0.0027142</td>
+<td align="right">2105.167</td>
+<td align="right">1.000362</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace

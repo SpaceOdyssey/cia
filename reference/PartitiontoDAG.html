@@ -75,9 +75,9 @@ each state will be an adjacency matrix.</p>
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="UniformlySampleDAG.html">UniformlySampleDAG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">partition</span> <span class="op">&lt;-</span> <span class="fu"><a href="DAGtoPartition.html">DAGtoPartition</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="CreateScorer.html">CreateScorer</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  scorer <span class="op">=</span> <span class="va">BNLearnScorer</span>, </span></span>
-<span class="r-in"><span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">data</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Used to sample from a single partition.  </span></span></span>
@@ -147,25 +147,25 @@ each state will be an adjacency matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B C D E F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 1 0 1 0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0 0 1 0 1 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0 0 0 1 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 1 1 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0 0 0 0 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0 0 0 1 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D 0 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> E 0 0 0 0 0 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> F 0 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state[[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   A B C D E F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 1 0 1 0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> B 0 0 1 0 1 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> C 0 0 0 1 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> A 0 1 1 1 0 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> B 0 0 0 0 1 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> C 0 0 0 1 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> D 0 0 0 0 0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> E 0 0 0 0 0 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> F 0 0 0 0 1 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> E 0 0 0 0 0 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F 0 0 0 0 0 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24071.05 -24071.05 -24027.77</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24071.05 -24029.79 -24029.79</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cia_chain"</span>

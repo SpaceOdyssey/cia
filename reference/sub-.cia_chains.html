@@ -75,9 +75,9 @@
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="UniformlySampleDAG.html">UniformlySampleDAG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">partitioned_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="DAGtoPartition.html">DAGtoPartition</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="CreateScorer.html">CreateScorer</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  scorer <span class="op">=</span> <span class="va">BNLearnScorer</span>, </span></span>
-<span class="r-in"><span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">data</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="SampleChains.html">SampleChains</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">partitioned_nodes</span>, <span class="fu"><a href="PartitionMCMC.html">PartitionMCMC</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">scorer</span><span class="op">)</span></span></span>
@@ -86,21 +86,21 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   partition node</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1    D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         1    F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         2    E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         3    B</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         4    A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         5    C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1    F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         2    D</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         3    E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         4    B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         5    A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         6    C</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24184.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24193.11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[1]]$proposal_used</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "split_join"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "swap_adjacent"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -116,10 +116,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$jac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.4054651</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$mhr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -461.6402</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -160.3342</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -131,15 +131,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   partition node</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         1    D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         2    A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         3    F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         4    C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         4    E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         5    B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         1    F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         2    E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         3    B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         3    C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         4    A</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24218.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -24479.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[1]]</span>
@@ -160,10 +160,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$jac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2231436</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$mhr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -856.8462</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -17.26375</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

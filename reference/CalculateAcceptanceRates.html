@@ -76,9 +76,9 @@ chains and the proposal used.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: igraph</span>
 <span class="r-in"><span><span class="va">partitioned_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="DAGtoPartition.html">DAGtoPartition</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="CreateScorer.html">CreateScorer</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  scorer <span class="op">=</span> <span class="va">BNLearnScorer</span>, </span></span>
-<span class="r-in"><span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">data</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="SampleChains.html">SampleChains</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">partitioned_nodes</span>, <span class="fu"><a href="PartitionMCMC.html">PartitionMCMC</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">scorer</span><span class="op">)</span></span></span>
@@ -86,7 +86,7 @@ chains and the proposal used.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   mean_accept mean_black_obeyed mean_white_obeyed n_accept n_total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>         0.2                 1                 1        4      20</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span>        0.45                 1                 1        9      20</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

@@ -79,9 +79,9 @@ be of the form p_predict(dag, ...) and return either a vector of numeric values.
 <span class="r-in"><span><span class="va">dag</span> <span class="op">&lt;-</span> <span class="fu"><a href="UniformlySampleDAG.html">UniformlySampleDAG</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">partitioned_nodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="DAGtoPartition.html">DAGtoPartition</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  scorer <span class="op">=</span> <span class="va">BNLearnScorer</span>, </span></span>
-<span class="r-in"><span>  parameters <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">scorer</span> <span class="op">&lt;-</span> <span class="fu"><a href="CreateScorer.html">CreateScorer</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  scorer <span class="op">=</span> <span class="va">BNLearnScorer</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">data</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="SampleChains.html">SampleChains</a></span><span class="op">(</span><span class="fl">10</span>, <span class="va">partitioned_nodes</span>, <span class="fu"><a href="PartitionMCMC.html">PartitionMCMC</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">scorer</span><span class="op">)</span></span></span>
@@ -91,27 +91,64 @@ be of the form p_predict(dag, ...) and return either a vector of numeric values.
 <span class="r-in"><span><span class="fu">SamplePosteriorPredictiveChains</span><span class="op">(</span><span class="va">dag_chains</span>, <span class="kw">function</span><span class="op">(</span><span class="va">dag</span><span class="op">)</span> <span class="op">{</span> <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">dag</span><span class="op">)</span> <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    0    0    0    0    1    1    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    0    0    0    0    1    1    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    0    0    0    0    1    1    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    0    0    0    0    1    0    1    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    0    0    0    0    1    0    1    0    0     0     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    0    0    0    0    1    0    1    0    0     0     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    0    0    0    0    1    0    1    0    0     0     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    0    0    0    0    1    0    1    0    0     0     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0     0     1     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     0     1     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0     0     0     0     1     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0     0     0     1     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     0     0     1     1     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     0     0     0     0     1     1     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     0     0     0     0     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     0     0     0     0     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     0     0     0     0     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     0     0     0     1     0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0     0     0     0     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     0     0     0     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0     0     0     0     0     0     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0     0     0     0     0     1     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cia_post_chain"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    0    0    0    0    0    0    1    0    1     0     1     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    0    0    0    0    0    0    1    0    1     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    0    0    0    0    0    0    1    0    1     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    0    0    0    0    0    1    1    0    1     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    0    0    0    0    0    1    1    0    0     1     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    0    0    0    0    1    1    1    0    0     1     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    0    0    0    0    1    1    1    0    0     1     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    0    0    0    0    1    1    1    0    0     1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    0    0    0    0    1    1    1    0    0     1     1     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    0    0    0    0    1    1    1    0    0     1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    0    0    0    0    0    0    1    0    0     1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    0    0    0    0    0    1    1    0    0     1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    0    0    0    0    0    1    1    0    0     1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    0    0    0    0    0    1    1    0    0     1     1     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    0    0    0    0    0    1    1    0    0     1     1     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    0    1    1    1    0    0    0    0    0     0     0     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    0    1    1    1    0    0    0    0    0     0     1     1     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    0    1    1    1    0    0    0    0    0     0     1     1     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     1     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     1     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     0     0     1     0     1     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0     0     0     0     0     1     0     1     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0     0     0     0     1     0     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     0     1     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     0     1     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     0     1     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     0     0     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0     1     0     1     0     1     0     0     0     1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     1     0     0     1     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     1     0     0     0     0     0     1     1     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     1     0     0     0     0     0     1     1     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     0     0     1     1     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     0     0     0     0     1     1     0     0     0     0     0</span>
@@ -120,44 +157,7 @@ be of the form p_predict(dag, ...) and return either a vector of numeric values.
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     0     0     1     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     0     0     1     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0     0     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0     0     0     1     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "cia_post_chain"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [[2]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]    0    0    0    0    0    0    1    0    1     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]    0    0    0    0    0    0    1    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]    0    1    1    0    0    0    0    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]    0    1    1    0    0    0    0    0    0     0     1     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     1     0     0     1     0     0     0     1     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     1     0     0     0     0     1     0     1     0     0     0     1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     1     0     0     0     0     1     0     1     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]     0     0     0     0     1     1     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]     0     0     0     0     1     1     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]     0     0     0     0     0     1     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]     0     0     0     0     0     1     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]     0     0     0     0     0     1     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]     0     0     0     0     0     1     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]     0     0     0     0     0     1     0     0     0     1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     0     0     0     0     1     1     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]     1     0     0     0     1     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]     0     0     0     0     1     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [10,]     0     0     0     0     1     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
