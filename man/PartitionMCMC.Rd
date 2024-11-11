@@ -18,11 +18,9 @@ PartitionMCMC(
 \item{temperature}{Numeric value representing the temperature to raise the
 score to. Default is 1.}
 
-\item{prerejection}{Boolean flag to reject due to the proposal disobeying the
-black or white lists. Only set to FALSE if you want to understand
-how often you are proposing states that disobey the black or white lists. Can
-be useful for debugging or understanding the efficiency of specific proposal
-distributions.}
+\item{prerejection}{Boolean flag to discard proposals due to the proposal
+disobeying the black or white lists. Setting this to TRUE disobeys detailed
+balance but can be useful for debugging. Default is FALSE.}
 
 \item{verbose}{Flag to pass MCMC information.}
 }
