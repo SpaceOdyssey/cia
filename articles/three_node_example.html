@@ -8,8 +8,8 @@
 <title>Simple Application of the Causal Inference Assistant (CIA) • cia</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><script src="../deps/MathJax-3.2.2/tex-chtml.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simple Application of the Causal Inference Assistant (CIA)">
 </head>
 <body>
@@ -60,9 +60,9 @@
                         <h4 data-toc-skip class="author">Mathew
 Varidel</h4>
             
-            <h4 data-toc-skip class="date">11 November, 2024</h4>
+            <h4 data-toc-skip class="date">17 November, 2024</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/main/vignettes/three_node_example.Rmd" class="external-link"><code>vignettes/three_node_example.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/v1.0.0/vignettes/three_node_example.Rmd" class="external-link"><code>vignettes/three_node_example.Rmd</code></a></small>
       <div class="d-none name"><code>three_node_example.Rmd</code></div>
     </div>
 
@@ -319,11 +319,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5347</td>
-<td align="right">0.5461888</td>
-<td align="right">0.0063879</td>
-<td align="right">7310.985</td>
-<td align="right">1.000218</td>
+<td align="right">-175.5275</td>
+<td align="right">0.5088514</td>
+<td align="right">0.0055313</td>
+<td align="right">8463.201</td>
+<td align="right">1.000197</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -338,11 +338,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5694</td>
-<td align="right">0.6539978</td>
-<td align="right">0.0067505</td>
-<td align="right">9386.135</td>
-<td align="right">1.000415</td>
+<td align="right">-175.5623</td>
+<td align="right">0.6262941</td>
+<td align="right">0.0059166</td>
+<td align="right">11205.05</td>
+<td align="right">1.000208</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -402,18 +402,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1202051</td>
+<td align="right">0.1177436</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2344</td>
+<td align="right">2296</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1163077</td>
+<td align="right">0.1198462</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2268</td>
+<td align="right">2337</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -483,19 +483,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3231538</td>
-<td align="right">0.0095128</td>
+<td align="right">0.3241795</td>
+<td align="right">0.0089487</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6764359</td>
+<td align="right">0.6755128</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6789744</td>
+<td align="right">0.6983846</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0092821</td>
-<td align="right">0.3210256</td>
+<td align="right">0.0084615</td>
+<td align="right">0.3016154</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -537,25 +537,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6764359</td>
-<td align="right">0.4678418</td>
-<td align="right">0.0096954</td>
-<td align="right">2328.470</td>
-<td align="right">1.000927</td>
+<td align="right">0.6755128</td>
+<td align="right">0.4681889</td>
+<td align="right">0.0098655</td>
+<td align="right">2252.187</td>
+<td align="right">1.001599</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0092821</td>
-<td align="right">0.0958965</td>
-<td align="right">0.0008249</td>
-<td align="right">13515.538</td>
-<td align="right">1.000554</td>
+<td align="right">0.0084615</td>
+<td align="right">0.0915978</td>
+<td align="right">0.0007477</td>
+<td align="right">15007.760</td>
+<td align="right">1.000090</td>
 </tr>
 <tr class="even">
-<td align="right">0.3231538</td>
-<td align="right">0.4676869</td>
-<td align="right">0.0096964</td>
-<td align="right">2326.436</td>
-<td align="right">1.000947</td>
+<td align="right">0.3241795</td>
+<td align="right">0.4680735</td>
+<td align="right">0.0098632</td>
+<td align="right">2252.125</td>
+<td align="right">1.001577</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -565,25 +565,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3210256</td>
-<td align="right">0.4668766</td>
-<td align="right">0.0099458</td>
-<td align="right">2203.540</td>
-<td align="right">1.000628</td>
+<td align="right">0.3016154</td>
+<td align="right">0.4589651</td>
+<td align="right">0.0091382</td>
+<td align="right">2522.535</td>
+<td align="right">1.000559</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0095128</td>
-<td align="right">0.0970699</td>
-<td align="right">0.0008242</td>
-<td align="right">13871.126</td>
-<td align="right">1.000106</td>
+<td align="right">0.0089487</td>
+<td align="right">0.0941747</td>
+<td align="right">0.0007495</td>
+<td align="right">15789.591</td>
+<td align="right">1.000196</td>
 </tr>
 <tr class="even">
-<td align="right">0.6789744</td>
-<td align="right">0.4668766</td>
-<td align="right">0.0099458</td>
-<td align="right">2203.540</td>
-<td align="right">1.000628</td>
+<td align="right">0.6983846</td>
+<td align="right">0.4589651</td>
+<td align="right">0.0091382</td>
+<td align="right">2522.535</td>
+<td align="right">1.000559</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -666,19 +666,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3232308</td>
-<td align="right">0.3227179</td>
+<td align="right">0.3242564</td>
+<td align="right">0.3238974</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6764615</td>
+<td align="right">0.6755641</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6789744</td>
+<td align="right">0.6983846</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3198718</td>
-<td align="right">0.3210256</td>
+<td align="right">0.3008718</td>
+<td align="right">0.3016154</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -728,11 +728,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.662764</td>
-<td align="right">0.1264188</td>
-<td align="right">0.0026205</td>
-<td align="right">2327.267</td>
-<td align="right">1.000914</td>
+<td align="right">0.6625108</td>
+<td align="right">0.1265035</td>
+<td align="right">0.0026663</td>
+<td align="right">2251.076</td>
+<td align="right">1.001592</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace

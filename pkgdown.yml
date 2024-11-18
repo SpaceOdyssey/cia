@@ -3,7 +3,7 @@ pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   three_node_example: three_node_example.html
-last_built: 2024-11-11T22:15Z
+last_built: 2024-11-17T23:54Z
 urls:
   reference: https://spaceodyssey.github.io/cia/reference
   article: https://spaceodyssey.github.io/cia/articles
