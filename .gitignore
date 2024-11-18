@@ -8,7 +8,6 @@
 .Rproj.user
 *.Rproj
 .Rhistory
-inst/
 *.csv
 *.pdf
 vignettes/*cache/

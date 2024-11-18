@@ -2,8 +2,8 @@
 # Causal Inference Assistant (cia)
 
 <!-- badges: start -->
-
 [![R-CMD-check](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/SpaceOdyssey/cia/actions/workflows/R-CMD-check.yaml)
+[![CRAN status](https://www.r-pkg.org/badges/version/cia)](https://CRAN.R-project.org/package=cia)
 [![codecov](https://codecov.io/github/SpaceOdyssey/cia/graph/badge.svg?token=NELX4A88RT)](https://app.codecov.io/github/SpaceOdyssey/cia)
 <!-- badges: end -->
 
