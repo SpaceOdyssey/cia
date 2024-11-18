@@ -2,7 +2,7 @@ citHeader("To cite CIA in publications use:")
 
 bibentry(
   key = "CIA",
-  bibtype  = "software",
+  bibtype  = "Manual",
   doi = "10.5281/zenodo.14176796",
   url = "https://github.com/SpaceOdyssey/cia",
   author = c(person("Mathew", "Varidel")),
