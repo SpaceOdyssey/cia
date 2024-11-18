@@ -343,14 +343,14 @@ PlotConcordance(p_edge)
 ```
 
 Another way to check the convergence is to look at the cumulative mean over the 
-chains (Suter et al., 2021). This can be performed by first drawing from the
+chains (Suter et al., 2023). This can be performed by first drawing from the
 posterior predictive chain, which involves sampling whether there is an edge
 per sampling iteration. The cumulative mean can then be calculated from this 
 chain. Eventually the two chains for the cumulative mean should stabilise to 
-approximately the same value. Note that in Suter et al. (2021) they show the 
-within chain cumulative mean trace, instead we show the the cumulative mean 
-trace per pairwise edge probability for multiple chains, to check both the 
-within and between chain convergence.
+approximately the same value. In Suter et al. (2023) they show the within chain 
+cumulative mean trace, instead we show the the cumulative mean trace per 
+pairwise edge probability for multiple chains, to check both the within and 
+between chain convergence.
 
 ```{r, error = TRUE, fig.dim = c(7.0, 5.0)}
 pedge_sample <- SampleEdgeProbabilities(eq_dag_chains)
