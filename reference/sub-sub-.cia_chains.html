@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">cia</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -103,12 +103,12 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state[[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   partition node</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1    A</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2         2    C</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3         3    D</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4         3    E</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5         4    F</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6         5    B</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         1    D</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         2    A</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         3    C</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         4    E</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         5    F</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         6    B</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $log_score</span>
@@ -117,17 +117,17 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[1]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[1]]$proposal_used</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "node_move"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "swap_node"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[2]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[2]]$proposal_used</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "split_join"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "node_move"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $proposal_info[[3]]$proposal_used</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "node_move"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "swap_node"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -143,10 +143,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$jac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1823216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[1]]$mhr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -752.3851</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -122.0319</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[2]]</span>
@@ -160,15 +160,15 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[2]]$jac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.1823216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[2]]$mhr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -21.17057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -184.7172</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[3]]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[3]]$accept</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[3]]$white_obeyed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
@@ -177,10 +177,10 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[3]]$jac</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1823216</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $mcmc_info[[3]]$mhr</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1.818989e-12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -137.395</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
