@@ -2,7 +2,7 @@ citHeader("To cite CIA in publications use:")
 
 bibentry(
   key = "CIA",
-  bibtype  = "Article",
+  bibtype  = "Manual",
   doi = "10.5281/zenodo.14176795",
   author = c(person("Mathew", "Varidel")),
   title = "CIA: Learn and Apply Directed Acyclic Graphs for Causal Inference",
