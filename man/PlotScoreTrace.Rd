@@ -9,8 +9,7 @@ PlotScoreTrace(
   attribute = "log_score",
   n_burnin = 0,
   same_plot = TRUE,
-  col = NULL,
-  ...
+  col = NULL
 )
 }
 \arguments{
@@ -24,11 +23,13 @@ PlotScoreTrace(
 
 \item{col}{A string representing a color for a single chain or a vector of
 strings to cycle through for multiple chains.}
-
-\item{...}{Extra parameters to pass to the plot and graphics::line functions.}
 }
 \value{
-No return value. Called to produce a base R trace plot.
+Depending on the argument 'same_plot', either:
+\itemize{
+\item A single 'ggplot' object combining all chains into one plot
+\item A list of 'ggplot' objects, each corresponding to a separate chain
+}
 }
 \description{
 Plot the score trace
@@ -47,10 +48,10 @@ scorer <- CreateScorer(
 results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
 
 # Plot partition score trace.
-PlotScoreTrace(results, type = 'l')
+PlotScoreTrace(results)
 
 # Plot DAG score trace.
 dag_chains <- PartitiontoDAG(results, scorer)
-PlotScoreTrace(dag_chains, type = 'l')
+PlotScoreTrace(dag_chains)
 
 }
