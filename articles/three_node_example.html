@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Mathew
 Varidel</h4>
             
-            <h4 data-toc-skip class="date">18 November, 2024</h4>
+            <h4 data-toc-skip class="date">03 December, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/main/vignettes/three_node_example.Rmd" class="external-link"><code>vignettes/three_node_example.Rmd</code></a></small>
       <div class="d-none name"><code>three_node_example.Rmd</code></div>
@@ -275,8 +275,8 @@ dependency on the initial starting value. This can be done graphically
 by plotting the score of both chains. This plot is often referred to as
 the score trace.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">chains</span>, ylab <span class="op">=</span> <span class="st">'log(partition score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="three_node_example_files/figure-html/unnamed-chunk-9-1.png" width="576"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">chains</span>, ylab <span class="op">=</span> <span class="st">'log(partition score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in PlotScoreTrace(chains, ylab = "log(partition score)", type = "l"): unused arguments (ylab = "log(partition score)", type = "l")</span></span></code></pre></div>
 <p>The graph suggests that PMCMC spends a number of steps at the start
 of the chains to converge to a stable point. This is called the burnin
 and should be removed. I remove 500 steps as a burnin and plot the trace
@@ -284,8 +284,8 @@ again.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_burnin</span> <span class="op">&lt;-</span> <span class="fl">500</span></span>
 <span><span class="va">eq_chains</span> <span class="op">&lt;-</span> <span class="va">chains</span><span class="op">[</span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">n_burnin</span><span class="op">)</span><span class="op">:</span><span class="va">n_results</span><span class="op">]</span></span>
-<span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">eq_chains</span>, ylab <span class="op">=</span> <span class="st">'log(partition score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="three_node_example_files/figure-html/unnamed-chunk-10-1.png" width="576"></p>
+<span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">eq_chains</span>, ylab <span class="op">=</span> <span class="st">'log(partition score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in PlotScoreTrace(eq_chains, ylab = "log(partition score)", type = "l"): unused arguments (ylab = "log(partition score)", type = "l")</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="qualitatively-check-the-dag-score-chains-for-convergence">Qualitatively check the DAG score chains for convergence<a class="anchor" aria-label="anchor" href="#qualitatively-check-the-dag-score-chains-for-convergence"></a>
@@ -297,8 +297,8 @@ partitions to DAGs and then see if the DAG score has converged.</p>
 <code class="sourceCode R"><span><span class="va">eq_dag_chains</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/PartitiontoDAG.html">PartitiontoDAG</a></span><span class="op">(</span><span class="va">eq_chains</span>, <span class="va">scorer</span><span class="op">)</span></span></code></pre></div>
 <p>Plot trace of DAG scores for equilibrium states.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">eq_dag_chains</span>, attribute <span class="op">=</span> <span class="st">'log_score'</span>, ylab <span class="op">=</span> <span class="st">'log(DAG score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span></code></pre></div>
-<p><img src="three_node_example_files/figure-html/unnamed-chunk-12-1.png" width="576"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/PlotScoreTrace.html">PlotScoreTrace</a></span><span class="op">(</span><span class="va">eq_dag_chains</span>, attribute <span class="op">=</span> <span class="st">'log_score'</span>, ylab <span class="op">=</span> <span class="st">'log(DAG score)'</span>, type <span class="op">=</span> <span class="st">'l'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in PlotScoreTrace(eq_dag_chains, attribute = "log_score", ylab = "log(DAG score)", : unused arguments (ylab = "log(DAG score)", type = "l")</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="quantitatively-check-the-convergence-of-the-score-trace">Quantitatively check the convergence of the score trace<a class="anchor" aria-label="anchor" href="#quantitatively-check-the-convergence-of-the-score-trace"></a>
@@ -319,11 +319,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5157</td>
-<td align="right">0.4486522</td>
-<td align="right">0.0046127</td>
-<td align="right">9460.518</td>
-<td align="right">1.000261</td>
+<td align="right">-175.5269</td>
+<td align="right">0.5052056</td>
+<td align="right">0.0056361</td>
+<td align="right">8034.739</td>
+<td align="right">1.000892</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -338,11 +338,11 @@ this for the log-score of the partitions:</p>
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5539</td>
-<td align="right">0.5902183</td>
-<td align="right">0.0051576</td>
-<td align="right">13095.8</td>
-<td align="right">1.000073</td>
+<td align="right">-175.5646</td>
+<td align="right">0.6344048</td>
+<td align="right">0.0061038</td>
+<td align="right">10802.86</td>
+<td align="right">1.000393</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -402,18 +402,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1166667</td>
+<td align="right">0.1096410</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2275</td>
+<td align="right">2138</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1117949</td>
+<td align="right">0.1167692</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2180</td>
+<td align="right">2277</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -483,19 +483,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3199744</td>
-<td align="right">0.0085385</td>
+<td align="right">0.3339744</td>
+<td align="right">0.0092051</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6798205</td>
+<td align="right">0.6656410</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6846923</td>
+<td align="right">0.6984615</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0073590</td>
-<td align="right">0.3153077</td>
+<td align="right">0.0088205</td>
+<td align="right">0.3015385</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -537,25 +537,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.6798205</td>
-<td align="right">0.4665514</td>
-<td align="right">0.0095029</td>
-<td align="right">2410.369</td>
-<td align="right">1.000900</td>
+<td align="right">0.6656410</td>
+<td align="right">0.4717719</td>
+<td align="right">0.0100313</td>
+<td align="right">2211.824</td>
+<td align="right">1.000136</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0073590</td>
-<td align="right">0.0854693</td>
-<td align="right">0.0006844</td>
-<td align="right">15595.734</td>
-<td align="right">1.000056</td>
+<td align="right">0.0088205</td>
+<td align="right">0.0935037</td>
+<td align="right">0.0007895</td>
+<td align="right">14027.499</td>
+<td align="right">1.000158</td>
 </tr>
 <tr class="even">
-<td align="right">0.3199744</td>
-<td align="right">0.4664722</td>
-<td align="right">0.0095055</td>
-<td align="right">2408.265</td>
-<td align="right">1.000896</td>
+<td align="right">0.3339744</td>
+<td align="right">0.4716367</td>
+<td align="right">0.0100279</td>
+<td align="right">2212.072</td>
+<td align="right">1.000128</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -565,25 +565,25 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.3153077</td>
-<td align="right">0.4646443</td>
-<td align="right">0.0096183</td>
-<td align="right">2333.677</td>
-<td align="right">1.000327</td>
+<td align="right">0.3015385</td>
+<td align="right">0.4589318</td>
+<td align="right">0.0099892</td>
+<td align="right">2110.758</td>
+<td align="right">1.000427</td>
 </tr>
 <tr class="odd">
-<td align="right">0.0085385</td>
-<td align="right">0.0920096</td>
-<td align="right">0.0007040</td>
-<td align="right">17083.222</td>
-<td align="right">1.000012</td>
+<td align="right">0.0092051</td>
+<td align="right">0.0955020</td>
+<td align="right">0.0008486</td>
+<td align="right">12665.995</td>
+<td align="right">1.000233</td>
 </tr>
 <tr class="even">
-<td align="right">0.6846923</td>
-<td align="right">0.4646443</td>
-<td align="right">0.0096183</td>
-<td align="right">2333.677</td>
-<td align="right">1.000327</td>
+<td align="right">0.6984615</td>
+<td align="right">0.4589318</td>
+<td align="right">0.0099892</td>
+<td align="right">2110.758</td>
+<td align="right">1.000427</td>
 </tr>
 <tr class="odd">
 <td align="right">0.0000000</td>
@@ -666,19 +666,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3200000</td>
-<td align="right">0.3202051</td>
+<td align="right">0.3340769</td>
+<td align="right">0.3333077</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6799231</td>
+<td align="right">0.6657179</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6846923</td>
+<td align="right">0.6984615</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3149744</td>
-<td align="right">0.3153077</td>
+<td align="right">0.3004615</td>
+<td align="right">0.3015385</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -728,11 +728,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">R_hat</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.6636864</td>
-<td align="right">0.1260596</td>
-<td align="right">0.0025695</td>
-<td align="right">2406.844</td>
-<td align="right">1.000901</td>
+<td align="right">0.6598599</td>
+<td align="right">0.1274796</td>
+<td align="right">0.0027112</td>
+<td align="right">2210.791</td>
+<td align="right">1.000134</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
