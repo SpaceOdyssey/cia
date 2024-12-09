@@ -60,16 +60,13 @@ PlotScoreTrace.cia_chains <- function(chains, attribute = 'log_score', n_burnin 
         iteration = 1:length(chains[[i]][[attribute]]))
       if (same_plot){
         plots <- plots + ggplot2::geom_line(data = chain_log_score, ggplot2::aes(x = iteration, y = log_score), size = 0.4, colour = col[[i]])
-        print(plots)
       } else {
         
         plot_list[[1]] <- plots
-        print(plots)
         plot_list[[i]] <- ggplot2::ggplot(chain_log_score, ggplot2::aes(x = iteration, y = log_score)) +
           ggplot2::geom_line(size = 0.4, colour = col[[i]]) + 
           ggplot2::labs(x = "Iteration", y = "log score") + 
           ggplot2::theme_classic()
-        print(plot_list[[i]])
       }
       
     } 
