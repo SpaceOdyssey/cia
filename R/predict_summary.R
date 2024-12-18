@@ -1,47 +1,70 @@
 # Summarise posterior predictive chains.
 
 #' @export
-summary.cia_post_chains <- function(object, ...) {
+summary.cia_post_chains <- function(object, 
+                                    stat_names = c('Mean', 'SD', 'MCSE', 'R_hat', 'N_eff'),
+                                    ...) {
   
   n_chains <- length(object)
   n_par <- ncol(object[[1]])
-  stat_names <- c('mean', 'sd', 'n_eff')
   res <- list()
   for (i in 1:n_chains) {
     res[[i]] <- summary(object[[i]])
   }
   
   # Summarise total.
-  stat_names <- c('Mean', 'SD', 'MCSE', 'S_eff', 'R_hat')
-  res_mat <- matrix(nrow = n_par, ncol = length(stat_names),
+  n_stats <- length(stat_names)
+  res_mat <- matrix(nrow = n_par, ncol = n_stats,
                     dimnames = list(colnames(object[[1]]), stat_names))
   
   flat <- FlattenChains(object)
   res_tot <- list()
-  res_mat[, 1] <- colMeans(flat)
-  res_mat[, 2] <- apply(flat, 2, stats::sd)
-  
-  if (n_par == 1) {
-    res_mat[1, 4] <- object |> 
-      lapply(function(x) as.vector(x)) |> 
-      CalculateEffectiveSize.list()
+  for (i in 1:n_stats) {
+    stat_name <- casefold(stat_names[i])
     
-    res_mat[1, 5] <- object |> 
-      lapply(function(x) as.vector(x)) |> 
-      CalculateSplitRHat()
-  } else {
-    for (i in 1:n_par) {
-      res_mat[i, 4] <- object |> 
-        lapply(function(x) as.vector(x[, i])) |>
-        CalculateEffectiveSize.list()
-      
-      res_mat[i, 5] <- object |> 
-        lapply(function(x) as.vector(x[, i])) |> 
-        CalculateSplitRHat()
+    if (stat_name == 'mean')
+      res_mat[, i] <- colMeans(flat)
+    if (stat_name == 'median')
+      res_mat[, i] <- apply(flat, 2, median)
+    if (stat_name == 'sd')
+      res_mat[, i] <- apply(flat, 2, stats::sd)
+    if (stat_name == 'mcse') {
+      sd <- apply(flat, 2, stats::sd)
+      n_eff <- apply(flat, 2, function(x) CalculateEffectiveSize.numeric(x))
+      res_mat[, i] <- sd/sqrt(n_eff)
+    } 
+    if (startsWith(stat_name, 'q')) {
+      q <- stat_name |> stringr::str_remove('q') |> as.numeric()
+      res_mat[, i] <- apply(flat, 2, function(x) stats::quantile(x, probs = q/100))
+    }
+    if (stat_name == 'r_hat') {
+      if (n_par == 1) {
+        res_mat[1, i] <- object |> 
+          lapply(function(x) as.vector(x)) |> 
+          CalculateSplitRHat.list()
+      } else {
+        for (j in 1:n_par) {
+          res_mat[j, i] <- object |> 
+            lapply(function(x) as.vector(x[, j])) |> 
+            CalculateSplitRHat.list()
+        }
+      }
+    }
+    if (stat_name == 'n_eff') {
+      if (n_par == 1) {
+        
+        res_mat[1, i] <- object |> 
+          lapply(function(x) as.vector(x)) |> 
+          CalculateEffectiveSize.list()
+      } else {
+        for (j in 1:n_par) {
+          res_mat[j, i] <- object |> 
+            lapply(function(x) as.vector(x[, j])) |> 
+            CalculateEffectiveSize.list()
+        }
+      }
     }
   }
-  
-  res_mat[, 3] <- res_mat[, 2]/sqrt(res_mat[, 4])
   
   res_tot$stats <- res_mat
   
@@ -71,16 +94,37 @@ print.summary.cia_post_chains <- function(x, digits = 3, ...) {
 }
 
 #' @export
-summary.cia_post_chain <- function(object, ...) {
+summary.cia_post_chain <- function(object, 
+                                   stat_names = c('Mean', 'SD', 'MCSE', 'R_hat', 'N_eff'),
+                                   ...) {
   
-  stat_names <- c('Mean', 'SD', 'MCSE', 'N_eff')
-  res_mat <- matrix(nrow = ncol(object), ncol = length(stat_names),
+  n_stats <- length(stat_names)
+  res_mat <- matrix(nrow = ncol(object), ncol = n_stats,
                     dimnames = list(colnames(object), stat_names))
   
-  res_mat[, 1] <- colMeans(object)
-  res_mat[, 2] <- apply(object, 2, stats::sd)
-  res_mat[, 4] <- apply(object, 2, function(x) CalculateEffectiveSize.vector(x))
-  res_mat[, 3] <- res_mat[, 2]/sqrt(res_mat[, 4])
+  for (i in 1:n_stats) {
+    stat_name <- casefold(stat_names[i])
+    
+    if (stat_name == 'mean')
+      res_mat[, i] <- colMeans(object)
+    if (stat_name == 'median')
+      res_mat[, i] <- apply(object, 2, stats::median)
+    if (stat_name == 'sd')
+      res_mat[, i] <- apply(object, 2, stats::sd)
+    if (stat_name == 'r_hat')
+      res_mat[, i] <- apply(object, 2, function(x) CalculateSplitRHat.numeric(x))
+    if (stat_name == 'n_eff')
+      res_mat[, i] <- apply(object, 2, function(x) CalculateEffectiveSize.numeric(x))
+    if (stat_name == 'mcse') {
+      std <- apply(object, 2, stats::sd)
+      n_eff <- CalculateEffectiveSize.numeric(object)
+      res_mat[, i] <- std/sqrt(n_eff)
+    }
+    if (startsWith(stat_name, 'q')) {
+      q <- stat_name |> stringr::str_remove('q') |> as.numeric(q)
+      res_mat[, i] <- apply(object, 2, function(x) stats::quantile(x, probs = q/100))
+    }
+  }
   
   res <- list(stats = res_mat)
   
