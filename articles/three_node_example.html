@@ -60,7 +60,7 @@
                         <h4 data-toc-skip class="author">Mathew
 Varidel</h4>
             
-            <h4 data-toc-skip class="date">09 December, 2024</h4>
+            <h4 data-toc-skip class="date">18 December, 2024</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/SpaceOdyssey/cia/blob/main/vignettes/three_node_example.Rmd" class="external-link"><code>vignettes/three_node_example.Rmd</code></a></small>
       <div class="d-none name"><code>three_node_example.Rmd</code></div>
@@ -309,42 +309,12 @@ such as the the Split R-hat convergence statistic and the effective
 sample size S_eff (Gelman et al., 2013; Vehtari et al., 2021). We can do
 this for the log-score of the partitions:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">eq_chains</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Mean</th>
-<th align="right">SD</th>
-<th align="right">MCSE</th>
-<th align="right">S_eff</th>
-<th align="right">R_hat</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="right">-175.5182</td>
-<td align="right">0.4630504</td>
-<td align="right">0.0049445</td>
-<td align="right">8770.419</td>
-<td align="right">1.000233</td>
-</tr></tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">eq_chains</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in CalculateEffectiveSize.numeric(object): could not find function "CalculateEffectiveSize.numeric"</span></span></code></pre></div>
 <p>This can also be performed for the log DAG scores.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">eq_dag_chains</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Mean</th>
-<th align="right">SD</th>
-<th align="right">MCSE</th>
-<th align="right">S_eff</th>
-<th align="right">R_hat</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="right">-175.5506</td>
-<td align="right">0.5771927</td>
-<td align="right">0.0052362</td>
-<td align="right">12151.02</td>
-<td align="right">1.000204</td>
-</tr></tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">eq_dag_chains</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in CalculateEffectiveSize.numeric(object): could not find function "CalculateEffectiveSize.numeric"</span></span></code></pre></div>
 <p>The Split R-hat statistic provides a measure of the convergence of
 the chains (Gelman et al., 2013). R-hat values closer to 1 are
 considered to have greater evidence for convergence, with the latest
@@ -402,18 +372,18 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.1148718</td>
+<td align="right">0.1174359</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2240</td>
+<td align="right">2290</td>
 <td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.1180000</td>
+<td align="right">0.1166154</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">2301</td>
+<td align="right">2274</td>
 <td align="right">19500</td>
 </tr>
 </tbody>
@@ -483,19 +453,19 @@ DAGs.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3221282</td>
-<td align="right">0.0079231</td>
+<td align="right">0.3176923</td>
+<td align="right">0.0088718</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6777179</td>
+<td align="right">0.6818718</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6878205</td>
+<td align="right">0.6626667</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.0072051</td>
-<td align="right">0.3121795</td>
+<td align="right">0.0099231</td>
+<td align="right">0.3373333</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -517,85 +487,8 @@ considering edge probabilities, a natural target is to reduce the error
 of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pedge_sample</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SampleEdgeProbabilities.html">SampleEdgeProbabilities</a></span><span class="op">(</span><span class="va">eq_dag_chains</span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pedge_sample</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
-<table class="table kable_wrapper"><tbody><tr>
-<td>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Mean</th>
-<th align="right">SD</th>
-<th align="right">MCSE</th>
-<th align="right">S_eff</th>
-<th align="right">R_hat</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-</tr>
-<tr class="even">
-<td align="right">0.6777179</td>
-<td align="right">0.4673563</td>
-<td align="right">0.0092933</td>
-<td align="right">2529.057</td>
-<td align="right">1.000326</td>
-</tr>
-<tr class="odd">
-<td align="right">0.0072051</td>
-<td align="right">0.0845778</td>
-<td align="right">0.0006498</td>
-<td align="right">16940.043</td>
-<td align="right">1.000106</td>
-</tr>
-<tr class="even">
-<td align="right">0.3221282</td>
-<td align="right">0.4672978</td>
-<td align="right">0.0092933</td>
-<td align="right">2528.410</td>
-<td align="right">1.000329</td>
-</tr>
-<tr class="odd">
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-</tr>
-<tr class="even">
-<td align="right">0.3121795</td>
-<td align="right">0.4633886</td>
-<td align="right">0.0098989</td>
-<td align="right">2191.367</td>
-<td align="right">1.000250</td>
-</tr>
-<tr class="odd">
-<td align="right">0.0079231</td>
-<td align="right">0.0886595</td>
-<td align="right">0.0007204</td>
-<td align="right">15145.733</td>
-<td align="right">1.000145</td>
-</tr>
-<tr class="even">
-<td align="right">0.6878205</td>
-<td align="right">0.4633886</td>
-<td align="right">0.0098989</td>
-<td align="right">2191.367</td>
-<td align="right">1.000250</td>
-</tr>
-<tr class="odd">
-<td align="right">0.0000000</td>
-<td align="right">0.0000000</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-<td align="right">NaN</td>
-</tr>
-</tbody>
-</table>
-</td>
-</tr></tbody></table>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pedge_sample</span><span class="op">)</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error in CalculateEffectiveSize.numeric(object): could not find function "CalculateEffectiveSize.numeric"</span></span></code></pre></div>
 <p>Qualitative checks are also a good idea to supplement the
 quantitative checks. In the below plot each point represents the
 marginalised edge probability for a given edge in chain 1 (x) compared
@@ -666,19 +559,19 @@ performed for these values for a complete analysis.</p>
 <tr class="odd">
 <td align="left">A</td>
 <td align="right">0.0000000</td>
-<td align="right">0.3221538</td>
-<td align="right">0.3221282</td>
+<td align="right">0.3177692</td>
+<td align="right">0.3164103</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.6777436</td>
+<td align="right">0.6819231</td>
 <td align="right">0.0000000</td>
-<td align="right">0.6878205</td>
+<td align="right">0.6626667</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.3114103</td>
-<td align="right">0.3121795</td>
+<td align="right">0.3366667</td>
+<td align="right">0.3373333</td>
 <td align="right">0.0000000</td>
 </tr>
 </tbody>
@@ -718,23 +611,9 @@ should be within the Mean<span class="math inline">\(\pm 2
 \times\)</span>SD 95% of the time.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">post_AdoB_summ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">post_AdoB_chains</span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">post_AdoB_summ</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Mean</th>
-<th align="right">SD</th>
-<th align="right">MCSE</th>
-<th align="right">S_eff</th>
-<th align="right">R_hat</th>
-</tr></thead>
-<tbody><tr class="odd">
-<td align="right">0.6630978</td>
-<td align="right">0.126277</td>
-<td align="right">0.0025116</td>
-<td align="right">2527.87</td>
-<td align="right">1.000327</td>
-</tr></tbody>
-</table>
+<span><span class="co">#&gt; Error in CalculateEffectiveSize.numeric(object): could not find function "CalculateEffectiveSize.numeric"</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">post_AdoB_summ</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">$</span><span class="va">stats</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Error: object 'post_AdoB_summ' not found</span></span></code></pre></div>
 <p>Let’s also look at the convergence using the cumulative mean trace
 plots again. Eventually the two chains for the cumulative mean should
 stabilise to approximately the same value.</p>
