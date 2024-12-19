@@ -246,7 +246,7 @@ quantities. Typically, we would suggest running four chains by default
 (Vehtari et al., 2021).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="va">n_results</span> <span class="op">&lt;-</span> <span class="fl">1000</span></span>
+<span><span class="va">n_results</span> <span class="op">&lt;-</span> <span class="fl">20000</span></span>
 <span><span class="va">n_chains</span> <span class="op">&lt;-</span> <span class="fl">2</span></span></code></pre></div>
 <p>For the sampling below I will only use the move-node proposal. There
 are some minor issues with following detailed balance by using the
@@ -323,10 +323,10 @@ this for the log-score of the partitions:</p>
 </tr></thead>
 <tbody><tr class="odd">
 <td align="right">-175.4691</td>
-<td align="right">-180.0793</td>
+<td align="right">-180.0556</td>
 <td align="right">-175.4791</td>
-<td align="right">1.007409</td>
-<td align="right">127.6714</td>
+<td align="right">1.000105</td>
+<td align="right">8195.971</td>
 </tr></tbody>
 </table>
 <p>This can also be performed for the log DAG scores.</p>
@@ -341,11 +341,11 @@ this for the log-score of the partitions:</p>
 <th align="right">N_eff</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">-175.5972</td>
-<td align="right">0.7443852</td>
-<td align="right">0.0598043</td>
-<td align="right">1.005264</td>
-<td align="right">158.627</td>
+<td align="right">-175.5638</td>
+<td align="right">0.6222286</td>
+<td align="right">0.0059056</td>
+<td align="right">1.000026</td>
+<td align="right">11102.46</td>
 </tr></tbody>
 </table>
 <p>The Split R-hat statistic provides a measure of the convergence of
@@ -405,19 +405,19 @@ from different locations converge to the same distribution.</p>
 <tbody>
 <tr class="odd">
 <td align="left">1</td>
-<td align="right">0.110</td>
+<td align="right">0.1179487</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">55</td>
-<td align="right">500</td>
+<td align="right">2300</td>
+<td align="right">19500</td>
 </tr>
 <tr class="even">
 <td align="left">2</td>
-<td align="right">0.118</td>
+<td align="right">0.1216410</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">59</td>
-<td align="right">500</td>
+<td align="right">2372</td>
+<td align="right">19500</td>
 </tr>
 </tbody>
 </table>
@@ -485,21 +485,21 @@ DAGs.</p>
 <tbody>
 <tr class="odd">
 <td align="left">A</td>
-<td align="right">0.000</td>
-<td align="right">0.204</td>
-<td align="right">0.013</td>
+<td align="right">0.0000000</td>
+<td align="right">0.3271026</td>
+<td align="right">0.0085897</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.796</td>
-<td align="right">0.000</td>
-<td align="right">0.578</td>
+<td align="right">0.6727949</td>
+<td align="right">0.0000000</td>
+<td align="right">0.6863590</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.011</td>
-<td align="right">0.422</td>
-<td align="right">0.000</td>
+<td align="right">0.0096667</td>
+<td align="right">0.3136410</td>
+<td align="right">0.0000000</td>
 </tr>
 </tbody>
 </table>
@@ -533,63 +533,63 @@ of the mean to below 1% corresponding to MCSE&lt;0.01.</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="right">0.000</td>
+<td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="right">NaN</td>
 <td align="right">NaN</td>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.796</td>
-<td align="right">0.4031706</td>
-<td align="right">0.0467597</td>
-<td align="right">1.042711</td>
-<td align="right">74.98155</td>
+<td align="right">0.6727949</td>
+<td align="right">0.4691989</td>
+<td align="right">0.0097282</td>
+<td align="right">1.0012522</td>
+<td align="right">2356.288</td>
 </tr>
 <tr class="odd">
-<td align="right">0.011</td>
-<td align="right">0.1043546</td>
-<td align="right">0.0041814</td>
-<td align="right">1.000143</td>
-<td align="right">627.02111</td>
+<td align="right">0.0096667</td>
+<td align="right">0.0978441</td>
+<td align="right">0.0007726</td>
+<td align="right">1.0000595</td>
+<td align="right">16043.658</td>
 </tr>
 <tr class="even">
-<td align="right">0.204</td>
-<td align="right">0.4031706</td>
-<td align="right">0.0467597</td>
-<td align="right">1.042711</td>
-<td align="right">74.98155</td>
+<td align="right">0.3271026</td>
+<td align="right">0.4691611</td>
+<td align="right">0.0097324</td>
+<td align="right">1.0012552</td>
+<td align="right">2354.025</td>
 </tr>
 <tr class="odd">
-<td align="right">0.000</td>
+<td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="right">NaN</td>
 <td align="right">NaN</td>
 <td align="right">NaN</td>
 </tr>
 <tr class="even">
-<td align="right">0.422</td>
-<td align="right">0.4941257</td>
-<td align="right">0.0569637</td>
-<td align="right">1.040955</td>
-<td align="right">93.87949</td>
+<td align="right">0.3136410</td>
+<td align="right">0.4639783</td>
+<td align="right">0.0096592</td>
+<td align="right">1.0007153</td>
+<td align="right">2329.477</td>
 </tr>
 <tr class="odd">
-<td align="right">0.013</td>
-<td align="right">0.1133307</td>
-<td align="right">NaN</td>
-<td align="right">1.007790</td>
-<td align="right">NaN</td>
+<td align="right">0.0085897</td>
+<td align="right">0.0922831</td>
+<td align="right">0.0007278</td>
+<td align="right">0.9999575</td>
+<td align="right">16087.751</td>
 </tr>
 <tr class="even">
-<td align="right">0.578</td>
-<td align="right">0.4941257</td>
-<td align="right">0.0569637</td>
-<td align="right">1.040955</td>
-<td align="right">93.87949</td>
+<td align="right">0.6863590</td>
+<td align="right">0.4639783</td>
+<td align="right">0.0096592</td>
+<td align="right">1.0007153</td>
+<td align="right">2329.477</td>
 </tr>
 <tr class="odd">
-<td align="right">0.000</td>
+<td align="right">0.0000000</td>
 <td align="right">0.0000000</td>
 <td align="right">NaN</td>
 <td align="right">NaN</td>
@@ -668,21 +668,21 @@ performed for these values for a complete analysis.</p>
 <tbody>
 <tr class="odd">
 <td align="left">A</td>
-<td align="right">0.000</td>
-<td align="right">0.204</td>
-<td align="right">0.203</td>
+<td align="right">0.0000000</td>
+<td align="right">0.3271026</td>
+<td align="right">0.3262051</td>
 </tr>
 <tr class="even">
 <td align="left">B</td>
-<td align="right">0.796</td>
-<td align="right">0.000</td>
-<td align="right">0.578</td>
+<td align="right">0.6728718</td>
+<td align="right">0.0000000</td>
+<td align="right">0.6863590</td>
 </tr>
 <tr class="odd">
 <td align="left">C</td>
-<td align="right">0.416</td>
-<td align="right">0.422</td>
-<td align="right">0.000</td>
+<td align="right">0.3138974</td>
+<td align="right">0.3136410</td>
+<td align="right">0.0000000</td>
 </tr>
 </tbody>
 </table>
@@ -731,11 +731,11 @@ should be within the Mean<span class="math inline">\(\pm 2
 <th align="right">N_eff</th>
 </tr></thead>
 <tbody><tr class="odd">
-<td align="right">0.69508</td>
-<td align="right">0.1089664</td>
-<td align="right">0.0126445</td>
-<td align="right">1.042914</td>
-<td align="right">74.9104</td>
+<td align="right">0.6617904</td>
+<td align="right">0.1267824</td>
+<td align="right">0.0026301</td>
+<td align="right">1.001257</td>
+<td align="right">2353.939</td>
 </tr></tbody>
 </table>
 <p>Let’s also look at the convergence using the cumulative mean trace
