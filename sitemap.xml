@@ -12,6 +12,7 @@
 <url><loc>https://spaceodyssey.github.io/cia/reference/CalculateEdgeProbabilities.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/CalculateFeatureMean.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/CollectUniqueObjects.html</loc></url>
+<url><loc>https://spaceodyssey.github.io/cia/reference/CoupledPartitionMCMC.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/CreateScorer.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/DAGtoCPDAG.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/DAGtoPartition.html</loc></url>
@@ -21,6 +22,8 @@
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetIncrementalScoringEdges.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetLowestPairwiseScoringEdges.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/GetMAP.html</loc></url>
+<url><loc>https://spaceodyssey.github.io/cia/reference/InitCoupledPartition.html</loc></url>
+<url><loc>https://spaceodyssey.github.io/cia/reference/InitPartition.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/MutilateGraph.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/PartitionMCMC.html</loc></url>
 <url><loc>https://spaceodyssey.github.io/cia/reference/PartitiontoDAG.html</loc></url>
