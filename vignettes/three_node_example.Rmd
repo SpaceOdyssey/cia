@@ -140,7 +140,7 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 1000
+n_results <- 20000
 n_chains <- 2
 ```
 

@@ -62,7 +62,10 @@ InitPartition <- function(nodes, scorer,
 }
 
 #' Initialise partition state for SampleChains. 
+#' 
+#' @description
 #' `r lifecycle::badge("experimental")`
+#' A coupled tempered MCMC (i.e., parallel tempering). 
 #'
 #' @param nodes A character vector of node names.
 #' @param scorer A scorer object.
