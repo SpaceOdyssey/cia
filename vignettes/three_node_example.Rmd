@@ -140,14 +140,8 @@ we would suggest running four chains by default (Vehtari et al., 2021).
 
 ```{r, error = TRUE}
 set.seed(1)
-n_results <- 20000
+n_results <- 1000
 n_chains <- 2
-
-init_partitions <- list()
-for (i in 1:n_chains) {
-  init_dag <- UniformlySampleDAG(nodes)
-  init_partitions[[i]] <- DAGtoPartition(init_dag)
-}
 ```
 
 For the sampling below I will only use the move-node proposal. There are some 
@@ -155,7 +149,7 @@ minor issues with following detailed balance by using the others. The details
 of this will be ignored for now.
 ```{r, error = TRUE, cache = TRUE}
 chains <- SampleChains(n_results,
-                       init_partitions,
+                       InitPartition(nodes, scorer),
                        transition = PartitionMCMC(
                          proposal = DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0))
                          ),
@@ -170,7 +164,9 @@ on the initial starting value. This can be done graphically by plotting the
 score of both chains. This plot is often referred to as the score trace.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-PlotScoreTrace(chains, ylab = 'log(partition score)', type = 'l')
+chains |>
+  PlotScoreTrace() +
+  ggplot2::ylab('log(partition score)')
 ```
 
 The graph suggests that PMCMC spends a number of steps at the start of the chains
@@ -180,7 +176,9 @@ I remove 500 steps as a burnin and plot the trace again.
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
 n_burnin <- 500
 eq_chains <- chains[(1 + n_burnin):n_results]
-PlotScoreTrace(eq_chains, ylab = 'log(partition score)', type = 'l')
+eq_chains |>
+  PlotScoreTrace() +
+  ggplot2::ylab('log(partition score)')
 ```
 
 ### Qualitatively check the DAG score chains for convergence
@@ -196,7 +194,9 @@ eq_dag_chains <- PartitiontoDAG(eq_chains, scorer)
 Plot trace of DAG scores for equilibrium states.
 
 ```{r, error = TRUE, fig.dim = c(6.0, 4.0)}
-PlotScoreTrace(eq_dag_chains, attribute = 'log_score', ylab = 'log(DAG score)', type = 'l')
+eq_dag_chains |>
+  PlotScoreTrace() +
+  ggplot2::ylab('log(DAG score)')
 ```
 
 ### Quantitatively check the convergence of the score trace
@@ -208,7 +208,8 @@ the Split R-hat convergence statistic and the effective sample size S_eff
 the partitions:
 
 ```{r, error = TRUE}
-knitr::kable(summary(eq_chains)[[3]]$stats)
+# summary(eq_chains[[1]])
+knitr::kable(summary(eq_chains, stat_names = c('Median', 'Q1', 'Q3', 'R_hat', 'N_eff'))[[3]]$stats)
 ```
 
 This can also be performed for the log DAG scores.

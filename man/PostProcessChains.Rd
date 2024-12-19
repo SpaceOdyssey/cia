@@ -2,7 +2,7 @@
 % Please edit documentation in R/post_process.R
 \name{PostProcessChains}
 \alias{PostProcessChains}
-\title{Index chains for further analysis}
+\title{Index chains for further analysis \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}}}
 \usage{
 PostProcessChains(chains, n_burnin = 0, n_thin = 1)
 }
@@ -24,15 +24,13 @@ is mostly redundant as you can now index the cia_chain(s) objects directly.
 \examples{
 data <- bnlearn::learning.test
 
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
 scorer <- CreateScorer(
   scorer = BNLearnScorer,
   data = data
   )
+init_state <- InitPartition(colnames(data), scorer)
 
-results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+results <- SampleChains(100, init_state, PartitionMCMC(), scorer)
 thinned_results <- PostProcessChains(results, n_thin = 2)
 
 }

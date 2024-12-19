@@ -13,16 +13,12 @@
 #' 
 #' @examples
 #' data <- bnlearn::learning.test
-#' 
-#' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- DAGtoPartition(dag)
-#' 
 #' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
 #'   data = data
 #'   )
-#' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' init_state <- InitPartition(colnames(data), scorer)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), scorer)
 #' 
 #' # Plot partition score trace.
 #' PlotScoreTrace(results)
@@ -47,23 +43,31 @@ PlotScoreTrace.cia_chains <- function(chains, attribute = 'log_score', n_burnin 
     log_score = chains[[1]][[attribute]][(1 + n_burnin):n_within],
     iteration = 1:length(chains[[1]][[attribute]]))
   
-  plots <- ggplot2::ggplot(chain_log_score, ggplot2::aes(x = iteration, y = log_score)) +
+  plots <- chain_log_score |>
+    ggplot2::ggplot(ggplot2::aes(x = .data$iteration, y = .data$log_score)) +
     ggplot2::geom_line(size = 0.4, colour = col[[1]]) + 
     ggplot2::labs(x = "Iteration", y = attribute) + 
     ggplot2::theme_classic() 
   
   n_chains <- length(chains)
-  if(n_chains > 1) {
-    for(i in 2:length(chains)) {
+  if (n_chains > 1) {
+    for (i in 2:length(chains)) {
       chain_log_score <- data.frame(
         log_score = chains[[i]][[attribute]],
         iteration = 1:length(chains[[i]][[attribute]]))
-      if (same_plot){
-        plots <- plots + ggplot2::geom_line(data = chain_log_score, ggplot2::aes(x = iteration, y = log_score), size = 0.4, colour = col[[i]])
+      if (same_plot) {
+        plots <- plots + 
+          ggplot2::geom_line(data = chain_log_score, 
+                             ggplot2::aes(x = .data$iteration, 
+                                          y = .data$log_score), 
+                             size = 0.4, 
+                             colour = col[[i]])
       } else {
         
         plot_list[[1]] <- plots
-        plot_list[[i]] <- ggplot2::ggplot(chain_log_score, ggplot2::aes(x = iteration, y = log_score)) +
+        plot_list[[i]] <- ggplot2::ggplot(chain_log_score, 
+                                          ggplot2::aes(x = .data$iteration, 
+                                                       y = .data$log_score)) +
           ggplot2::geom_line(size = 0.4, colour = col[[i]]) + 
           ggplot2::labs(x = "Iteration", y = "log score") + 
           ggplot2::theme_classic()
@@ -71,7 +75,7 @@ PlotScoreTrace.cia_chains <- function(chains, attribute = 'log_score', n_burnin 
       
     } 
   }
-  if(same_plot){
+  if (same_plot) {
     return(plots)
   } else {
     return(plot_list)
@@ -89,7 +93,8 @@ PlotScoreTrace.cia_chain <- function(chains, attribute = 'log_score', n_burnin =
   chain_log_score <- data.frame(
     log_score = chains[[attribute]][(1 + n_burnin):n_within],
     iteration = 1:length(chains[[attribute]]))
-  plot <- ggplot2::ggplot(chain_log_score, ggplot2::aes(x = iteration, y = log_score)) +
+  plot <- ggplot2::ggplot(chain_log_score, ggplot2::aes(x = .data$iteration, 
+                                                        y = .data$log_score)) +
     ggplot2::geom_line(size = 0.4, colour = col[[1]]) + 
     ggplot2::labs(x = "Iteration", y = attribute) + 
     ggplot2::theme_classic() 

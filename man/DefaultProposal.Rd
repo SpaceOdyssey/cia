@@ -21,15 +21,13 @@ This constructs a proposal function for PartitionMCMC.
 \examples{
 data <- bnlearn::learning.test
 
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
 scorer <- CreateScorer(
   scorer = BNLearnScorer, 
   data = data
   )
+init_state <- InitPartition(colnames(data), scorer)
 
-results <- SampleChains(10, partitioned_nodes, 
+results <- SampleChains(10, init_state, 
                         PartitionMCMC(
                           proposal = DefaultProposal(p = c(0.0, 1.0, 0.0, 0.0, 0.0))
                           ), 

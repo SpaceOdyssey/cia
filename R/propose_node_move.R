@@ -52,7 +52,7 @@ ProposeNodeMove <- function(partitioned_nodes) {
   
   # Select node to move.
   node <- sample(partitioned_nodes$node, size = 1)
-  inode <- partitioned_nodes$node == node
+  inode <- which(partitioned_nodes$node == node)
   current_element <- partitioned_nodes$partition[inode]
   
   # Move the node into it's available options.
@@ -81,7 +81,7 @@ ProposeNodeMove <- function(partitioned_nodes) {
   partitioned_nodes$partition[inode] <- new_element
   partitioned_nodes$partition <- match(
     partitioned_nodes$partition, 
-    sort(unique(partitioned_nodes$partition))
+    sort(unique(partitioned_nodes$partition))  ## TODO: Remove this sort.
   )
   partitioned_nodes <- OrderPartitionedNodes(partitioned_nodes)
 

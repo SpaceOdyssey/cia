@@ -25,7 +25,7 @@ summary.cia_post_chains <- function(object,
     if (stat_name == 'mean')
       res_mat[, i] <- colMeans(flat)
     if (stat_name == 'median')
-      res_mat[, i] <- apply(flat, 2, median)
+      res_mat[, i] <- apply(flat, 2, stats::median)
     if (stat_name == 'sd')
       res_mat[, i] <- apply(flat, 2, stats::sd)
     if (stat_name == 'mcse') {

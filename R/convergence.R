@@ -9,8 +9,8 @@
 #' overcomes some problems with the classical R-hat calculation (Gelman & Rubin, 
 #' 1992).
 #' 
-#' @param x A list of vectors representing an MCMC chain in equilibrium for a 
-#' parameter.
+#' @param x A list of vectors or a vector representing an MCMC chain(s) in 
+#' equilibrium for a parameter.
 #' 
 #' @return r_hat A scalar.
 #' 
@@ -26,7 +26,15 @@
 #' multiple sequences, Statistical Science, 7, 457-511.
 #' 
 #' @noRd
-CalculateSplitRHat <- function(x) {
+CalculateSplitRHat <- function(x) UseMethod('CalculateSplitRHat')
+
+#' @noRd
+CalculateSplitRHat.numeric <- function(x) {
+  return(CalculateSplitRHat(list(x)))
+}
+
+#' @noRd
+CalculateSplitRHat.list <- function(x) {
   
   theta <- SplitChains(x)
   
@@ -59,16 +67,16 @@ CalculateEffectiveSize <- function(x) UseMethod('EffectiveSize')
 #' @noRd
 CalculateEffectiveSize.list <- function(x) {
   
-  theta <- SplitChains(x)
+  theta <- SplitChains.list(x)
   s_eff <- EffectiveSizeGivenSplitChains(theta)
 
   return(s_eff)
 }
 
 #' @noRd
-CalculateEffectiveSize.vector <- function(x) {
+CalculateEffectiveSize.numeric <- function(x) {
   
-  theta <- SplitChains.vector(x)
+  theta <- SplitChains.numeric(x)
   n_eff <- EffectiveSizeGivenSplitChains(theta)
   
   return(n_eff)
@@ -148,7 +156,7 @@ SplitChains.list <- function(x) {
 }
 
 #' @noRd
-SplitChains.vector <- function(x) {
+SplitChains.numeric <- function(x) {
   
   N_tot <- length(x)
   

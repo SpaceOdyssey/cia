@@ -35,7 +35,8 @@ scorer <- CreateScorer(
 PartitiontoDAG(partition, scorer)
 
 # Used to convert a chain of partitions to DAGs.
-results <- SampleChains(3, partition, PartitionMCMC(), scorer)
+init_state <- InitPartition(colnames(data), scorer)
+results <- SampleChains(3, init_state, PartitionMCMC(), scorer)
 PartitiontoDAG(results, scorer)
 
 }

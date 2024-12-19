@@ -31,12 +31,9 @@
 #'   cache = TRUE
 #'   )
 #'
-#' # Randomly sample a starting DAG consistent with the blacklist. Then
-#' # convert to a partition.
-#' dag <- UniformlySampleDAG(colnames(data)) * !blacklist
-#' partitioned_nodes <- DAGtoPartition(dag)
+#' init_state <- InitPartition(colnames(data), blacklist_scorer)
 #' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), blacklist_scorer)
 #' 
 #' @references 
 #' 1. Koller D, Friedman N. Being Bayesian about network structure. A Bayesian 
@@ -121,15 +118,15 @@ CalculatePairwiseScores <- function(scorer) {
 #' blacklist_scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
 #'   data = data,
+#'   blacklist = blacklist,
 #'   cache = TRUE
 #'   )
 #'
 #' # Randomly sample a starting DAG consistent with the blacklist. Then
 #' # convert to a partition.
-#' dag <- UniformlySampleDAG(colnames(data)) * !blacklist
-#' partitioned_nodes <- DAGtoPartition(dag)
+#' init_state <- InitPartition(colnames(data), blacklist_scorer)
 #' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), blacklist_scorer)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), blacklist_scorer)
 #'
 #'@export
 GetIncrementalScoringEdges <- function(scorer, cutoff = 0.0){

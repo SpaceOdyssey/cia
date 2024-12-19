@@ -1,17 +1,14 @@
-data <- bnlearn::learning.test
-
 set.seed(1)
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
+data <- bnlearn::learning.test
 scorer <- CreateScorer(data = data)
+init_state <- InitPartition(colnames(data), scorer, n_parallel_chains = 1)
 
-chain <- SampleChain(10, partitioned_nodes, PartitionMCMC(), scorer)
+chain <- SampleChain(10, init_state, PartitionMCMC(), scorer)
 test_that('SampleChainDAGs Single', {
   testthat::expect_equal(length(PartitiontoDAG(chain, scorer)), 2)
 })
 
-chains <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+chains <- SampleChains(10, init_state, PartitionMCMC(), scorer)
 test_that('SampleChainDAGs Multiple', {
   testthat::expect_equal(length(PartitiontoDAG(chains, scorer)), length(chains))
 })

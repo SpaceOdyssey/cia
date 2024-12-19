@@ -36,16 +36,12 @@ Plot the score trace
 }
 \examples{
 data <- bnlearn::learning.test
-
-dag <- UniformlySampleDAG(colnames(data))
-partitioned_nodes <- DAGtoPartition(dag)
-
 scorer <- CreateScorer(
   scorer = BNLearnScorer, 
   data = data
   )
-
-results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+init_state <- InitPartition(colnames(data), scorer)
+results <- SampleChains(10, init_state, PartitionMCMC(), scorer)
 
 # Plot partition score trace.
 PlotScoreTrace(results)

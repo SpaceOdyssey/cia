@@ -13,5 +13,6 @@
 vignettes/*cache/
 vignettes/*files/
 vignettes/*.html
+Vignettes/coupled_mcmc.Rmd
 CRAN-SUBMISSION
 cran-comments.md

@@ -1,4 +1,4 @@
-#' Index chains for further analysis
+#' Index chains for further analysis `r lifecycle::badge("deprecated")`
 #' 
 #' This allows you to remove a burnin and thin the chains after processing. This
 #' is mostly redundant as you can now index the cia_chain(s) objects directly.
@@ -13,15 +13,13 @@
 #' @examples
 #' data <- bnlearn::learning.test
 #' 
-#' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- DAGtoPartition(dag)
-#' 
 #' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer,
 #'   data = data
 #'   )
+#' init_state <- InitPartition(colnames(data), scorer)
 #' 
-#' results <- SampleChains(100, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(100, init_state, PartitionMCMC(), scorer)
 #' thinned_results <- PostProcessChains(results, n_thin = 2)
 #' 
 #' @export

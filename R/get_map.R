@@ -16,15 +16,13 @@
 #' @examples
 #' data <- bnlearn::learning.test
 #' 
-#' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- DAGtoPartition(dag)
-#' 
 #' scorer <- CreateScorer(
 #'   scorer = BNLearnScorer, 
 #'   data = data
 #'   )
+#' init_state <- InitPartition(colnames(data), scorer)
 #' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), scorer)
 #' 
 #' # Get the MAP per chain. Can be helpful to compare chains.
 #' GetMAP(results)
@@ -33,7 +31,6 @@
 #' results |>
 #'   FlattenChains() |>
 #'   GetMAP()
-#' 
 #' 
 #' @export
 GetMAP <- function(x) UseMethod('GetMAP')

@@ -13,33 +13,39 @@
 #' @examples
 #' data <- bnlearn::learning.test
 #' 
-#' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- DAGtoPartition(dag)
-#' 
 #' scorer <- CreateScorer(
-#'   scorer = BNLearnScorer, 
+#'   scorer = BNLearnScorer,
 #'   data = data
 #'   )
+#' init_state <- InitPartition(colnames(data), scorer)
 #' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), scorer)
 #' 
 #' @export
 SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1, 
                          n_parallel_chains = 2) {
   
-  cl <- parallel::makeCluster(n_parallel_chains)
+  if (!is.list(init_state))
+    print(
+      paste0(
+        "init_state must be a list of states.",
+        "We recommend using the available init functions (e.g., InitPartition)."
+        )
+      )
+  
+  cl <- parallel::makeCluster(n_parallel_chains, outfile = "")
   doParallel::registerDoParallel(cl)
   
   i <- NULL
   chains <- foreach::foreach(i = 1:n_parallel_chains) %dopar% {
     
-    if (is.data.frame(init_state)) {
-      init_state_each <- init_state
-    } else {
-      init_state_each <- init_state[[i]]
-    }
+    if ("state" %in% names(init_state))
+      init_state_each = init_state
+    else 
+      init_state_each = init_state[[i]]
 
-    SampleChain(n_results, init_state_each, transition, scorer, n_thin)
+    SampleChain(n_results, init_state_each, transition, scorer, n_thin, 
+                name = paste('Chain', i))
   }
   parallel::stopCluster(cl)
   
@@ -64,7 +70,8 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 #' results <- SampleChain(10, partitioned_nodes, PartitionMCMC(), scorer_1)
 #' 
 #' @param n_results Number of saved states.
-#' @param init_state An initial state that can be passed to transition.
+#' @param init_state An initial state. Recommended to use the available 
+#' initialisation functions (e.g., InitPartition, InitCoupledPartition).
 #' @param transition A transition function.
 #' @param scorer A scorer object.
 #' @param n_thin Number of steps between saved states.
@@ -72,7 +79,8 @@ SampleChains <- function(n_results, init_state, transition, scorer, n_thin = 1,
 #' @returns chain A cia_chain object.
 #' 
 #' @noRd
-SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
+SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1,
+                        name = NULL) {
   
   # Setup objects to store results.
   states <- vector('list', n_results)
@@ -81,18 +89,20 @@ SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
   mcmc_info <- vector('list', n_results*n_thin)
   
   # Setup initial state.
-  if (!CheckWhitelistObeyed(init_state, scorer$whitelist))
+  if (!CheckWhitelistObeyed(init_state$state, scorer$whitelist))
     stop('Initial state does not obey whitelist.')
   
-  if (!CheckBlacklistObeyed(init_state, scorer$blacklist))
+  if (!CheckBlacklistObeyed(init_state$state, scorer$blacklist))
     stop('Initial state does not obey blacklist.')
   
-  init_log_score <- ScoreLabelledPartition(init_state, scorer)
-  current_state <- list(state = init_state,
-                        log_score = init_log_score,
-                        proposal_info = NULL,
-                        mcmc_info = NULL)
+  if (is.data.frame(init_state)) {
+    stop("Supplying a data.frame is no longer supported. ",
+         "Please use the Init functions (e.g. InitPartition)")
+  } else {
+    current_state <- init_state
+  }
   
+  sprintf('%s started sampling.', name)
   # Run MCMC to return n_results.
   for (i in 1:n_results) {
     for (j in 1:n_thin) {
@@ -104,6 +114,15 @@ SampleChain <- function(n_results, init_state, transition, scorer, n_thin = 1) {
     }
     states[[i]] <- current_state$state
     log_scores[[i]] <- current_state$log_score
+    
+    # Printing with do par doesn't work.
+    if (i %% (n_results / 10) == 0) {
+      if (!is.null(name)) {
+        sprintf('%s Progress: %i%%', name, round(100*i/n_results, 0))
+      } else {
+        sprintf('Progress: %i%%', round(100*i/n_results, 0))
+      }
+    }
   }
   
   chain <- new_cia_chain(

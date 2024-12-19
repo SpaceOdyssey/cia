@@ -8,7 +8,7 @@ Partition MCMC}
 PartitionMCMC(
   proposal = DefaultProposal(),
   temperature = 1,
-  prerejection = TRUE,
+  prerejection = FALSE,
   verbose = TRUE
 )
 }
@@ -18,9 +18,10 @@ PartitionMCMC(
 \item{temperature}{Numeric value representing the temperature to raise the
 score to. Default is 1.}
 
-\item{prerejection}{Boolean flag to discard proposals due to the proposal
-disobeying the black or white lists. Setting this to TRUE disobeys detailed
-balance but can be useful for debugging. Default is FALSE.}
+\item{prerejection}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Boolean flag to
+discard proposals due to the proposal disobeying the black or white lists.
+Setting this to TRUE disobeys detailed balance but can be useful for
+debugging. Default is FALSE.}
 
 \item{verbose}{Flag to pass MCMC information.}
 }

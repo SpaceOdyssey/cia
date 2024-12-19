@@ -14,11 +14,10 @@
 #' 
 #' @examples
 #' data <- bnlearn::learning.test
-#' dag <- UniformlySampleDAG(colnames(data))
-#' partitioned_nodes <- DAGtoPartition(dag)
 #' scorer <- CreateScorer(scorer = BNLearnScorer, data = data)
+#' init_state <- InitPartition(colnames(data), scorer)
 #' 
-#' results <- SampleChains(10, partitioned_nodes, PartitionMCMC(), scorer, n_parallel_chains = 2)
+#' results <- SampleChains(10, init_state, PartitionMCMC(), scorer, n_parallel_chains = 2)
 #' dags <- PartitiontoDAG(results, scorer)
 #' 
 #' p_edge <- CalculateEdgeProbabilities(dags)
@@ -40,7 +39,7 @@ PlotConcordance.default <- function(x, highlight = 0.3, ...) {
     for (i in 1:n_runs) {
       for (j in 1:n_runs) {
         if (i == j) { 
-          text <- paste('Run', (k - 1) %/% 4 + 1)
+          text <- paste('Run', i)
           g[[k]] <- ggplot2::ggplot() +
             ggplot2::annotate("text", x = 0, y = 0, label = text) +
             ggplot2::theme_void()

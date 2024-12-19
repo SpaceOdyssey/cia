@@ -31,9 +31,11 @@
 #' @param proposal Proposal function. Default is the DefaultProposal.
 #' @param temperature Numeric value representing the temperature to raise the 
 #' score to. Default is 1.
-#' @param prerejection Boolean flag to discard proposals due to the proposal 
-#' disobeying the black or white lists. Setting this to TRUE disobeys detailed 
-#' balance but can be useful for debugging. Default is FALSE.
+#' @param prerejection `r lifecycle::badge("deprecated")` Boolean flag to 
+#' discard proposals due to the proposal disobeying the black or white lists. 
+#' Setting this to TRUE disobeys detailed balance but can be useful for 
+#' debugging. Default is FALSE. 
+#' 
 #' @param verbose Flag to pass MCMC information.
 #'
 #' @returns Function that takes the current state and scorer that outputs a new
@@ -42,7 +44,7 @@
 #' @export
 PartitionMCMC <- function(proposal = DefaultProposal(), 
                           temperature = 1.0, 
-                          prerejection = TRUE,
+                          prerejection = FALSE,
                           verbose = TRUE) {
   
   beta <- 1.0/temperature
@@ -73,14 +75,16 @@ PartitionMCMC <- function(proposal = DefaultProposal(),
       # proposal.
       black_obeyed <- CheckBlacklistObeyed(proposed$state, scorer$blacklist)
       white_obeyed <- CheckWhitelistObeyed(proposed$state, scorer$whitelist)
-      if ((!black_obeyed | !white_obeyed) & verbose) {
-        current_state$mcmc_info <- list(
-          accept = FALSE,
-          white_obeyed = white_obeyed,
-          black_obeyed = black_obeyed,
-          jac = NULL,
-          mhr = NULL
-        )
+      if (!black_obeyed | !white_obeyed) {
+        if (verbose) {
+          current_state$mcmc_info <- list(
+            accept = FALSE,
+            white_obeyed = white_obeyed,
+            black_obeyed = black_obeyed,
+            jac = NULL,
+            mhr = NULL
+          )
+        }
         
         return(current_state)
       }
