@@ -1,6 +1,6 @@
 Package: cia
 Title: Learn and Apply Directed Acyclic Graphs for Causal Inference
-Version: 1.0.0.9000
+Version: 1.1.0
 Authors@R: c(
     person(given = "Mathew",
            family = "Varidel",
@@ -27,14 +27,15 @@ Imports:
     parallel,
     foreach,
     arrangements,
-    graphics,
     dplyr,
     rlang,
     fastmatch,
     methods,
     gRain,
     patchwork,
-    tidyr
+    tidyr,
+    lifecycle,
+    stringr
 Suggests:
     rmarkdown,
     knitr,
